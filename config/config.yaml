@@ -1,0 +1,56 @@
+# TwinGuard-OT System Configuration
+# Process-Aware Digital Twin for Cybersecurity Testing and Anomaly Detection in ICS
+
+simulation:
+  time_step_sec: 0.1
+  tick_rate_hz: 10
+  default_experiment_duration_sec: 60
+
+physical_process:
+  capacity_liters: 1000.0
+  min_level: 0.0
+  max_level: 100.0
+  initial_level: 50.0
+  pump_inflow_rate: 3.0          # % level increase per sec when pump is ON
+  gravity_outflow_rate: 1.2      # % level decrease per sec when outlet valve is open
+  leak_outflow_rate: 0.1         # nominal baseline loss
+  sensor_noise_std: 0.25         # Gaussian noise standard deviation for level sensor
+  flow_noise_std: 0.05           # Gaussian noise standard deviation for flow sensor
+
+plc:
+  cycle_interval_sec: 0.2        # PLC scan cycle interval (5 Hz)
+  default_setpoint: 70.0         # Target water level (%)
+  low_threshold: 30.0            # Pump starts when level falls below this threshold
+  high_threshold: 80.0           # Pump stops when level reaches this threshold
+  emergency_low_threshold: 10.0  # Low-low alarm threshold (%)
+  emergency_high_threshold: 95.0 # High-high alarm threshold (%)
+  auto_mode: 1                   # 1 = Automatic control, 0 = Manual operator control
+
+modbus:
+  host: "127.0.0.1"              # Localhost simulation binding ONLY
+  port: 5020                     # Non-privileged port for cross-platform execution
+  unit_id: 1                     # Modbus Unit/Slave ID
+  timeout_sec: 2.0
+  authorized_clients:
+    - "127.0.0.1"
+
+detection:
+  residual_threshold: 10.0       # Threshold for |observed - expected| level discrepancy (%)
+  max_level_rate_threshold: 5.0  # Maximum physically possible level change (% per sec)
+  request_rate_flood_threshold: 30.0 # Modbus requests per second threshold
+  unauthorized_source_alert: true
+  isolation_forest:
+    n_estimators: 100
+    contamination: 0.03
+    random_state: 42
+  one_class_svm:
+    kernel: "rbf"
+    nu: 0.03
+    gamma: "scale"
+
+storage:
+  db_path: "data/twinguard.db"
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  models_dir: "data/models"
+  results_dir: "data/results"
