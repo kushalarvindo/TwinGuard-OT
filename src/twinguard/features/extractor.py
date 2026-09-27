@@ -124,14 +124,14 @@ class FeatureExtractor:
         else:
             out["process_residual"] = 0.0
 
-        out["inflow_rate"] = df.get("inflow_rate", 0.0).astype(float)
-        out["outflow_rate"] = df.get("outflow_rate", 0.0).astype(float)
+        out["inflow_rate"] = df["inflow_rate"].astype(float) if "inflow_rate" in df.columns else 0.0
+        out["outflow_rate"] = df["outflow_rate"].astype(float) if "outflow_rate" in df.columns else 0.0
         out["net_flow"] = (out["inflow_rate"] - out["outflow_rate"]).round(3)
-        out["pump_state"] = df.get("pump_state", 0).astype(float)
-        out["valve_state"] = df.get("valve_state", 0).astype(float)
-        out["setpoint"] = df.get("setpoint", 70.0).astype(float)
+        out["pump_state"] = df["pump_state"].astype(float) if "pump_state" in df.columns else 0.0
+        out["valve_state"] = df["valve_state"].astype(float) if "valve_state" in df.columns else 0.0
+        out["setpoint"] = df["setpoint"].astype(float) if "setpoint" in df.columns else 70.0
         out["setpoint_error"] = (out["sensor_level"] - out["setpoint"]).round(2)
-        out["request_rate"] = df.get("request_rate", 0.0).astype(float)
+        out["request_rate"] = df["request_rate"].astype(float) if "request_rate" in df.columns else 0.0
 
         out["actuator_inconsistency"] = (
             (out["pump_state"] == 1.0) & (out["sensor_level"] >= self.high_threshold)
