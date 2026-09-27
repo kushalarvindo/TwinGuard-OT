@@ -1,0 +1,51 @@
+{
+  "experiment_id": "ALL_EXPERIMENTS",
+  "evaluated_at": "2026-09-27 21:18:15",
+  "total_samples": 1133,
+  "attack_samples": 478,
+  "normal_samples": 655,
+  "models": {
+    "Rule-Based": {
+      "status": "Evaluated",
+      "total_samples": 1133,
+      "true_positives": 319,
+      "false_positives": 108,
+      "true_negatives": 547,
+      "false_negatives": 159,
+      "accuracy": 0.7643,
+      "precision": 0.7471,
+      "recall": 0.6674,
+      "f1_score": 0.705,
+      "false_positive_rate": 0.1649,
+      "detection_latency_sec": 0.602
+    },
+    "Isolation Forest": {
+      "status": "Evaluated",
+      "total_samples": 1133,
+      "true_positives": 219,
+      "false_positives": 57,
+      "true_negatives": 598,
+      "false_negatives": 259,
+      "accuracy": 0.7211,
+      "precision": 0.7935,
+      "recall": 0.4582,
+      "f1_score": 0.5809,
+      "false_positive_rate": 0.087,
+      "detection_latency_sec": 1.506
+    },
+    "Hybrid Correlation": {
+      "status": "Evaluated",
+      "total_samples": 1133,
+      "true_positives": 319,
+      "false_positives": 120,
+      "true_negatives": 535,
+      "false_negatives": 159,
+      "accuracy": 0.7538,
+      "precision": 0.7267,
+      "recall": 0.6674,
+      "f1_score": 0.6958,
+      "false_positive_rate": 0.1832,
+      "detection_latency_sec": 0.602
+    }
+  }
+}

@@ -46,14 +46,7 @@ htmlcov/
 Thumbs.db
 .DS_Store
 
-# Temporary experiment data & outputs (keep data directory structure)
-data/raw/*.csv
-data/processed/*.csv
-data/results/*.csv
-data/results/*.json
-data/results/*.png
-data/models/*.joblib
-!data/**/.gitkeep
+# Temporary experiment data & outputs
 *.db
 *.sqlite
 *.sqlite3
