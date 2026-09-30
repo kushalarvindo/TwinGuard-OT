@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  twinguard:
+    build: .
+    container_name: twinguard-ot
+    ports:
+      - "5020:5020"    # Modbus TCP Simulation Port
+      - "8501:8501"    # Streamlit Dashboard
+    volumes:
+      - ./data:/app/data
+      - ./config:/app/config
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: ["python", "scripts/start_system.py", "--dashboard"]

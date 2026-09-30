@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "twinguard-ot"
+version = "1.0.0"
+description = "Process-Aware Digital Twin for Cybersecurity Testing and Anomaly Detection in Industrial Control Systems"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "TwinGuard-OT Research Team"}
+]
+dependencies = [
+    "pymodbus>=3.8.0",
+    "numpy>=1.24.0",
+    "pandas>=2.0.0",
+    "scikit-learn>=1.3.0",
+    "scipy>=1.10.0",
+    "PyYAML>=6.0",
+    "streamlit>=1.30.0",
+    "plotly>=5.18.0",
+    "joblib>=1.3.0",
+    "pytest>=8.0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]

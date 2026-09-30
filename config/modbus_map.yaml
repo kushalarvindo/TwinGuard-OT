@@ -1,0 +1,116 @@
+# TwinGuard-OT Modbus Register Map
+# Defines register layout for Virtual PLC and Digital Twin Communication
+
+protocol: "Modbus TCP"
+unit_id: 1
+
+holding_registers:
+  # Base address 1 (40001 in standard 1-indexed PLC notation, address 0/1 depending on offset)
+  # In our implementation, register addresses use 0-based indexing:
+  0:
+    name: "TANK_LEVEL_SENSOR"
+    address_display: 40001
+    type: "UINT16"
+    scale: 10.0                 # Stored as level * 10 (e.g. 75.4% -> 754)
+    unit: "%"
+    access: "RO"                # Read-Only from HMI, written by PLC/Sensor
+    description: "Current observed water level reported by virtual sensor"
+
+  1:
+    name: "SETPOINT_LEVEL"
+    address_display: 40002
+    type: "UINT16"
+    scale: 10.0                 # Stored as setpoint * 10 (e.g. 70.0% -> 700)
+    unit: "%"
+    access: "RW"                # Read/Write by authorized operator
+    description: "Desired target water level setpoint"
+
+  2:
+    name: "PUMP_COMMAND"
+    address_display: 40003
+    type: "UINT16"
+    scale: 1.0                  # 0 = OFF, 1 = ON
+    unit: "state"
+    access: "RW"                # Controlled by PLC logic or manual override
+    description: "Inflow pump operational status and command"
+
+  3:
+    name: "VALVE_COMMAND"
+    address_display: 40004
+    type: "UINT16"
+    scale: 1.0                  # 0 = CLOSED, 1 = OPEN
+    unit: "state"
+    access: "RW"                # Controlled by PLC logic or manual override
+    description: "Outflow drain valve operational status and command"
+
+  4:
+    name: "INFLOW_RATE"
+    address_display: 40005
+    type: "UINT16"
+    scale: 10.0                 # e.g. 3.0 L/s -> 30
+    unit: "%/s"
+    access: "RO"
+    description: "Measured inflow rate from virtual flow meter"
+
+  5:
+    name: "OUTFLOW_RATE"
+    address_display: 40006
+    type: "UINT16"
+    scale: 10.0                 # e.g. 1.2 L/s -> 12
+    unit: "%/s"
+    access: "RO"
+    description: "Measured outflow discharge rate"
+
+  6:
+    name: "ALARM_STATE"
+    address_display: 40007
+    type: "UINT16"
+    scale: 1.0                  # 0=Normal, 1=Low, 2=High, 3=Critical
+    unit: "enum"
+    access: "RO"
+    description: "Current PLC process alarm status"
+
+  7:
+    name: "LOW_THRESHOLD"
+    address_display: 40008
+    type: "UINT16"
+    scale: 10.0                 # e.g. 30.0% -> 300
+    unit: "%"
+    access: "RW"
+    description: "Low level hysteresis activation threshold"
+
+  8:
+    name: "HIGH_THRESHOLD"
+    address_display: 40009
+    type: "UINT16"
+    scale: 10.0                 # e.g. 80.0% -> 800
+    unit: "%"
+    access: "RW"
+    description: "High level hysteresis deactivation threshold"
+
+  9:
+    name: "CONTROL_MODE"
+    address_display: 40010
+    type: "UINT16"
+    scale: 1.0                  # 1 = AUTO, 0 = MANUAL
+    unit: "state"
+    access: "RW"
+    description: "PLC operating mode (Automatic or Manual)"
+
+  10:
+    name: "TRUE_TANK_LEVEL"
+    address_display: 40011
+    type: "UINT16"
+    scale: 10.0                 # Digital Twin telemetry register
+    unit: "%"
+    access: "RO"
+    description: "True physical water level (Digital Twin ground truth)"
+
+  11:
+    name: "PHYSICAL_RESIDUAL"
+    address_display: 40012
+    type: "UINT16"
+    scale: 10.0                 # Residual * 10
+    unit: "%"
+    access: "RO"
+    description: "Process residual: |Observed Sensor - Expected Twin Level|"
