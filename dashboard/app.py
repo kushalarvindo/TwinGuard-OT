@@ -39,8 +39,10 @@ st.set_page_config(
 )
 
 # Initialize Session State
-if "show_help_hub" not in st.session_state:
-    st.session_state.show_help_hub = False
+if "onboarding_completed" not in st.session_state:
+    st.session_state.onboarding_completed = False
+if "show_onboarding" not in st.session_state:
+    st.session_state.show_onboarding = not st.session_state.onboarding_completed
 if "refresh_speed" not in st.session_state:
     st.session_state.refresh_speed = 3.0
 if "auto_refresh" not in st.session_state:
@@ -74,7 +76,7 @@ st.markdown("""
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background: rgba(15, 23, 42, 0.7);
+        background: rgba(15, 23, 42, 0.72);
         backdrop-filter: blur(24px) saturate(190%);
         -webkit-backdrop-filter: blur(24px) saturate(190%);
         border: 1px solid rgba(255, 255, 255, 0.09);
@@ -87,7 +89,7 @@ st.markdown("""
 
     /* Glass Cards */
     .glass-card {
-        background: rgba(15, 23, 42, 0.65);
+        background: rgba(15, 23, 42, 0.68);
         backdrop-filter: blur(20px) saturate(180%);
         -webkit-backdrop-filter: blur(20px) saturate(180%);
         border: 1px solid rgba(255, 255, 255, 0.08);
@@ -99,7 +101,7 @@ st.markdown("""
         transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), border-color 0.25s ease;
     }
     .glass-card:hover {
-        border-color: rgba(56, 189, 248, 0.3);
+        border-color: rgba(56, 189, 248, 0.35);
     }
 
     /* Gradient Brand Headings */
@@ -115,7 +117,7 @@ st.markdown("""
 
     /* Metric Cards */
     [data-testid="stMetric"] {
-        background: rgba(15, 23, 42, 0.7) !important;
+        background: rgba(15, 23, 42, 0.72) !important;
         backdrop-filter: blur(16px) !important;
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
         border-radius: 20px !important;
@@ -166,23 +168,30 @@ st.markdown("""
         box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35) !important;
     }
 
-    /* Material You Custom Sidebar Radio (Replaced into Segmented Menu Items) */
+    /* Material Design 3 Expressive Sidebar Navigation */
     section[data-testid="stSidebar"] {
-        background: rgba(10, 14, 24, 0.94) !important;
+        background: rgba(10, 14, 24, 0.95) !important;
         backdrop-filter: blur(28px) !important;
         border-right: 1px solid rgba(255, 255, 255, 0.07) !important;
+    }
+    section[data-testid="stSidebar"] div[role="radiogroup"] {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
     }
     section[data-testid="stSidebar"] div[role="radiogroup"] > label {
         background: rgba(255, 255, 255, 0.02) !important;
         border: 1px solid rgba(255, 255, 255, 0.05) !important;
-        border-radius: 14px !important;
-        padding: 10px 14px !important;
-        margin-bottom: 8px !important;
-        transition: all 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
+        border-radius: 16px !important;
+        padding: 11px 16px !important;
+        margin: 0 !important;
+        transition: all 0.22s cubic-bezier(0.2, 0, 0, 1) !important;
         cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
     }
     section[data-testid="stSidebar"] div[role="radiogroup"] > label:hover {
-        background: rgba(56, 189, 248, 0.1) !important;
+        background: rgba(56, 189, 248, 0.08) !important;
         border-color: rgba(56, 189, 248, 0.3) !important;
         transform: translateX(4px) !important;
     }
@@ -191,9 +200,22 @@ st.markdown("""
         display: none !important;
     }
     section[data-testid="stSidebar"] div[role="radiogroup"] > label div[data-testid="stMarkdownContainer"] p {
-        font-weight: 600 !important;
-        font-size: 0.92rem !important;
-        color: #cbd5e1 !important;
+        font-weight: 500 !important;
+        font-size: 0.91rem !important;
+        color: #94a3b8 !important;
+        letter-spacing: -0.01em !important;
+        margin: 0 !important;
+    }
+    /* MD3 Expressive Selected Navigation Pill */
+    section[data-testid="stSidebar"] div[role="radiogroup"] > label:has(input:checked) {
+        background: linear-gradient(90deg, rgba(14, 165, 233, 0.22) 0%, rgba(99, 102, 241, 0.14) 100%) !important;
+        border: 1px solid rgba(56, 189, 248, 0.5) !important;
+        border-left: 5px solid #38bdf8 !important;
+        box-shadow: 0 4px 18px -2px rgba(14, 165, 233, 0.3) !important;
+    }
+    section[data-testid="stSidebar"] div[role="radiogroup"] > label:has(input:checked) div[data-testid="stMarkdownContainer"] p {
+        color: #38bdf8 !important;
+        font-weight: 700 !important;
     }
 
     /* M3 Category Labels in Sidebar */
@@ -352,6 +374,142 @@ st.markdown("""
         border-radius: 9999px;
         color: #38bdf8;
     }
+
+    /* MD3 Expressive Dialog & Onboarding Modal */
+    div[data-testid="stDialog"] div[role="dialog"] {
+        background: rgba(11, 17, 32, 0.98) !important;
+        backdrop-filter: blur(36px) saturate(200%) !important;
+        -webkit-backdrop-filter: blur(36px) saturate(200%) !important;
+        border: 1px solid rgba(56, 189, 248, 0.35) !important;
+        border-radius: 28px !important;
+        box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.85),
+                    0 0 50px rgba(14, 165, 233, 0.2) !important;
+        color: #f1f5f9 !important;
+        max-width: 94vw !important;
+        width: 1060px !important;
+        padding: 28px 32px !important;
+    }
+    div[data-testid="stDialog"] div[role="dialog"] button[aria-label="Close"] {
+        color: #94a3b8 !important;
+    }
+    div[data-testid="stDialog"] div[role="dialog"] button[aria-label="Close"]:hover {
+        color: #ffffff !important;
+    }
+
+    /* MD3 Tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        background: rgba(15, 23, 42, 0.6);
+        padding: 6px;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .stTabs [data-baseweb="tab"] {
+        height: auto;
+        padding: 8px 18px;
+        border-radius: 12px;
+        color: #94a3b8;
+        font-weight: 600;
+        font-size: 0.88rem;
+        transition: all 0.2s ease;
+        border: none !important;
+    }
+    .stTabs [data-baseweb="tab"]:hover {
+        color: #f8fafc;
+        background: rgba(255, 255, 255, 0.05);
+    }
+    .stTabs [aria-selected="true"] {
+        background: rgba(14, 165, 233, 0.2) !important;
+        color: #38bdf8 !important;
+        border: 1px solid rgba(56, 189, 248, 0.35) !important;
+    }
+
+    /* Onboarding Card Grid */
+    .onboarding-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin: 18px 0;
+    }
+    @media (max-width: 768px) {
+        .onboarding-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    .onboarding-card {
+        background: rgba(18, 26, 46, 0.75);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        padding: 18px 20px;
+        transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+    }
+    .onboarding-card:hover {
+        border-color: rgba(56, 189, 248, 0.4);
+        background: rgba(22, 32, 56, 0.85);
+        transform: translateY(-2px);
+    }
+    .onboarding-card-title {
+        font-size: 1.02rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .onboarding-tag {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 3px 8px;
+        border-radius: 9999px;
+        background: rgba(14, 165, 233, 0.15);
+        color: #38bdf8;
+        border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+    .onboarding-card-desc {
+        font-size: 0.84rem;
+        color: #94a3b8;
+        line-height: 1.5;
+        margin: 0 0 10px 0;
+    }
+    .onboarding-card-tip {
+        font-size: 0.76rem;
+        color: #38bdf8;
+        background: rgba(14, 165, 233, 0.08);
+        border-left: 3px solid #38bdf8;
+        padding: 6px 10px;
+        border-radius: 6px;
+        margin: 0;
+    }
+
+    /* Onboarding Step Cards */
+    .onboarding-step {
+        display: flex;
+        gap: 18px;
+        background: rgba(18, 26, 46, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        padding: 18px 22px;
+        margin-bottom: 14px;
+        align-items: flex-start;
+    }
+    .onboarding-step-num {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
+        color: #ffffff;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.05rem;
+        flex-shrink: 0;
+        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -387,7 +545,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
 
     # Sidebar Navigation Menu Items
-    st.markdown('<div class="sidebar-category">Operations & Telemetry</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-category">Operations & Security Navigation</div>', unsafe_allow_html=True)
     nav_choice = st.radio(
         "Navigation",
         [
@@ -402,6 +560,11 @@ with st.sidebar:
         ],
         label_visibility="collapsed"
     )
+
+    st.markdown("<div style='height: 4px;'></div>", unsafe_allow_html=True)
+    if st.button("🧭 Platform Tour & Onboarding", use_container_width=True):
+        st.session_state.show_onboarding = True
+        st.rerun()
 
     st.markdown("---")
 
@@ -451,7 +614,223 @@ with st.sidebar:
 
 
 # ==============================================================================
-# TOP APP BAR (Live Status, Breadcrumb, Knowledge Hub Launcher)
+# ONBOARDING TUTORIAL MODAL / OVERLAY (MD3 Expressive SaaS Flow)
+# ==============================================================================
+def on_dialog_dismiss():
+    st.session_state.onboarding_completed = True
+    st.session_state.show_onboarding = False
+
+
+@st.dialog("🚀 Welcome to TwinGuard-OT | Platform Onboarding", width="large", on_dismiss=on_dialog_dismiss)
+def show_onboarding_tutorial():
+    st.markdown("""
+    <div style="margin-bottom: 20px;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(14, 165, 233, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 5px 14px; border-radius: 9999px; font-size: 0.75rem; color: #38bdf8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;">
+            <span>🛡️ ICS CYBERSECURITY PLATFORM</span>
+        </div>
+        <h2 style="font-size: 1.7rem; font-weight: 800; margin: 0 0 6px 0; background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #38bdf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            TwinGuard-OT: Process-Aware Digital Twin
+        </h2>
+        <p style="color: #94a3b8; font-size: 0.92rem; margin: 0; line-height: 1.55;">
+            Welcome to the TwinGuard-OT industrial operations & cybersecurity operations center. 
+            TwinGuard-OT pairs continuous hydrodynamic physical process simulation with virtual PLC control, 
+            industrial Modbus TCP networking, controlled threat injection, and hybrid physics-ML anomaly detection.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    tab_tour, tab_steps, tab_sys = st.tabs([
+        "🧭 Navigation Menu Tour (8 Core Modules)",
+        "⚡ 3-Step Guided Experiment Workflow",
+        "📐 System Architecture & Modbus Map"
+    ])
+
+    with tab_tour:
+        st.markdown("""
+        <div class="onboarding-grid">
+            <div class="onboarding-card">
+                <div class="onboarding-card-title">
+                    <span>🌊 1. Process SCADA Overview</span>
+                    <span class="onboarding-tag">Operations & HMI</span>
+                </div>
+                <p class="onboarding-card-desc">
+                    Primary supervisory dashboard monitoring live water tank level, pump and valve states, and automated hysteresis control.
+                </p>
+                <p class="onboarding-card-tip">
+                    <strong>Interactive Rig:</strong> View animated dual-column water tanks comparing ground truth against reported sensor readings.
+                </p>
+            </div>
+            <div class="onboarding-card">
+                <div class="onboarding-card-title">
+                    <span>🔄 2. Digital Twin Shadow Model</span>
+                    <span class="onboarding-tag">Physics Reference</span>
+                </div>
+                <p class="onboarding-card-desc">
+                    First-principles mass-balance differential equation solver running continuously in parallel with the live plant.
+                </p>
+                <p class="onboarding-card-tip">
+                    <strong>Key Metric:</strong> Physical Residual |r(t)| = |h_sensor - h_shadow| detects deception when PLC appears normal.
+                </p>
+            </div>
+            <div class="onboarding-card">
+                <div class="onboarding-card-title">
+                    <span>📡 3. Modbus Protocol Inspector</span>
+                    <span class="onboarding-tag">OT Network Forensics</span>
+                </div>
+                <p class="onboarding-card-desc">
+                    Deep packet inspection of raw industrial Modbus TCP communication over localhost port 5020 (Unit ID 1).
+                </p>
+                <p class="onboarding-card-tip">
+                    <strong>Forensics:</strong> Tracks Function Codes (FC03, FC06, FC16), transaction latency, and packet request rates (req/s).
+                </p>
+            </div>
+            <div class="onboarding-card">
+                <div class="onboarding-card-title">
+                    <span>🎯 4. Cyberattack Laboratory</span>
+                    <span class="onboarding-tag">Red Team Injection</span>
+                </div>
+                <p class="onboarding-card-desc">
+                    Isolated experimentation suite to safely execute 5 industrial cyberattacks against local simulation in real time.
+                </p>
+                <p class="onboarding-card-tip">
+                    <strong>Vectors:</strong> Sensor Spoofing, Unauthorized Write, Packet Replay, Command Flooding, Setpoint Manipulation.
+                </p>
+            </div>
+            <div class="onboarding-card">
+                <div class="onboarding-card-title">
+                    <span>🛡️ 5. Multi-Tier Anomaly Detection</span>
+                    <span class="onboarding-tag">Blue Team SOC</span>
+                </div>
+                <p class="onboarding-card-desc">
+                    Defense-in-depth correlation fusing deterministic domain rules, physics residuals, and scikit-learn Isolation Forest ML.
+                </p>
+                <p class="onboarding-card-tip">
+                    <strong>Correlation:</strong> Categorizes incidents into Normal, Cyber-Only, Process-Only, or Cyber-Physical Attacks.
+                </p>
+            </div>
+            <div class="onboarding-card">
+                <div class="onboarding-card-title">
+                    <span>📊 6. Statistical Process Analytics</span>
+                    <span class="onboarding-tag">Process Dynamics</span>
+                </div>
+                <p class="onboarding-card-desc">
+                    High-resolution exploratory data analysis of sensor drift, actuator correlations, and physical distribution curves.
+                </p>
+                <p class="onboarding-card-tip">
+                    <strong>Analytics:</strong> Interactive Plotly residual error histograms and sensor vs ground-truth scatter plots.
+                </p>
+            </div>
+            <div class="onboarding-card">
+                <div class="onboarding-card-title">
+                    <span>🏆 7. Empirical Evaluation Metrics</span>
+                    <span class="onboarding-tag">ML Benchmarking</span>
+                </div>
+                <p class="onboarding-card-desc">
+                    Quantitative academic verification computing Accuracy, Precision, Recall, and F1-Scores across labelled datasets.
+                </p>
+                <p class="onboarding-card-tip">
+                    <strong>Scientific Proof:</strong> Dynamic benchmark recalculation, confusion matrices, and model comparison charts.
+                </p>
+            </div>
+            <div class="onboarding-card">
+                <div class="onboarding-card-title">
+                    <span>💾 8. Datasets & Research Artifacts</span>
+                    <span class="onboarding-tag">Data Ops & Export</span>
+                </div>
+                <p class="onboarding-card-desc">
+                    Full time-series data table inspector with instant CSV export of timestamped, ground-truth labelled experimental runs.
+                </p>
+                <p class="onboarding-card-tip">
+                    <strong>Publication:</strong> Export clean datasets ready for college project appendices and IEEE research papers.
+                </p>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with tab_steps:
+        st.markdown("""
+        <div style="margin: 16px 0;">
+            <div class="onboarding-step">
+                <div class="onboarding-step-num">1</div>
+                <div>
+                    <div style="font-weight: 700; color: #ffffff; font-size: 1.05rem; margin-bottom: 4px;">Step 1: Observe Normal Baseline Operation</div>
+                    <div style="color: #94a3b8; font-size: 0.88rem; line-height: 1.5;">
+                        Navigate to <strong>🌊 Process SCADA Overview</strong>. Confirm that the simulated water level naturally cycles within hysteresis limits (refill at 30%, shutoff at 80%). The top bar displays a green <code>PLANT OPERATING NORMALLY</code> badge with near-zero physical residual (&lt; 5%).
+                    </div>
+                </div>
+            </div>
+            <div class="onboarding-step">
+                <div class="onboarding-step-num">2</div>
+                <div>
+                    <div style="font-weight: 700; color: #ffffff; font-size: 1.05rem; margin-bottom: 4px;">Step 2: Inject a Controlled Cyber Threat</div>
+                    <div style="color: #94a3b8; font-size: 0.88rem; line-height: 1.5;">
+                        Switch to <strong>🎯 Cyberattack Laboratory</strong>. Select <em>Sensor Spoofing</em> (falsified level = 20%) or <em>Command Flooding</em> (150 req/s), set duration to 12s, and click <strong>INJECT CYBERATTACK SCENARIO</strong>. The attack runs against localhost:5020 without risking physical equipment.
+                    </div>
+                </div>
+            </div>
+            <div class="onboarding-step">
+                <div class="onboarding-step-num">3</div>
+                <div>
+                    <div style="font-weight: 700; color: #ffffff; font-size: 1.05rem; margin-bottom: 4px;">Step 3: Analyze Multi-Tier Detection & Verification</div>
+                    <div style="color: #94a3b8; font-size: 0.88rem; line-height: 1.5;">
+                        Go to <strong>🛡️ Multi-Tier Anomaly Detection</strong> and <strong>🔄 Digital Twin Shadow Model</strong>. Notice how the physical residual diverges past the 5.0% threshold while the reported sensor lies, triggering the Isolation Forest and cyber-physical correlation alarm. Then inspect <strong>🏆 Empirical Evaluation Metrics</strong> for quantitative F1-scores.
+                    </div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with tab_sys:
+        st.markdown("""
+        <div style="background: rgba(18, 26, 46, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 20px; margin: 16px 0;">
+            <h4 style="color: #ffffff; margin-top: 0; font-size: 1.05rem;">Closed-Loop Cyber-Physical Digital Twin Architecture</h4>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; font-size: 0.82rem;">
+                <div style="background: rgba(15, 23, 42, 0.8); padding: 12px; border-radius: 12px; border-left: 3px solid #38bdf8;">
+                    <div style="font-weight: 700; color: #38bdf8;">1. Physical Plant</div>
+                    <div style="color: #94a3b8; margin-top: 4px;">Continuous mass-balance dh/dt = (Qin - Qout)/A with Torricelli efflux discharge.</div>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.8); padding: 12px; border-radius: 12px; border-left: 3px solid #818cf8;">
+                    <div style="font-weight: 700; color: #818cf8;">2. Virtual PLC</div>
+                    <div style="color: #94a3b8; margin-top: 4px;">Deterministic 5.0 Hz cyclic scan with hysteresis pump/valve control logic.</div>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.8); padding: 12px; border-radius: 12px; border-left: 3px solid #34d399;">
+                    <div style="font-weight: 700; color: #34d399;">3. Modbus TCP</div>
+                    <div style="color: #94a3b8; margin-top: 4px;">Port 5020 slave holding registers 40001–40012 for industrial telemetry & commands.</div>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.8); padding: 12px; border-radius: 12px; border-left: 3px solid #fbbf24;">
+                    <div style="font-weight: 700; color: #fbbf24;">4. Digital Twin</div>
+                    <div style="color: #94a3b8; margin-top: 4px;">Shadow physics reference calculating instantaneous residual |h_sensor - h_shadow|.</div>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.8); padding: 12px; border-radius: 12px; border-left: 3px solid #f87171;">
+                    <div style="font-weight: 700; color: #f87171;">5. Threat Simulator</div>
+                    <div style="color: #94a3b8; margin-top: 4px;">Red team injector targeting Modbus registers with spoofing, writes, floods, replays.</div>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.8); padding: 12px; border-radius: 12px; border-left: 3px solid #c084fc;">
+                    <div style="font-weight: 700; color: #c084fc;">6. Hybrid Detection</div>
+                    <div style="color: #94a3b8; margin-top: 4px;">Rule invariants + residual thresholding + scikit-learn Isolation Forest ML.</div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("---")
+    c_btn1, c_btn2 = st.columns([2, 1])
+    with c_btn1:
+        st.caption("💡 Tip: You can reopen this guided tour at any time from the top navigation bar or sidebar button.")
+    with c_btn2:
+        if st.button("🚀 Explore Dashboard & Get Started", type="primary", use_container_width=True):
+            st.session_state.onboarding_completed = True
+            st.session_state.show_onboarding = False
+            st.rerun()
+
+
+# Trigger Onboarding Dialog on Load or when Requested
+if st.session_state.show_onboarding:
+    show_onboarding_tutorial()
+
+
+# ==============================================================================
+# TOP APP BAR (Live Status, Residual Breadcrumb & Platform Tour Trigger)
 # ==============================================================================
 df_telemetry = db.get_all_telemetry()
 latest_level = 50.0
@@ -479,7 +858,7 @@ with col_tb1:
     if is_anomaly:
         st.markdown(f"""
         <div class="m3-top-bar">
-            <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
                 <span class="chip-red"><span class="dot-danger"></span> CYBER-PHYSICAL ANOMALY DETECTED</span>
                 <span class="tech-pill">ACTIVE EXP: {active_exp}</span>
                 <span style="font-size: 0.85rem; color: #f87171; font-weight: 600;">Physical Residual: {latest_residual:.2f}% &gt; {config['detection']['residual_threshold']}%</span>
@@ -489,7 +868,7 @@ with col_tb1:
     else:
         st.markdown(f"""
         <div class="m3-top-bar">
-            <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
                 <span class="chip-green"><span class="dot-live"></span> PLANT OPERATING NORMALLY</span>
                 <span class="tech-pill">SESSION: {active_exp}</span>
                 <span style="font-size: 0.85rem; color: #94a3b8;">All safety interlocks clear • Zero residual violations</span>
@@ -498,97 +877,9 @@ with col_tb1:
         """, unsafe_allow_html=True)
 
 with col_tb2:
-    if st.button("📘 Engineering Knowledge Hub", use_container_width=True):
-        st.session_state.show_help_hub = not st.session_state.show_help_hub
-
-
-# ==============================================================================
-# HIGH-VALUE ENGINEERING KNOWLEDGE HUB (Help & Documentation Modal/Drawer)
-# ==============================================================================
-if st.session_state.show_help_hub:
-    st.markdown('<div class="glass-card" style="border: 2px solid rgba(56, 189, 248, 0.4); margin-bottom: 25px;">', unsafe_allow_html=True)
-    col_hh_t, col_hh_b = st.columns([4, 1])
-    with col_hh_t:
-        st.markdown('<h2 class="brand-title" style="font-size: 1.5rem;">📖 TwinGuard-OT: Engineering & Evaluation Manual</h2>', unsafe_allow_html=True)
-        st.caption("Deep technical specifications, mathematical equations, register architecture, and evaluation rubrics.")
-    with col_hh_b:
-        if st.button("✕ Close Hub", use_container_width=True):
-            st.session_state.show_help_hub = False
-            st.rerun()
-
-    tab_h1, tab_h2, tab_h3, tab_h4 = st.tabs([
-        "📐 Physical Hydrodynamics",
-        "⚡ Virtual PLC & Modbus Architecture",
-        "🎯 Cyber-Physical Threat Vectors",
-        "🎓 RVCE Rubrics & Evaluation Checklist"
-    ])
-
-    with tab_h1:
-        st.markdown(r"""
-        #### 1. Continuous Hydrodynamic Differential Equation
-        The physical water plant is modelled mathematically using first-principles continuous mass balance:
-        """)
-        st.latex(r"\frac{dh(t)}{dt} = \frac{Q_{in}(t) - Q_{out}(t)}{A_{tank}}")
-        st.markdown(r"""
-        * **Inflow Dynamics ($Q_{in}$)**: Governed by the virtual positive displacement pump:
-          $$Q_{in}(t) = P_{state} \times 3.0\,\%/s$$
-        * **Outflow Dynamics ($Q_{out}$)**: Follows Torricelli's Law of Fluid Efflux combined with discharge valve state:
-          $$Q_{out}(t) = V_{state} \times \left(1.2 + 0.05 \sqrt{h(t)}\right)\,\%/s + Q_{leak}$$
-        * **Physical Invariant**: Water level is physically constrained to $[0.0\%, 100.0\%]$. Overflow ($h \ge 100\%$) and dry-run cavitation ($h \le 0\%$) trigger physical safety interlocks.
-        * **Sensor Decoupling**: Crucial to digital twin research:
-          * $h_{true}(t)$: Actual physical water level in the tank.
-          * $h_{sensor}(t)$: Measurement transmitted to PLC over Modbus (may include Gaussian telemetry noise $\mathcal{N}(0, \sigma^2)$ or cyber spoofing overrides).
-        """)
-
-    with tab_h2:
-        st.markdown(r"""
-        #### 2. Virtual PLC Scan Loop & Industrial Modbus Register Mapping
-        The virtual Programmable Logic Controller executes a deterministic cyclic scan at **5.0 Hz (200 ms)**:
-        1. **Input Scan**: Samples observed level from holding register `40001`.
-        2. **Hysteresis Setpoint Control**:
-           * If $h_{sensor} < 30.0\% \rightarrow$ Energize Pump (`ON`), Close Valve (`CLOSED`).
-           * If $h_{sensor} \ge 80.0\% \rightarrow$ De-energize Pump (`OFF`), Open Valve (`OPEN`).
-           * If $30.0\% \le h_{sensor} < 80.0\% \rightarrow$ Maintain current operational state (hysteresis deadband).
-        3. **Emergency Interlock**: If $h_{sensor} \ge 95.0\%$, hardware failsafe forcibly trips the pump to prevent brim rupture.
-        
-        ##### Official Modbus TCP Register Map (Port 5020, Unit ID 1):
-        | Address | Register Name | Scale | Unit | Type | Description |
-        |:---:|:---|:---:|:---:|:---:|:---|
-        | `40001` | `TANK_LEVEL_SENSOR` | 10.0 | % | RO | Reported tank level from virtual sensor |
-        | `40002` | `SETPOINT_LEVEL` | 10.0 | % | RW | Desired setpoint (Default: 70.0%) |
-        | `40003` | `PUMP_COMMAND` | 1.0 | Binary | RW | Inflow pump control (0=OFF, 1=ON) |
-        | `40004` | `VALVE_COMMAND` | 1.0 | Binary | RW | Drain discharge valve (0=CLOSED, 1=OPEN) |
-        | `40005` | `INFLOW_RATE` | 10.0 | %/s | RO | Flow telemetry sensor |
-        | `40006` | `OUTFLOW_RATE` | 10.0 | %/s | RO | Discharge rate telemetry sensor |
-        | `40007` | `ALARM_STATE` | 1.0 | Enum | RO | 0=Normal, 1=Low, 2=High, 3=Interlock |
-        | `40011` | `TRUE_TANK_LEVEL` | 10.0 | % | RO | Ground-truth plant level (hidden from PLC) |
-        | `40012` | `PHYSICAL_RESIDUAL`| 10.0 | % | RO | Instantaneous divergence $\|h_{sensor} - h_{shadow}\|$ |
-        """)
-
-    with tab_h3:
-        st.markdown(r"""
-        #### 3. Industrial Cyber-Physical Attack Taxonomy
-        All attacks are executed against local loopback `127.0.0.1:5020` without external network exposure:
-        1. **Sensor Spoofing (`sensor_spoofing.py`)**: Intercepts the sensor register and overwrites it with an artificially low value (e.g. 20%) while the tank is full, deceiving the PLC into overfilling.
-        2. **Unauthorized Register Write (`unauthorized_write.py`)**: Rogue Modbus client injects unauthorized Function Code 06 writes directly to `PUMP_COMMAND` coil.
-        3. **Replay Attack (`replay.py`)**: Records legitimate filling phase packets and replays them out-of-context during discharge, hiding real process drain.
-        4. **Command Flooding (`command_flood.py`)**: Modbus TCP Denial-of-Service burst ($150 - 300\text{ req/s}$) starving the PLC scan cycle.
-        5. **Abnormal Setpoint Manipulation (`setpoint_manipulation.py`)**: Manipulates holding register `40002` to an out-of-envelope boundary ($98.0\%$).
-        """)
-
-    with tab_h4:
-        st.markdown("""
-        #### 4. RVCE Experiential Learning (EL) Batch 2025 Rubrics Alignment
-        * **Phase I (40 Marks)**: Problem Definition (20M), Objectives (10M), Methodology Flowchart (10M).
-        * **Phase II (60 Marks)**: Project Execution (30M), Tools & Integration (20M), Partial Results (10M).
-        * **Phase III (100 Marks)**: 
-          * Prototype Demonstration (30M) — *Use this dashboard to trigger an attack live!*
-          * Results & Discussion (20M) — *Show the Isolation Forest F1-score of 0.705 and ROC metrics*.
-          * Report Completeness (20M) — *Attach exported CSV datasets and Modbus map*.
-          * Poster & PPT (10M) — *Use the A3 poster template with dual-tank SCADA screenshots*.
-          * Notable Outcome / Publication (20M) — *Benchmark run with N=1133 samples ready for IEEE student paper submission*.
-        """)
-    st.markdown('</div>', unsafe_allow_html=True)
+    if st.button("🧭 Platform Tour", use_container_width=True):
+        st.session_state.show_onboarding = True
+        st.rerun()
 
 
 # ==============================================================================
