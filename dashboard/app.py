@@ -67,45 +67,45 @@ st.markdown("""
         letter-spacing: -0.01em;
     }
 
-    /* Enterprise Dark Canvas */
+    /* Enterprise Deep Matte Canvas (F1 Reference) */
     .stApp {
-        background-color: #080c14 !important;
-        background-image: radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.06) 0%, transparent 55%) !important;
+        background-color: #060911 !important;
+        background-image: none !important;
         color: #f1f5f9 !important;
     }
 
-    /* Tighten Root Layout Spacing (Telemetry Density) */
+    /* Generous Layout Spacing & Breathing Room */
     .block-container {
-        padding-top: 0.85rem !important;
-        padding-bottom: 2rem !important;
-        padding-left: 1.5rem !important;
-        padding-right: 1.5rem !important;
+        padding-top: 1.6rem !important;
+        padding-bottom: 2.8rem !important;
+        padding-left: 2.2rem !important;
+        padding-right: 2.2rem !important;
         max-width: 100% !important;
     }
     header[data-testid="stHeader"] {
         background: transparent !important;
-        height: 1.6rem !important;
+        height: 1.8rem !important;
     }
     [data-testid="stVerticalBlock"] {
-        gap: 0.65rem !important;
+        gap: 1.20rem !important;
     }
     [data-testid="stHorizontalBlock"] {
-        gap: 0.75rem !important;
+        gap: 1.25rem !important;
     }
 
-    /* MD3 Expressive Surface Cards */
+    /* MD3 Expressive Surface Cards (Deep Matte Navy) */
     div[data-testid="stVerticalBlockBorderWrapper"] {
-        background: #0d1322 !important;
+        background: #0c101d !important;
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 14px !important;
-        padding: 16px 20px !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
-        margin-bottom: 8px !important;
+        border-radius: 16px !important;
+        padding: 20px 24px !important;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45) !important;
+        margin-bottom: 14px !important;
         transition: border-color 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
     }
     div[data-testid="stVerticalBlockBorderWrapper"]:hover {
-        border-color: rgba(56, 189, 248, 0.25) !important;
-        box-shadow: 0 6px 26px rgba(0, 0, 0, 0.55) !important;
+        border-color: rgba(56, 189, 248, 0.30) !important;
+        box-shadow: 0 6px 30px rgba(0, 0, 0, 0.6) !important;
     }
     div[data-testid="stVerticalBlockBorderWrapper"] > div {
         border: none !important;
@@ -222,8 +222,8 @@ st.markdown("""
     .metrics-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 12px;
-        margin-bottom: 8px;
+        gap: 16px;
+        margin: 12px 0 16px 0;
     }
     @media (max-width: 900px) {
         .metrics-grid {
@@ -236,25 +236,30 @@ st.markdown("""
         }
     }
     .telemetry-card {
-        background: #0d1322;
+        background: #0c101d;
         border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 12px;
-        padding: 14px 16px;
+        border-radius: 14px;
+        padding: 16px 18px 18px 18px;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
         transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+        min-height: 116px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
     .telemetry-card:hover {
-        border-color: rgba(56, 189, 248, 0.3);
-        background: #11192b;
-        transform: translateY(-1px);
+        border-color: rgba(56, 189, 248, 0.35);
+        background: #11172a;
+        box-shadow: 0 6px 22px rgba(0, 0, 0, 0.5);
+        transform: translateY(-2px);
     }
     .telemetry-card-header {
         display: flex;
         align-items: center;
         gap: 8px;
-        margin-bottom: 6px;
+        margin-bottom: 8px;
     }
     .telemetry-icon {
         width: 24px;
@@ -356,10 +361,10 @@ st.markdown("""
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 16px;
-        padding: 12px 14px;
-        background: #090e18;
-        border-radius: 12px;
+        gap: 24px;
+        padding: 16px 20px;
+        background: #080c16;
+        border-radius: 14px;
         border: 1px solid rgba(255, 255, 255, 0.08);
         position: relative;
     }
@@ -408,7 +413,7 @@ st.markdown("""
         border-top: 1px solid rgba(255, 255, 255, 0.35);
         border-radius: 4px 4px 14px 14px;
         position: relative;
-        background: radial-gradient(circle at 50% 50%, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.95) 100%);
+        background: #090e17;
         overflow: hidden;
         box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 4px 12px rgba(0, 0, 0, 0.4);
     }
