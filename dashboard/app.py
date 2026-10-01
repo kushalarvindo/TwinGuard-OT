@@ -364,16 +364,34 @@ st.markdown("""
         position: relative;
     }
     .scale-column {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        position: relative;
         height: 190px;
+        width: 38px;
         font-family: 'JetBrains Mono', monospace;
         font-size: 0.62rem;
         color: #64748b;
         text-align: right;
         padding-right: 6px;
-        border-right: 1px dashed rgba(255, 255, 255, 0.12);
+        border-right: 1px dashed rgba(255, 255, 255, 0.14);
+        margin-top: 22px;
+        margin-bottom: 48px;
+        flex-shrink: 0;
+    }
+    .scale-tick {
+        position: absolute;
+        right: 6px;
+        transform: translateY(50%);
+        line-height: 1;
+        white-space: nowrap;
+    }
+    .scale-tick::after {
+        content: "";
+        position: absolute;
+        right: -6px;
+        top: 50%;
+        width: 4px;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.28);
     }
     .tank-column {
         display: flex;
@@ -393,6 +411,16 @@ st.markdown("""
         background: radial-gradient(circle at 50% 50%, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.95) 100%);
         overflow: hidden;
         box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    .tank-glass-sheen {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 20%, transparent 60%, rgba(255,255,255,0.06) 100%);
+        pointer-events: none;
+        z-index: 12;
     }
     .liquid-wave-surface {
         position: absolute;
@@ -424,8 +452,17 @@ st.markdown("""
         left: 0;
         right: 0;
         height: 1px;
-        border-top: 1px dashed #f59e0b;
+        border-top: 1px dashed rgba(245, 158, 11, 0.75);
         z-index: 10;
+        pointer-events: none;
+    }
+    .telemetry-progress-track {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.06);
     }
     .tank-readout-tile {
         background: rgba(255, 255, 255, 0.03);
@@ -804,10 +841,6 @@ with st.sidebar:
             <span>DATABASE:</span>
             <span style="color: #38bdf8; font-weight: 600;">SQLite (WAL Active)</span>
         </div>
-        <div class="diag-row">
-            <span>ACADEMIC DEPT:</span>
-            <span style="color: #cbd5e1; font-weight: 500;">RVCE — Dept of ECE</span>
-        </div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -1158,47 +1191,63 @@ if nav_choice == "🌊 Process SCADA Overview":
     <div class="metrics-grid">
         <div class="telemetry-card">
             <div class="telemetry-card-header">
-                <div class="telemetry-icon icon-cyan">🌊</div>
+                <div class="telemetry-icon icon-cyan">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">water_drop</span>
+                </div>
                 <span class="telemetry-label">REPORTED TANK LEVEL</span>
             </div>
             <div class="telemetry-value text-cyan">{latest_level:.1f} <span class="telemetry-unit">%</span></div>
             <div class="telemetry-footer">
                 <span class="telemetry-pill {sp_pill_cls}">{delta_str}</span>
             </div>
-            <div class="telemetry-progress-bar" style="width: {level_pct}%; background: linear-gradient(90deg, #0284c7, #38bdf8);"></div>
+            <div class="telemetry-progress-track">
+                <div class="telemetry-progress-bar" style="width: {level_pct}%; background: linear-gradient(90deg, #0284c7, #38bdf8);"></div>
+            </div>
         </div>
         <div class="telemetry-card">
             <div class="telemetry-card-header">
-                <div class="telemetry-icon {pump_icon_cls}">⚡</div>
+                <div class="telemetry-icon {pump_icon_cls}">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">electric_bolt</span>
+                </div>
                 <span class="telemetry-label">INFLOW PUMP (COIL 40003)</span>
             </div>
             <div class="telemetry-value {pump_val_cls}">{pump_status_text}</div>
             <div class="telemetry-footer">
                 <span class="telemetry-pill {pump_pill_cls}">{pump_sub}</span>
             </div>
-            <div class="telemetry-progress-bar" style="width: {'100%' if latest_pump == 1 else '0%'}; background: #34d399;"></div>
+            <div class="telemetry-progress-track">
+                <div class="telemetry-progress-bar" style="width: {'100%' if latest_pump == 1 else '0%'}; background: #34d399;"></div>
+            </div>
         </div>
         <div class="telemetry-card">
             <div class="telemetry-card-header">
-                <div class="telemetry-icon {valve_icon_cls}">🚰</div>
+                <div class="telemetry-icon {valve_icon_cls}">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">tune</span>
+                </div>
                 <span class="telemetry-label">DISCHARGE VALVE (COIL 40004)</span>
             </div>
             <div class="telemetry-value {valve_val_cls}">{valve_status_text}</div>
             <div class="telemetry-footer">
                 <span class="telemetry-pill {valve_pill_cls}">{valve_sub}</span>
             </div>
-            <div class="telemetry-progress-bar" style="width: {'100%' if latest_valve == 1 else '0%'}; background: #34d399;"></div>
+            <div class="telemetry-progress-track">
+                <div class="telemetry-progress-bar" style="width: {'100%' if latest_valve == 1 else '0%'}; background: #34d399;"></div>
+            </div>
         </div>
         <div class="telemetry-card">
             <div class="telemetry-card-header">
-                <div class="telemetry-icon {res_icon_cls}">🛡️</div>
+                <div class="telemetry-icon {res_icon_cls}">
+                    <span class="material-symbols-outlined" style="font-size: 16px;">verified_user</span>
+                </div>
                 <span class="telemetry-label">PHYSICAL RESIDUAL |r(t)|</span>
             </div>
             <div class="telemetry-value {res_val_cls}">{latest_residual:.2f} <span class="telemetry-unit">%</span></div>
             <div class="telemetry-footer">
                 <span class="telemetry-pill {res_pill_cls}">{res_sub}</span>
             </div>
-            <div class="telemetry-progress-bar" style="width: {res_pct}%; background: {'#ef4444' if res_violated else '#818cf8'};"></div>
+            <div class="telemetry-progress-track">
+                <div class="telemetry-progress-bar" style="width: {res_pct}%; background: {'#ef4444' if res_violated else '#818cf8'};"></div>
+            </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -1222,16 +1271,17 @@ if nav_choice == "🌊 Process SCADA Overview":
             st.markdown(f"""
             <div class="scada-rig-container">
                 <div class="scale-column">
-                    <span>100%</span>
-                    <span style="color: #f59e0b; font-weight: 700;">80%</span>
-                    <span>60%</span>
-                    <span>40%</span>
-                    <span style="color: #f59e0b; font-weight: 700;">30%</span>
-                    <span>0%</span>
+                    <div class="scale-tick" style="bottom: 100%;">100%</div>
+                    <div class="scale-tick" style="bottom: 80%; color: #f59e0b; font-weight: 700;">80%</div>
+                    <div class="scale-tick" style="bottom: 60%;">60%</div>
+                    <div class="scale-tick" style="bottom: 40%;">40%</div>
+                    <div class="scale-tick" style="bottom: 30%; color: #f59e0b; font-weight: 700;">30%</div>
+                    <div class="scale-tick" style="bottom: 0%;">0%</div>
                 </div>
                 <div class="tank-column">
                     <span style="font-size: 0.68rem; color: #38bdf8; font-weight: 800; letter-spacing: 0.05em;">GROUND TRUTH</span>
                     <div class="tank-vessel">
+                        <div class="tank-glass-sheen"></div>
                         <div class="interlock-line" style="bottom: {high_line}%;"></div>
                         <div class="interlock-line" style="bottom: {low_line}%;"></div>
                         <div class="liquid-wave-surface wave-glow-true" style="height: {latest_true}%;"></div>
@@ -1246,6 +1296,7 @@ if nav_choice == "🌊 Process SCADA Overview":
                         {('⚠️ SPOOFED' if is_spoofed else 'REPORTED SENSOR')}
                     </span>
                     <div class="tank-vessel">
+                        <div class="tank-glass-sheen"></div>
                         <div class="interlock-line" style="bottom: {high_line}%;"></div>
                         <div class="interlock-line" style="bottom: {low_line}%;"></div>
                         <div class="{sensor_wave_cls}" style="height: {latest_level}%;"></div>
@@ -1256,10 +1307,12 @@ if nav_choice == "🌊 Process SCADA Overview":
                     </div>
                 </div>
             </div>
-            <div style="display: flex; justify-content: space-between; font-size: 0.68rem; color: #64748b; margin-top: 8px; font-family: 'JetBrains Mono', monospace;">
-                <span>CUTOFF: {high_line}%</span>
-                <span>REFILL: {low_line}%</span>
-                <span style="color: {'#f87171' if is_spoofed else '#34d399'}; font-weight: 700;">Δ {abs(latest_level - latest_true):.2f}%</span>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.68rem; color: #64748b; margin-top: 8px; font-family: 'JetBrains Mono', monospace; padding: 4px 8px; background: rgba(255,255,255,0.02); border-radius: 6px; border: 1px solid rgba(255,255,255,0.04);">
+                <span>CUTOFF: <strong style="color: #f59e0b;">{high_line:.0f}%</strong></span>
+                <span>REFILL: <strong style="color: #f59e0b;">{low_line:.0f}%</strong></span>
+                <span style="color: {'#f87171' if is_spoofed else '#34d399'}; font-weight: 700; background: {'rgba(239,68,68,0.14)' if is_spoofed else 'rgba(52,211,153,0.14)'}; padding: 2px 7px; border-radius: 4px; border: 1px solid {'rgba(239,68,68,0.25)' if is_spoofed else 'rgba(52,211,153,0.25)'};">
+                    {'⚠️ SENSOR SPOOFED' if is_spoofed else '✓ SYNCHRONIZED'} (Δ {abs(latest_level - latest_true):.2f}%)
+                </span>
             </div>
             """, unsafe_allow_html=True)
 
@@ -1284,7 +1337,7 @@ if nav_choice == "🌊 Process SCADA Overview":
                     name="Ground Truth Level",
                     line=dict(color="#38bdf8", width=2.5),
                     fill="tozeroy",
-                    fillcolor="rgba(56, 189, 248, 0.08)"
+                    fillcolor="rgba(56, 189, 248, 0.07)"
                 ))
                 fig_trend.add_trace(go.Scatter(
                     x=recent_df["Time_Sec"],
@@ -1293,18 +1346,54 @@ if nav_choice == "🌊 Process SCADA Overview":
                     name="Reported Sensor Signal",
                     line=dict(color="#f87171" if is_spoofed else "#34d399", width=2, dash="dot" if is_spoofed else "solid"),
                 ))
-                fig_trend.add_hline(y=high_line, line_dash="dash", line_color="#f59e0b", annotation_text=f"Cutoff ({high_line}%)", annotation_position="top left", annotation_font=dict(color="#f59e0b", size=10))
-                fig_trend.add_hline(y=low_line, line_dash="dash", line_color="#f59e0b", annotation_text=f"Refill ({low_line}%)", annotation_position="bottom left", annotation_font=dict(color="#f59e0b", size=10))
+                fig_trend.add_hline(
+                    y=high_line,
+                    line_dash="dash",
+                    line_color="#f59e0b",
+                    line_width=1.5,
+                    annotation_text=f"Cutoff ({high_line:.0f}%)",
+                    annotation_position="top right",
+                    annotation_font=dict(color="#f59e0b", size=9, family="JetBrains Mono"),
+                    annotation_bgcolor="rgba(15, 23, 42, 0.85)",
+                )
+                fig_trend.add_hline(
+                    y=low_line,
+                    line_dash="dash",
+                    line_color="#f59e0b",
+                    line_width=1.5,
+                    annotation_text=f"Refill ({low_line:.0f}%)",
+                    annotation_position="bottom right",
+                    annotation_font=dict(color="#f59e0b", size=9, family="JetBrains Mono"),
+                    annotation_bgcolor="rgba(15, 23, 42, 0.85)",
+                )
 
                 fig_trend.update_layout(
-                    height=272,
-                    margin=dict(l=8, r=8, t=10, b=8),
+                    height=265,
+                    margin=dict(l=8, r=12, t=10, b=8),
                     paper_bgcolor="rgba(0,0,0,0)",
                     plot_bgcolor="rgba(0,0,0,0)",
                     font=dict(color="#cbd5e1", family="Plus Jakarta Sans"),
-                    xaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.06)", tickfont=dict(color="#94a3b8")),
-                    yaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.06)", range=[0, 105], tickfont=dict(color="#94a3b8")),
-                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color="#cbd5e1", size=11)),
+                    xaxis=dict(
+                        showgrid=True,
+                        gridcolor="rgba(255,255,255,0.06)",
+                        tickfont=dict(color="#94a3b8", family="JetBrains Mono", size=10),
+                        title=dict(text="Elapsed Time (s)", font=dict(color="#64748b", size=11)),
+                    ),
+                    yaxis=dict(
+                        showgrid=True,
+                        gridcolor="rgba(255,255,255,0.06)",
+                        range=[0, 105],
+                        tickfont=dict(color="#94a3b8", family="JetBrains Mono", size=10),
+                        title=dict(text="Water Level (%)", font=dict(color="#64748b", size=11)),
+                    ),
+                    legend=dict(
+                        orientation="h",
+                        yanchor="bottom",
+                        y=1.02,
+                        xanchor="right",
+                        x=1,
+                        font=dict(color="#cbd5e1", size=11),
+                    ),
                 )
                 st.plotly_chart(fig_trend, use_container_width=True)
             else:
