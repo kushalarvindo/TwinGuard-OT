@@ -47,15 +47,17 @@ if "refresh_speed" not in st.session_state:
     st.session_state.refresh_speed = 3.0
 if "auto_refresh" not in st.session_state:
     st.session_state.auto_refresh = False
+if "nav_choice" not in st.session_state:
+    st.session_state.nav_choice = "🌊 Process SCADA Overview"
 
 # ==============================================================================
-# MATERIAL 3 EXPRESSIVE & GLASSMORHPISM SOC DESIGN SYSTEM
+# MATERIAL 3 EXPRESSIVE & SOC DESIGN SYSTEM
 # ==============================================================================
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
-    /* Global Canvas & Typography */
+    /* Global Typography & Canvas */
     html, body, [class*="css"] {
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         letter-spacing: -0.01em;
@@ -71,37 +73,23 @@ st.markdown("""
         color: #f1f5f9;
     }
 
-    /* Top Navigation App Bar */
-    .m3-top-bar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background: rgba(15, 23, 42, 0.72);
-        backdrop-filter: blur(24px) saturate(190%);
-        -webkit-backdrop-filter: blur(24px) saturate(190%);
-        border: 1px solid rgba(255, 255, 255, 0.09);
-        border-radius: 20px;
-        padding: 14px 24px;
-        margin-bottom: 24px;
-        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    /* Container Border Cards (Replaces broken unclosed glass-card divs) */
+    div[data-testid="stVerticalBlockBorderWrapper"] {
+        background: rgba(15, 23, 42, 0.72) !important;
+        backdrop-filter: blur(20px) saturate(180%) !important;
+        -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 20px !important;
+        padding: 20px 24px !important;
+        box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.45) !important;
+        margin-bottom: 16px !important;
+        transition: border-color 0.25s ease, transform 0.25s ease !important;
     }
-
-    /* Glass Cards */
-    .glass-card {
-        background: rgba(15, 23, 42, 0.68);
-        backdrop-filter: blur(20px) saturate(180%);
-        -webkit-backdrop-filter: blur(20px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 22px;
-        padding: 24px;
-        margin-bottom: 20px;
-        box-shadow: 0 12px 35px -8px rgba(0, 0, 0, 0.4),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-        transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), border-color 0.25s ease;
+    div[data-testid="stVerticalBlockBorderWrapper"]:hover {
+        border-color: rgba(56, 189, 248, 0.35) !important;
     }
-    .glass-card:hover {
-        border-color: rgba(56, 189, 248, 0.35);
+    div[data-testid="stVerticalBlockBorderWrapper"] > div {
+        border: none !important;
     }
 
     /* Gradient Brand Headings */
@@ -146,9 +134,9 @@ st.markdown("""
     /* Material You Expressive Buttons */
     .stButton > button {
         border-radius: 9999px !important;
-        padding: 10px 24px !important;
+        padding: 9px 22px !important;
         font-weight: 600 !important;
-        font-size: 0.92rem !important;
+        font-size: 0.9rem !important;
         border: 1px solid rgba(255, 255, 255, 0.12) !important;
         background: rgba(30, 41, 59, 0.75) !important;
         color: #f8fafc !important;
@@ -168,54 +156,55 @@ st.markdown("""
         box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35) !important;
     }
 
-    /* Material Design 3 Expressive Sidebar Navigation */
+    /* Sidebar Navigation Menu Items (Button-based MD3 Expressive) */
     section[data-testid="stSidebar"] {
         background: rgba(10, 14, 24, 0.95) !important;
         backdrop-filter: blur(28px) !important;
         border-right: 1px solid rgba(255, 255, 255, 0.07) !important;
     }
-    section[data-testid="stSidebar"] div[role="radiogroup"] {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-    }
-    section[data-testid="stSidebar"] div[role="radiogroup"] > label {
-        background: rgba(255, 255, 255, 0.02) !important;
-        border: 1px solid rgba(255, 255, 255, 0.05) !important;
-        border-radius: 16px !important;
-        padding: 11px 16px !important;
-        margin: 0 !important;
-        transition: all 0.22s cubic-bezier(0.2, 0, 0, 1) !important;
-        cursor: pointer !important;
+    section[data-testid="stSidebar"] .stButton > button {
+        width: 100% !important;
+        text-align: left !important;
+        justify-content: flex-start !important;
+        padding: 10px 14px !important;
+        border-radius: 12px !important;
+        font-size: 0.88rem !important;
+        font-weight: 600 !important;
+        margin-bottom: 2px !important;
+        letter-spacing: -0.01em !important;
         display: flex !important;
         align-items: center !important;
+        gap: 10px !important;
+        transition: all 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
     }
-    section[data-testid="stSidebar"] div[role="radiogroup"] > label:hover {
-        background: rgba(56, 189, 248, 0.08) !important;
-        border-color: rgba(56, 189, 248, 0.3) !important;
-        transform: translateX(4px) !important;
-    }
-    /* Hide native radio bullet */
-    section[data-testid="stSidebar"] div[role="radiogroup"] > label > div:first-child {
-        display: none !important;
-    }
-    section[data-testid="stSidebar"] div[role="radiogroup"] > label div[data-testid="stMarkdownContainer"] p {
-        font-weight: 500 !important;
-        font-size: 0.91rem !important;
+    /* Inactive Sidebar Nav Button */
+    section[data-testid="stSidebar"] .stButton > button[kind="secondary"] {
+        background: rgba(255, 255, 255, 0.02) !important;
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
         color: #94a3b8 !important;
-        letter-spacing: -0.01em !important;
-        margin: 0 !important;
+        backdrop-filter: blur(8px) !important;
     }
-    /* MD3 Expressive Selected Navigation Pill */
-    section[data-testid="stSidebar"] div[role="radiogroup"] > label:has(input:checked) {
-        background: linear-gradient(90deg, rgba(14, 165, 233, 0.22) 0%, rgba(99, 102, 241, 0.14) 100%) !important;
-        border: 1px solid rgba(56, 189, 248, 0.5) !important;
+    section[data-testid="stSidebar"] .stButton > button[kind="secondary"]:hover {
+        background: rgba(56, 189, 248, 0.1) !important;
+        border-color: rgba(56, 189, 248, 0.35) !important;
+        color: #ffffff !important;
+        transform: translateX(4px) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+    }
+    /* Active Sidebar Nav Button */
+    section[data-testid="stSidebar"] .stButton > button[kind="primary"] {
+        background: linear-gradient(90deg, rgba(14, 165, 233, 0.25) 0%, rgba(99, 102, 241, 0.18) 100%) !important;
+        border: 1px solid rgba(56, 189, 248, 0.55) !important;
         border-left: 5px solid #38bdf8 !important;
-        box-shadow: 0 4px 18px -2px rgba(14, 165, 233, 0.3) !important;
-    }
-    section[data-testid="stSidebar"] div[role="radiogroup"] > label:has(input:checked) div[data-testid="stMarkdownContainer"] p {
         color: #38bdf8 !important;
+        box-shadow: 0 4px 18px -2px rgba(14, 165, 233, 0.35) !important;
         font-weight: 700 !important;
+        transform: none !important;
+    }
+    section[data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {
+        border-color: #38bdf8 !important;
+        color: #ffffff !important;
+        box-shadow: 0 4px 22px rgba(56, 189, 248, 0.4) !important;
     }
 
     /* M3 Category Labels in Sidebar */
@@ -225,7 +214,7 @@ st.markdown("""
         text-transform: uppercase;
         letter-spacing: 0.1em;
         color: #64748b;
-        margin: 18px 0 8px 4px;
+        margin: 16px 0 6px 4px;
     }
 
     /* Status Badges */
@@ -236,10 +225,10 @@ st.markdown("""
         background: rgba(16, 185, 129, 0.12);
         color: #34d399;
         border: 1px solid rgba(52, 211, 153, 0.25);
-        padding: 6px 14px;
+        padding: 5px 12px;
         border-radius: 9999px;
         font-weight: 600;
-        font-size: 0.85rem;
+        font-size: 0.82rem;
     }
     .chip-red {
         display: inline-flex;
@@ -248,10 +237,10 @@ st.markdown("""
         background: rgba(239, 68, 68, 0.15);
         color: #f87171;
         border: 1px solid rgba(248, 113, 113, 0.35);
-        padding: 6px 14px;
+        padding: 5px 12px;
         border-radius: 9999px;
         font-weight: 600;
-        font-size: 0.85rem;
+        font-size: 0.82rem;
         animation: pulseAlert 2s infinite ease-in-out;
     }
     @keyframes pulseAlert {
@@ -273,41 +262,28 @@ st.markdown("""
         box-shadow: 0 0 8px #f87171;
     }
 
-    /* M3 Sliders */
-    [data-baseweb="slider"] {
-        margin-top: 12px;
-    }
-    [data-testid="stSlider"] div[role="slider"] {
-        background: #38bdf8 !important;
-        border: 3px solid #07090e !important;
-        box-shadow: 0 0 16px rgba(56, 189, 248, 0.7) !important;
-        width: 22px !important;
-        height: 22px !important;
-        border-radius: 50% !important;
-    }
-
-    /* Contextual Page Header Glass Card */
+    /* Contextual Page Header */
     .page-hero {
-        background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
-        backdrop-filter: blur(18px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-left: 5px solid #38bdf8;
-        border-radius: 18px;
-        padding: 20px 24px;
-        margin-bottom: 22px;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.75) 100%);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-left: 4px solid #38bdf8;
+        border-radius: 16px;
+        padding: 14px 20px;
+        margin-bottom: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     }
     .page-hero h3 {
-        margin: 0 0 6px 0;
-        font-size: 1.25rem;
+        margin: 0 0 4px 0;
+        font-size: 1.15rem;
         font-weight: 700;
         color: #f8fafc;
     }
     .page-hero p {
         margin: 0;
         color: #94a3b8;
-        font-size: 0.9rem;
-        line-height: 1.5;
+        font-size: 0.85rem;
+        line-height: 1.4;
     }
 
     /* SCADA Tank Visualizer */
@@ -315,26 +291,26 @@ st.markdown("""
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 36px;
-        padding: 28px;
-        background: rgba(11, 17, 33, 0.75);
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.06);
+        gap: 32px;
+        padding: 16px 20px;
+        background: rgba(11, 17, 33, 0.7);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
     }
     .scada-column {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
     }
     .tank-glass {
-        width: 140px;
-        height: 230px;
+        width: 130px;
+        height: 210px;
         border: 3px solid rgba(148, 163, 184, 0.35);
         border-top: none;
-        border-radius: 0 0 20px 20px;
+        border-radius: 0 0 18px 18px;
         position: relative;
-        background: rgba(15, 23, 42, 0.5);
+        background: rgba(15, 23, 42, 0.55);
         overflow: hidden;
         box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
     }
@@ -544,26 +520,37 @@ with st.sidebar:
     </div>
     """, unsafe_allow_html=True)
 
-    # Sidebar Navigation Menu Items
-    st.markdown('<div class="sidebar-category">Operations & Security Navigation</div>', unsafe_allow_html=True)
-    nav_choice = st.radio(
-        "Navigation",
-        [
-            "🌊 Process SCADA Overview",
-            "🔄 Digital Twin Shadow Model",
-            "📡 Modbus Protocol Inspector",
-            "🎯 Cyberattack Laboratory",
-            "🛡️ Multi-Tier Anomaly Detection",
-            "📊 Statistical Process Analytics",
-            "🏆 Empirical Evaluation Metrics",
-            "💾 Datasets & Research Artifacts",
-        ],
-        label_visibility="collapsed"
-    )
+    # 1. Operations & Telemetry
+    st.markdown('<div class="sidebar-category">Operations & Telemetry</div>', unsafe_allow_html=True)
+    if st.button("🌊  Process SCADA Overview", key="nav_scada", use_container_width=True, type="primary" if st.session_state.nav_choice == "🌊 Process SCADA Overview" else "secondary"):
+        st.session_state.nav_choice = "🌊 Process SCADA Overview"
+        st.rerun()
+    if st.button("🔄  Digital Twin Shadow Model", key="nav_twin", use_container_width=True, type="primary" if st.session_state.nav_choice == "🔄 Digital Twin Shadow Model" else "secondary"):
+        st.session_state.nav_choice = "🔄 Digital Twin Shadow Model"
+        st.rerun()
+    if st.button("📡  Modbus Protocol Inspector", key="nav_modbus", use_container_width=True, type="primary" if st.session_state.nav_choice == "📡 Modbus Protocol Inspector" else "secondary"):
+        st.session_state.nav_choice = "📡 Modbus Protocol Inspector"
+        st.rerun()
 
-    st.markdown("<div style='height: 4px;'></div>", unsafe_allow_html=True)
-    if st.button("🧭 Platform Tour & Onboarding", use_container_width=True):
-        st.session_state.show_onboarding = True
+    # 2. Security & Threat Lab
+    st.markdown('<div class="sidebar-category">Security & Threat Lab</div>', unsafe_allow_html=True)
+    if st.button("🎯  Cyberattack Laboratory", key="nav_attacks", use_container_width=True, type="primary" if st.session_state.nav_choice == "🎯 Cyberattack Laboratory" else "secondary"):
+        st.session_state.nav_choice = "🎯 Cyberattack Laboratory"
+        st.rerun()
+    if st.button("🛡️  Multi-Tier Anomaly Detection", key="nav_soc", use_container_width=True, type="primary" if st.session_state.nav_choice == "🛡️ Multi-Tier Anomaly Detection" else "secondary"):
+        st.session_state.nav_choice = "🛡️ Multi-Tier Anomaly Detection"
+        st.rerun()
+
+    # 3. Analytics & Benchmarking
+    st.markdown('<div class="sidebar-category">Analytics & Benchmarking</div>', unsafe_allow_html=True)
+    if st.button("📊  Statistical Process Analytics", key="nav_analytics", use_container_width=True, type="primary" if st.session_state.nav_choice == "📊 Statistical Process Analytics" else "secondary"):
+        st.session_state.nav_choice = "📊 Statistical Process Analytics"
+        st.rerun()
+    if st.button("🏆  Empirical Evaluation Metrics", key="nav_eval", use_container_width=True, type="primary" if st.session_state.nav_choice == "🏆 Empirical Evaluation Metrics" else "secondary"):
+        st.session_state.nav_choice = "🏆 Empirical Evaluation Metrics"
+        st.rerun()
+    if st.button("💾  Datasets & Research Artifacts", key="nav_data", use_container_width=True, type="primary" if st.session_state.nav_choice == "💾 Datasets & Research Artifacts" else "secondary"):
+        st.session_state.nav_choice = "💾 Datasets & Research Artifacts"
         st.rerun()
 
     st.markdown("---")
@@ -611,6 +598,8 @@ with st.sidebar:
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+nav_choice = st.session_state.nav_choice
 
 
 # ==============================================================================
@@ -816,7 +805,7 @@ def show_onboarding_tutorial():
     st.markdown("---")
     c_btn1, c_btn2 = st.columns([2, 1])
     with c_btn1:
-        st.caption("💡 Tip: You can reopen this guided tour at any time from the top navigation bar or sidebar button.")
+        st.caption("💡 Tip: You can reopen this guided tour at any time from the top navigation bar '🧭 Platform Tour' button.")
     with c_btn2:
         if st.button("🚀 Explore Dashboard & Get Started", type="primary", use_container_width=True):
             st.session_state.onboarding_completed = True
@@ -830,7 +819,7 @@ if st.session_state.show_onboarding:
 
 
 # ==============================================================================
-# TOP APP BAR (Live Status, Residual Breadcrumb & Platform Tour Trigger)
+# TOP APP BAR (Unified Status & Single Tour Button)
 # ==============================================================================
 df_telemetry = db.get_all_telemetry()
 latest_level = 50.0
@@ -853,33 +842,30 @@ if not df_telemetry.empty:
 
 is_anomaly = latest_label == 1 or latest_residual > config["detection"]["residual_threshold"]
 
-col_tb1, col_tb2 = st.columns([3, 1])
-with col_tb1:
-    if is_anomaly:
-        st.markdown(f"""
-        <div class="m3-top-bar">
+with st.container(border=True):
+    col_tb1, col_tb2 = st.columns([5, 1], vertical_alignment="center")
+    with col_tb1:
+        if is_anomaly:
+            st.markdown(f"""
             <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
                 <span class="chip-red"><span class="dot-danger"></span> CYBER-PHYSICAL ANOMALY DETECTED</span>
                 <span class="tech-pill">ACTIVE EXP: {active_exp}</span>
                 <span style="font-size: 0.85rem; color: #f87171; font-weight: 600;">Physical Residual: {latest_residual:.2f}% &gt; {config['detection']['residual_threshold']}%</span>
             </div>
-        </div>
-        """, unsafe_allow_html=True)
-    else:
-        st.markdown(f"""
-        <div class="m3-top-bar">
+            """, unsafe_allow_html=True)
+        else:
+            st.markdown(f"""
             <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
                 <span class="chip-green"><span class="dot-live"></span> PLANT OPERATING NORMALLY</span>
                 <span class="tech-pill">SESSION: {active_exp}</span>
                 <span style="font-size: 0.85rem; color: #94a3b8;">All safety interlocks clear • Zero residual violations</span>
             </div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
 
-with col_tb2:
-    if st.button("🧭 Platform Tour", use_container_width=True):
-        st.session_state.show_onboarding = True
-        st.rerun()
+    with col_tb2:
+        if st.button("🧭 Platform Tour", use_container_width=True):
+            st.session_state.show_onboarding = True
+            st.rerun()
 
 
 # ==============================================================================
@@ -911,73 +897,71 @@ if nav_choice == "🌊 Process SCADA Overview":
     col_scada1, col_scada2 = st.columns([1, 2])
 
     with col_scada1:
-        st.markdown('<div class="glass-card" style="text-align: center;">', unsafe_allow_html=True)
-        st.markdown('<div style="font-size: 0.85rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 14px;">Cyber-Physical Tank Rig</div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            st.markdown('<div style="font-size: 0.82rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; text-align: center;">Cyber-Physical Tank Rig</div>', unsafe_allow_html=True)
 
-        is_spoofed = abs(latest_level - latest_true) > 4.0
-        sensor_color_cls = "liquid-wave liquid-sensor"
-        if is_spoofed:
-            sensor_color_cls = "liquid-wave liquid-spoofed"
+            is_spoofed = abs(latest_level - latest_true) > 4.0
+            sensor_color_cls = "liquid-wave liquid-sensor"
+            if is_spoofed:
+                sensor_color_cls = "liquid-wave liquid-spoofed"
 
-        high_line = config['plc']['high_threshold']
-        low_line = config['plc']['low_threshold']
+            high_line = config['plc']['high_threshold']
+            low_line = config['plc']['low_threshold']
 
-        st.markdown(f"""
-        <div class="scada-rig">
-            <div class="scada-column">
-                <span style="font-size: 0.72rem; color: #38bdf8; font-weight: 800;">GROUND TRUTH</span>
-                <div class="tank-glass">
-                    <div class="interlock-line" style="bottom: {high_line}%;"></div>
-                    <div class="interlock-line" style="bottom: {low_line}%;"></div>
-                    <div class="liquid-wave liquid-true" style="height: {latest_true}%;"></div>
+            st.markdown(f"""
+            <div class="scada-rig">
+                <div class="scada-column">
+                    <span style="font-size: 0.72rem; color: #38bdf8; font-weight: 800;">GROUND TRUTH</span>
+                    <div class="tank-glass">
+                        <div class="interlock-line" style="bottom: {high_line}%;"></div>
+                        <div class="interlock-line" style="bottom: {low_line}%;"></div>
+                        <div class="liquid-wave liquid-true" style="height: {latest_true}%;"></div>
+                    </div>
+                    <span style="font-size: 1.15rem; font-weight: 800; color: #38bdf8;">{latest_true:.1f}%</span>
                 </div>
-                <span style="font-size: 1.15rem; font-weight: 800; color: #38bdf8;">{latest_true:.1f}%</span>
-            </div>
-            <div class="scada-column">
-                <span style="font-size: 0.72rem; color: {'#f87171' if is_spoofed else '#34d399'}; font-weight: 800;">
-                    REPORTED SENSOR {('(SPOOFED)' if is_spoofed else '')}
-                </span>
-                <div class="tank-glass">
-                    <div class="interlock-line" style="bottom: {high_line}%;"></div>
-                    <div class="interlock-line" style="bottom: {low_line}%;"></div>
-                    <div class="{sensor_color_cls}" style="height: {latest_level}%;"></div>
+                <div class="scada-column">
+                    <span style="font-size: 0.72rem; color: {'#f87171' if is_spoofed else '#34d399'}; font-weight: 800;">
+                        REPORTED SENSOR {('(SPOOFED)' if is_spoofed else '')}
+                    </span>
+                    <div class="tank-glass">
+                        <div class="interlock-line" style="bottom: {high_line}%;"></div>
+                        <div class="interlock-line" style="bottom: {low_line}%;"></div>
+                        <div class="{sensor_color_cls}" style="height: {latest_level}%;"></div>
+                    </div>
+                    <span style="font-size: 1.15rem; font-weight: 800; color: {'#f87171' if is_spoofed else '#34d399'};">{latest_level:.1f}%</span>
                 </div>
-                <span style="font-size: 1.15rem; font-weight: 800; color: {'#f87171' if is_spoofed else '#34d399'};">{latest_level:.1f}%</span>
             </div>
-        </div>
-        <div style="font-size: 0.75rem; color: #64748b; margin-top: 14px;">
-            Dashed Markers: Hysteresis Cutoff ({high_line}%) & Refill Trigger ({low_line}%)
-        </div>
-        </div>
-        """, unsafe_allow_html=True)
+            <div style="font-size: 0.75rem; color: #64748b; margin-top: 12px; text-align: center;">
+                Dashed Markers: Hysteresis Cutoff ({high_line}%) & Refill Trigger ({low_line}%)
+            </div>
+            """, unsafe_allow_html=True)
 
     with col_scada2:
-        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        st.markdown('<div style="font-size: 0.85rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px;">Real-Time Hydrodynamic Trajectory</div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            st.markdown('<div style="font-size: 0.82rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;">Real-Time Hydrodynamic Trajectory</div>', unsafe_allow_html=True)
 
-        if not df_telemetry.empty:
-            recent_df = df_telemetry.tail(120).copy()
-            recent_df["Time_Sec"] = (recent_df["timestamp"] - recent_df["timestamp"].iloc[0]).round(1)
-            fig_trend = px.line(
-                recent_df,
-                x="Time_Sec",
-                y=["sensor_level", "true_level"],
-                labels={"value": "Level (%)", "Time_Sec": "Elapsed (s)", "variable": "Telemetry Stream"},
-                color_discrete_map={"sensor_level": "#34d399", "true_level": "#38bdf8"},
-            )
-            fig_trend.update_layout(
-                height=285,
-                margin=dict(l=10, r=10, t=10, b=10),
-                paper_bgcolor="rgba(0,0,0,0)",
-                plot_bgcolor="rgba(0,0,0,0)",
-                xaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.06)"),
-                yaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.06)", range=[0, 105]),
-                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-            )
-            st.plotly_chart(fig_trend, use_container_width=True)
-        else:
-            st.info("System initializing... telemetry stream will populate automatically.")
-        st.markdown('</div>', unsafe_allow_html=True)
+            if not df_telemetry.empty:
+                recent_df = df_telemetry.tail(120).copy()
+                recent_df["Time_Sec"] = (recent_df["timestamp"] - recent_df["timestamp"].iloc[0]).round(1)
+                fig_trend = px.line(
+                    recent_df,
+                    x="Time_Sec",
+                    y=["sensor_level", "true_level"],
+                    labels={"value": "Level (%)", "Time_Sec": "Elapsed (s)", "variable": "Telemetry Stream"},
+                    color_discrete_map={"sensor_level": "#34d399", "true_level": "#38bdf8"},
+                )
+                fig_trend.update_layout(
+                    height=285,
+                    margin=dict(l=10, r=10, t=10, b=10),
+                    paper_bgcolor="rgba(0,0,0,0)",
+                    plot_bgcolor="rgba(0,0,0,0)",
+                    xaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.06)"),
+                    yaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.06)", range=[0, 105]),
+                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+                )
+                st.plotly_chart(fig_trend, use_container_width=True)
+            else:
+                st.info("System initializing... telemetry stream will populate automatically.")
 
 
 # ==============================================================================
@@ -999,25 +983,23 @@ elif nav_choice == "🔄 Digital Twin Shadow Model":
         exp_df = df_telemetry[df_telemetry["experiment_id"] == selected_exp].copy()
         exp_df["Elapsed_Sec"] = (exp_df["timestamp"] - exp_df["timestamp"].iloc[0]).round(1)
 
-        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        st.subheader("1. True Physical Level vs Observed Sensor Signal")
-        fig1 = go.Figure()
-        fig1.add_trace(go.Scatter(x=exp_df["Elapsed_Sec"], y=exp_df["true_level"], mode="lines", name="Ground Truth Physical Level", line=dict(color="#38bdf8", width=3)))
-        fig1.add_trace(go.Scatter(x=exp_df["Elapsed_Sec"], y=exp_df["sensor_level"], mode="lines", name="Reported Sensor Signal", line=dict(color="#f87171", width=2, dash="dot")))
-        fig1.add_hline(y=config["plc"]["high_threshold"], line_dash="dash", line_color="#fbbf24", annotation_text="High Hysteresis (80%)")
-        fig1.add_hline(y=config["plc"]["low_threshold"], line_dash="dash", line_color="#fbbf24", annotation_text="Low Hysteresis (30%)")
-        fig1.update_layout(height=320, xaxis_title="Elapsed Time (s)", yaxis_title="Water Level (%)", paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
-        st.plotly_chart(fig1, use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            st.subheader("1. True Physical Level vs Observed Sensor Signal")
+            fig1 = go.Figure()
+            fig1.add_trace(go.Scatter(x=exp_df["Elapsed_Sec"], y=exp_df["true_level"], mode="lines", name="Ground Truth Physical Level", line=dict(color="#38bdf8", width=3)))
+            fig1.add_trace(go.Scatter(x=exp_df["Elapsed_Sec"], y=exp_df["sensor_level"], mode="lines", name="Reported Sensor Signal", line=dict(color="#f87171", width=2, dash="dot")))
+            fig1.add_hline(y=config["plc"]["high_threshold"], line_dash="dash", line_color="#fbbf24", annotation_text="High Hysteresis (80%)")
+            fig1.add_hline(y=config["plc"]["low_threshold"], line_dash="dash", line_color="#fbbf24", annotation_text="Low Hysteresis (30%)")
+            fig1.update_layout(height=320, xaxis_title="Elapsed Time (s)", yaxis_title="Water Level (%)", paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+            st.plotly_chart(fig1, use_container_width=True)
 
-        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        st.subheader("2. Instantaneous Physical Residual: |Observed - Expected|")
-        fig2 = go.Figure()
-        fig2.add_trace(go.Scatter(x=exp_df["Elapsed_Sec"], y=exp_df["process_residual"], mode="lines", name="Process Residual r(t)", line=dict(color="#c084fc", width=2.5)))
-        fig2.add_hline(y=config["detection"]["residual_threshold"], line_dash="dash", line_color="#ef4444", annotation_text=f"Anomaly Threshold ({config['detection']['residual_threshold']}%)")
-        fig2.update_layout(height=260, xaxis_title="Elapsed Time (s)", yaxis_title="Residual Deviation (%)", paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
-        st.plotly_chart(fig2, use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            st.subheader("2. Instantaneous Physical Residual: |Observed - Expected|")
+            fig2 = go.Figure()
+            fig2.add_trace(go.Scatter(x=exp_df["Elapsed_Sec"], y=exp_df["process_residual"], mode="lines", name="Process Residual r(t)", line=dict(color="#c084fc", width=2.5)))
+            fig2.add_hline(y=config["detection"]["residual_threshold"], line_dash="dash", line_color="#ef4444", annotation_text=f"Anomaly Threshold ({config['detection']['residual_threshold']}%)")
+            fig2.update_layout(height=260, xaxis_title="Elapsed Time (s)", yaxis_title="Residual Deviation (%)", paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+            st.plotly_chart(fig2, use_container_width=True)
 
 
 # ==============================================================================
@@ -1038,39 +1020,36 @@ elif nav_choice == "📡 Modbus Protocol Inspector":
         col_m1, col_m2 = st.columns([2, 1])
 
         with col_m1:
-            st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-            st.subheader("Packet Arrival Rate (Requests / sec)")
-            df_events["Time"] = pd.to_datetime(df_events["timestamp"], unit="s")
-            fig_rate = px.line(
-                df_events.tail(120),
-                x="Time",
-                y="request_rate",
-                labels={"request_rate": "Requests / sec", "Time": "Timestamp"},
-                color_discrete_sequence=["#38bdf8"],
-            )
-            fig_rate.add_hline(y=config["detection"]["request_rate_flood_threshold"], line_dash="dash", line_color="#ef4444", annotation_text="Flood Alarm (30 req/s)")
-            fig_rate.update_layout(height=280, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
-            st.plotly_chart(fig_rate, use_container_width=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+            with st.container(border=True):
+                st.subheader("Packet Arrival Rate (Requests / sec)")
+                df_events["Time"] = pd.to_datetime(df_events["timestamp"], unit="s")
+                fig_rate = px.line(
+                    df_events.tail(120),
+                    x="Time",
+                    y="request_rate",
+                    labels={"request_rate": "Requests / sec", "Time": "Timestamp"},
+                    color_discrete_sequence=["#38bdf8"],
+                )
+                fig_rate.add_hline(y=config["detection"]["request_rate_flood_threshold"], line_dash="dash", line_color="#ef4444", annotation_text="Flood Alarm (30 req/s)")
+                fig_rate.update_layout(height=280, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+                st.plotly_chart(fig_rate, use_container_width=True)
 
         with col_m2:
-            st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-            st.subheader("Function Code Breakdown")
-            fc_counts = df_events["function_name"].value_counts().reset_index()
-            fc_counts.columns = ["Function", "Count"]
-            fig_pie = px.pie(fc_counts, values="Count", names="Function", color_discrete_sequence=px.colors.qualitative.Prism)
-            fig_pie.update_layout(height=280, paper_bgcolor="rgba(0,0,0,0)")
-            st.plotly_chart(fig_pie, use_container_width=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+            with st.container(border=True):
+                st.subheader("Function Code Breakdown")
+                fc_counts = df_events["function_name"].value_counts().reset_index()
+                fc_counts.columns = ["Function", "Count"]
+                fig_pie = px.pie(fc_counts, values="Count", names="Function", color_discrete_sequence=px.colors.qualitative.Prism)
+                fig_pie.update_layout(height=280, paper_bgcolor="rgba(0,0,0,0)")
+                st.plotly_chart(fig_pie, use_container_width=True)
 
-        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        st.subheader("Live Modbus Frame Transaction Table")
-        st.dataframe(
-            df_events[["timestamp", "client_ip", "function_name", "register_address", "register_name", "value", "is_write", "request_rate"]].tail(50),
-            use_container_width=True,
-            hide_index=True,
-        )
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            st.subheader("Live Modbus Frame Transaction Table")
+            st.dataframe(
+                df_events[["timestamp", "client_ip", "function_name", "register_address", "register_name", "value", "is_write", "request_rate"]].tail(50),
+                use_container_width=True,
+                hide_index=True,
+            )
 
 
 # ==============================================================================
@@ -1084,64 +1063,62 @@ elif nav_choice == "🎯 Cyberattack Laboratory":
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.subheader("Configure Threat Scenario")
+    with st.container(border=True):
+        st.subheader("Configure Threat Scenario")
 
-    attack_type = st.selectbox(
-        "Choose Attack Vector",
-        [
-            "Sensor Spoofing",
-            "Unauthorized Register Write",
-            "Replay Attack",
-            "Command Flooding",
-            "Abnormal Setpoint Manipulation",
-        ],
-    )
+        attack_type = st.selectbox(
+            "Choose Attack Vector",
+            [
+                "Sensor Spoofing",
+                "Unauthorized Register Write",
+                "Replay Attack",
+                "Command Flooding",
+                "Abnormal Setpoint Manipulation",
+            ],
+        )
 
-    c_at1, c_at2 = st.columns(2)
-    with c_at1:
-        duration = st.slider("Attack Duration (seconds)", min_value=5, max_value=30, value=12)
+        c_at1, c_at2 = st.columns(2)
+        with c_at1:
+            duration = st.slider("Attack Duration (seconds)", min_value=5, max_value=30, value=12)
 
-    with c_at2:
-        if attack_type == "Sensor Spoofing":
-            spoof_val = st.slider("Falsified Tank Level (%)", min_value=0.0, max_value=100.0, value=20.0)
-            st.caption("Reports falsified low level to PLC, forcing pump to cause an overflow disaster.")
-        elif attack_type == "Unauthorized Register Write":
-            target_reg = st.selectbox("Target Control Register", ["PUMP_COMMAND (40003)", "VALVE_COMMAND (40004)"])
-            st.caption("Sends unauthorized FC06 write packets directly to physical actuator holding registers.")
-        elif attack_type == "Command Flooding":
-            flood_rate = st.slider("Target Request Rate (req/s)", min_value=50, max_value=300, value=150)
-            st.caption("Floods PLC network socket with high-frequency queries to trigger CPU starvation.")
-        elif attack_type == "Abnormal Setpoint Manipulation":
-            setpoint_val = st.slider("Out-of-Envelope Setpoint (%)", min_value=5.0, max_value=99.0, value=98.0)
-            st.caption("Forces PLC setpoint outside the safe operational design envelope.")
-        else:
-            st.caption("Captures legitimate filling sequence frames and replays them during plant drain.")
+        with c_at2:
+            if attack_type == "Sensor Spoofing":
+                spoof_val = st.slider("Falsified Tank Level (%)", min_value=0.0, max_value=100.0, value=20.0)
+                st.caption("Reports falsified low level to PLC, forcing pump to cause an overflow disaster.")
+            elif attack_type == "Unauthorized Register Write":
+                target_reg = st.selectbox("Target Control Register", ["PUMP_COMMAND (40003)", "VALVE_COMMAND (40004)"])
+                st.caption("Sends unauthorized FC06 write packets directly to physical actuator holding registers.")
+            elif attack_type == "Command Flooding":
+                flood_rate = st.slider("Target Request Rate (req/s)", min_value=50, max_value=300, value=150)
+                st.caption("Floods PLC network socket with high-frequency queries to trigger CPU starvation.")
+            elif attack_type == "Abnormal Setpoint Manipulation":
+                setpoint_val = st.slider("Out-of-Envelope Setpoint (%)", min_value=5.0, max_value=99.0, value=98.0)
+                st.caption("Forces PLC setpoint outside the safe operational design envelope.")
+            else:
+                st.caption("Captures legitimate filling sequence frames and replays them during plant drain.")
 
-    st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("🚀 INJECT CYBERATTACK SCENARIO", type="primary", use_container_width=True):
-        st.info(f"Injecting {attack_type} against local simulation...")
-        attack_key_map = {
-            "Sensor Spoofing": "sensor_spoofing",
-            "Unauthorized Register Write": "unauthorized_write",
-            "Replay Attack": "replay",
-            "Command Flooding": "command_flood",
-            "Abnormal Setpoint Manipulation": "setpoint_manipulation",
-        }
-        internal_name = attack_key_map[attack_type]
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🚀 INJECT CYBERATTACK SCENARIO", type="primary", use_container_width=True):
+            st.info(f"Injecting {attack_type} against local simulation...")
+            attack_key_map = {
+                "Sensor Spoofing": "sensor_spoofing",
+                "Unauthorized Register Write": "unauthorized_write",
+                "Replay Attack": "replay",
+                "Command Flooding": "command_flood",
+                "Abnormal Setpoint Manipulation": "setpoint_manipulation",
+            }
+            internal_name = attack_key_map[attack_type]
 
-        with st.spinner(f"Executing {attack_type} for {duration} seconds..."):
-            csv_path = run_attack_experiment(
-                attack_name=internal_name,
-                warmup_sec=3.0,
-                attack_duration_sec=float(duration),
-                cooldown_sec=3.0,
-            )
-            st.success(f"Attack execution completed! Telemetry recorded and exported to: {csv_path}")
-            time.sleep(1.0)
-            st.rerun()
-
-    st.markdown('</div>', unsafe_allow_html=True)
+            with st.spinner(f"Executing {attack_type} for {duration} seconds..."):
+                csv_path = run_attack_experiment(
+                    attack_name=internal_name,
+                    warmup_sec=3.0,
+                    attack_duration_sec=float(duration),
+                    cooldown_sec=3.0,
+                )
+                st.success(f"Attack execution completed! Telemetry recorded and exported to: {csv_path}")
+                time.sleep(1.0)
+                st.rerun()
 
 
 # ==============================================================================
@@ -1170,37 +1147,35 @@ elif nav_choice == "🛡️ Multi-Tier Anomaly Detection":
             cp_count = len(df_detections[df_detections["correlation_category"] == "CYBER_PHYSICAL_ATTACK"])
             st.metric("Correlated Cyber-Physical Attacks", cp_count)
 
-        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        st.subheader("Cyber-Physical Incident Classification Breakdown")
-        cat_counts = df_detections["correlation_category"].value_counts().reset_index()
-        cat_counts.columns = ["Category", "Count"]
-        fig_cat = px.bar(
-            cat_counts,
-            x="Category",
-            y="Count",
-            color="Category",
-            color_discrete_map={
-                "NORMAL": "#34d399",
-                "CYBER_ONLY": "#38bdf8",
-                "PROCESS_ONLY": "#fbbf24",
-                "CYBER_PHYSICAL_ATTACK": "#f87171",
-            }
-        )
-        fig_cat.update_layout(height=280, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
-        st.plotly_chart(fig_cat, use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            st.subheader("Cyber-Physical Incident Classification Breakdown")
+            cat_counts = df_detections["correlation_category"].value_counts().reset_index()
+            cat_counts.columns = ["Category", "Count"]
+            fig_cat = px.bar(
+                cat_counts,
+                x="Category",
+                y="Count",
+                color="Category",
+                color_discrete_map={
+                    "NORMAL": "#34d399",
+                    "CYBER_ONLY": "#38bdf8",
+                    "PROCESS_ONLY": "#fbbf24",
+                    "CYBER_PHYSICAL_ATTACK": "#f87171",
+                }
+            )
+            fig_cat.update_layout(height=280, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+            st.plotly_chart(fig_cat, use_container_width=True)
 
-        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        st.subheader("Explainable Security Incident Feed")
-        if not anom_only.empty:
-            for _, alert in anom_only.tail(10).iterrows():
-                with st.expander(f"🚨 [{alert['severity']}] {alert['correlation_category']} — Rule: {alert['rule_id']}"):
-                    st.write(f"**Explanation:** {alert['explanation']}")
-                    st.write(f"**Timestamp:** {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(alert['timestamp']))}")
-                    st.write(f"**Machine Learning Anomaly Score:** `{alert['anomaly_score']:.3f}`")
-        else:
-            st.success("All processes running normally. No anomalies detected.")
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            st.subheader("Explainable Security Incident Feed")
+            if not anom_only.empty:
+                for _, alert in anom_only.tail(10).iterrows():
+                    with st.expander(f"🚨 [{alert['severity']}] {alert['correlation_category']} — Rule: {alert['rule_id']}"):
+                        st.write(f"**Explanation:** {alert['explanation']}")
+                        st.write(f"**Timestamp:** {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(alert['timestamp']))}")
+                        st.write(f"**Machine Learning Anomaly Score:** `{alert['anomaly_score']:.3f}`")
+            else:
+                st.success("All processes running normally. No anomalies detected.")
 
 
 # ==============================================================================
@@ -1220,32 +1195,30 @@ elif nav_choice == "📊 Statistical Process Analytics":
         col_a1, col_a2 = st.columns(2)
 
         with col_a1:
-            st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-            st.subheader("Physical Residual Histogram")
-            fig_hist = px.histogram(
-                df_telemetry,
-                x="process_residual",
-                color="attack_type",
-                nbins=35,
-                labels={"process_residual": "Residual Error (%)", "count": "Sample Count"},
-            )
-            fig_hist.update_layout(height=320, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
-            st.plotly_chart(fig_hist, use_container_width=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+            with st.container(border=True):
+                st.subheader("Physical Residual Histogram")
+                fig_hist = px.histogram(
+                    df_telemetry,
+                    x="process_residual",
+                    color="attack_type",
+                    nbins=35,
+                    labels={"process_residual": "Residual Error (%)", "count": "Sample Count"},
+                )
+                fig_hist.update_layout(height=320, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+                st.plotly_chart(fig_hist, use_container_width=True)
 
         with col_a2:
-            st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-            st.subheader("Sensor vs Ground Truth Discrepancy")
-            fig_scatter = px.scatter(
-                df_telemetry,
-                x="true_level",
-                y="sensor_level",
-                color="attack_type",
-                labels={"true_level": "True Plant Level (%)", "sensor_level": "Reported Sensor (%)"},
-            )
-            fig_scatter.update_layout(height=320, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
-            st.plotly_chart(fig_scatter, use_container_width=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+            with st.container(border=True):
+                st.subheader("Sensor vs Ground Truth Discrepancy")
+                fig_scatter = px.scatter(
+                    df_telemetry,
+                    x="true_level",
+                    y="sensor_level",
+                    color="attack_type",
+                    labels={"true_level": "True Plant Level (%)", "sensor_level": "Reported Sensor (%)"},
+                )
+                fig_scatter.update_layout(height=320, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+                st.plotly_chart(fig_scatter, use_container_width=True)
 
 
 # ==============================================================================
@@ -1269,29 +1242,27 @@ elif nav_choice == "🏆 Empirical Evaluation Metrics":
     if df_eval.empty:
         st.warning("No evaluation metrics generated yet. Click 'Recompute Metrics' above to calculate.")
     else:
-        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        st.subheader("Comparative Detection Benchmark Table")
-        st.dataframe(
-            df_eval[["model_name", "total_samples", "true_positives", "false_positives", "true_negatives", "false_negatives", "accuracy", "precision", "recall", "f1_score", "false_positive_rate"]].drop_duplicates(subset=["model_name"]),
-            use_container_width=True,
-            hide_index=True,
-        )
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            st.subheader("Comparative Detection Benchmark Table")
+            st.dataframe(
+                df_eval[["model_name", "total_samples", "true_positives", "false_positives", "true_negatives", "false_negatives", "accuracy", "precision", "recall", "f1_score", "false_positive_rate"]].drop_duplicates(subset=["model_name"]),
+                use_container_width=True,
+                hide_index=True,
+            )
 
-        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        st.subheader("F1-Score and Accuracy Comparison")
-        latest_unique = df_eval.drop_duplicates(subset=["model_name"])
-        fig_bar = px.bar(
-            latest_unique,
-            x="model_name",
-            y=["accuracy", "precision", "recall", "f1_score"],
-            barmode="group",
-            labels={"value": "Score (0.0 to 1.0)", "model_name": "Detection Approach"},
-            color_discrete_sequence=["#38bdf8", "#818cf8", "#34d399", "#f87171"],
-        )
-        fig_bar.update_layout(height=340, yaxis_range=[0, 1.05], paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
-        st.plotly_chart(fig_bar, use_container_width=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+        with st.container(border=True):
+            st.subheader("F1-Score and Accuracy Comparison")
+            latest_unique = df_eval.drop_duplicates(subset=["model_name"])
+            fig_bar = px.bar(
+                latest_unique,
+                x="model_name",
+                y=["accuracy", "precision", "recall", "f1_score"],
+                barmode="group",
+                labels={"value": "Score (0.0 to 1.0)", "model_name": "Detection Approach"},
+                color_discrete_sequence=["#38bdf8", "#818cf8", "#34d399", "#f87171"],
+            )
+            fig_bar.update_layout(height=340, yaxis_range=[0, 1.05], paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+            st.plotly_chart(fig_bar, use_container_width=True)
 
 
 # ==============================================================================
@@ -1308,23 +1279,22 @@ elif nav_choice == "💾 Datasets & Research Artifacts":
     if df_telemetry.empty:
         st.info("No recorded datasets found in database.")
     else:
-        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        exp_list = ["ALL"] + list(df_telemetry["experiment_id"].unique())
-        selected = st.selectbox("Select Experiment Run to View & Download", exp_list)
+        with st.container(border=True):
+            exp_list = ["ALL"] + list(df_telemetry["experiment_id"].unique())
+            selected = st.selectbox("Select Experiment Run to View & Download", exp_list)
 
-        filtered_df = df_telemetry if selected == "ALL" else df_telemetry[df_telemetry["experiment_id"] == selected]
-        st.write(f"Showing **{len(filtered_df)}** recorded telemetry frames:")
-        st.dataframe(filtered_df.tail(200), use_container_width=True, hide_index=True)
+            filtered_df = df_telemetry if selected == "ALL" else df_telemetry[df_telemetry["experiment_id"] == selected]
+            st.write(f"Showing **{len(filtered_df)}** recorded telemetry frames:")
+            st.dataframe(filtered_df.tail(200), use_container_width=True, hide_index=True)
 
-        csv_data = filtered_df.to_csv(index=False).encode("utf-8")
-        st.download_button(
-            label="📥 Download Labelled Dataset (CSV)",
-            data=csv_data,
-            file_name=f"twinguard_dataset_{selected}.csv",
-            mime="text/csv",
-            use_container_width=True,
-        )
-        st.markdown('</div>', unsafe_allow_html=True)
+            csv_data = filtered_df.to_csv(index=False).encode("utf-8")
+            st.download_button(
+                label="📥 Download Labelled Dataset (CSV)",
+                data=csv_data,
+                file_name=f"twinguard_dataset_{selected}.csv",
+                mime="text/csv",
+                use_container_width=True,
+            )
 
 
 # ==============================================================================
