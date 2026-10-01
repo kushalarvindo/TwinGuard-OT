@@ -1,11 +1,13 @@
 """
-TwinGuard-OT: Process-Aware Digital Twin for Cybersecurity Testing and Anomaly Detection in ICS
-Interactive Material You & Glassmorphism SCADA Platform.
+TwinGuard-OT: Process-Aware Digital Twin for Cybersecurity Testing and Anomaly Detection in ICS.
+Material 3 Expressive SCADA & Security Operations Center (SOC) Platform.
+Designed for high-impact academic demonstration, empirical research, and industrial emulation.
 """
 
 import sys
 import time
 from pathlib import Path
+from datetime import datetime
 
 # Add src to pythonpath
 root_dir = Path(__file__).resolve().parent.parent
@@ -30,274 +32,324 @@ from experiments.run_attack import run_attack_experiment
 
 # Streamlit Page Config
 st.set_page_config(
-    page_title="TwinGuard-OT | Industrial Digital Twin",
+    page_title="TwinGuard-OT | Industrial Cyber-Physical Testbed",
     page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
 # Initialize Session State
-if "show_tour" not in st.session_state:
-    st.session_state.show_tour = True
-if "active_nav" not in st.session_state:
-    st.session_state.active_nav = "🌊 Overview"
+if "show_help_hub" not in st.session_state:
+    st.session_state.show_help_hub = False
+if "refresh_speed" not in st.session_state:
+    st.session_state.refresh_speed = 3.0
+if "auto_refresh" not in st.session_state:
+    st.session_state.auto_refresh = False
 
 # ==============================================================================
-# MATERIAL YOU & GLASSMORHPISM DESIGN SYSTEM (CSS)
+# MATERIAL 3 EXPRESSIVE & GLASSMORHPISM SOC DESIGN SYSTEM
 # ==============================================================================
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
-    /* Global Typography & Mesh Background */
+    /* Global Canvas & Typography */
     html, body, [class*="css"] {
-        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        letter-spacing: -0.01em;
     }
-    
+
     .stApp {
-        background: radial-gradient(circle at 15% 15%, rgba(14, 30, 60, 0.45), transparent 40%),
-                    radial-gradient(circle at 85% 85%, rgba(30, 20, 50, 0.35), transparent 45%),
-                    #090d16;
+        background-color: #07090e;
+        background-image: 
+            radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.12) 0px, transparent 50%),
+            radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+            radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
+        background-attachment: fixed;
         color: #f1f5f9;
     }
 
-    /* Glassmorphism Surface Container */
-    .glass-card {
-        background: rgba(18, 25, 42, 0.65);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+    /* Top Navigation App Bar */
+    .m3-top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(15, 23, 42, 0.7);
+        backdrop-filter: blur(24px) saturate(190%);
+        -webkit-backdrop-filter: blur(24px) saturate(190%);
+        border: 1px solid rgba(255, 255, 255, 0.09);
         border-radius: 20px;
+        padding: 14px 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    }
+
+    /* Glass Cards */
+    .glass-card {
+        background: rgba(15, 23, 42, 0.65);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 22px;
         padding: 24px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
         margin-bottom: 20px;
+        box-shadow: 0 12px 35px -8px rgba(0, 0, 0, 0.4),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), border-color 0.25s ease;
     }
     .glass-card:hover {
-        border-color: rgba(56, 189, 248, 0.25);
-        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+        border-color: rgba(56, 189, 248, 0.3);
     }
 
-    /* Material You Pill Header Banner */
-    .m3-hero {
-        background: linear-gradient(135deg, rgba(30, 58, 138, 0.4) 0%, rgba(15, 23, 42, 0.8) 100%);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(56, 189, 248, 0.2);
-        border-radius: 24px;
-        padding: 28px;
-        position: relative;
-        overflow: hidden;
-        margin-bottom: 25px;
-    }
-    .m3-hero::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -20%;
-        width: 300px;
-        height: 300px;
-        background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 70%);
-        pointer-events: none;
-    }
-
-    /* Gradient Typography */
-    .gradient-title {
-        background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #38bdf8 100%);
+    /* Gradient Brand Headings */
+    .brand-title {
+        background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 40%, #38bdf8 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-weight: 800;
-        letter-spacing: -0.5px;
-        margin-bottom: 6px;
+        font-size: 1.85rem;
+        letter-spacing: -0.03em;
+        margin: 0;
     }
 
-    /* Material You Metric Pill Cards */
+    /* Metric Cards */
     [data-testid="stMetric"] {
-        background: rgba(18, 26, 45, 0.7) !important;
-        backdrop-filter: blur(14px) !important;
+        background: rgba(15, 23, 42, 0.7) !important;
+        backdrop-filter: blur(16px) !important;
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 18px !important;
-        padding: 16px 20px !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+        border-radius: 20px !important;
+        padding: 16px 22px !important;
+        box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.35) !important;
+        transition: all 0.2s ease !important;
     }
     [data-testid="stMetric"]:hover {
-        border-color: rgba(56, 189, 248, 0.35) !important;
+        border-color: rgba(56, 189, 248, 0.4) !important;
+        transform: translateY(-2px) !important;
     }
     [data-testid="stMetricLabel"] {
         color: #94a3b8 !important;
-        font-size: 0.85rem !important;
-        font-weight: 600 !important;
+        font-size: 0.8rem !important;
+        font-weight: 700 !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.5px !important;
+        letter-spacing: 0.05em !important;
     }
     [data-testid="stMetricValue"] {
-        color: #f8fafc !important;
-        font-weight: 700 !important;
-        font-size: 1.8rem !important;
+        color: #ffffff !important;
+        font-weight: 800 !important;
+        font-size: 1.9rem !important;
+        letter-spacing: -0.02em !important;
     }
 
-    /* Material You Rounded Pill Buttons */
+    /* Material You Expressive Buttons */
     .stButton > button {
         border-radius: 9999px !important;
         padding: 10px 24px !important;
         font-weight: 600 !important;
-        font-size: 0.95rem !important;
+        font-size: 0.92rem !important;
         border: 1px solid rgba(255, 255, 255, 0.12) !important;
-        background: rgba(30, 41, 59, 0.8) !important;
+        background: rgba(30, 41, 59, 0.75) !important;
         color: #f8fafc !important;
-        backdrop-filter: blur(10px) !important;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+        backdrop-filter: blur(12px) !important;
+        transition: all 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
     }
     .stButton > button:hover {
         background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%) !important;
-        border-color: rgba(56, 189, 248, 0.5) !important;
+        border-color: rgba(56, 189, 248, 0.6) !important;
         color: #ffffff !important;
         transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4) !important;
+        box-shadow: 0 8px 24px rgba(2, 132, 199, 0.45) !important;
     }
     .stButton > button[kind="primary"] {
         background: linear-gradient(135deg, #0284c7 0%, #3b82f6 100%) !important;
-        border: 1px solid rgba(56, 189, 248, 0.6) !important;
-    }
-    .stButton > button[kind="primary"]:hover {
-        background: linear-gradient(135deg, #0369a1 0%, #1d4ed8 100%) !important;
+        border: 1px solid rgba(56, 189, 248, 0.7) !important;
+        box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35) !important;
     }
 
-    /* Material You Sliders */
-    [data-baseweb="slider"] {
-        margin-top: 10px;
+    /* Material You Custom Sidebar Radio (Replaced into Segmented Menu Items) */
+    section[data-testid="stSidebar"] {
+        background: rgba(10, 14, 24, 0.94) !important;
+        backdrop-filter: blur(28px) !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.07) !important;
     }
-    [data-testid="stSlider"] div[role="slider"] {
-        background: #38bdf8 !important;
-        border: 3px solid #0f172a !important;
-        box-shadow: 0 0 12px rgba(56, 189, 248, 0.6) !important;
-        width: 20px !important;
-        height: 20px !important;
+    section[data-testid="stSidebar"] div[role="radiogroup"] > label {
+        background: rgba(255, 255, 255, 0.02) !important;
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        border-radius: 14px !important;
+        padding: 10px 14px !important;
+        margin-bottom: 8px !important;
+        transition: all 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
+        cursor: pointer !important;
+    }
+    section[data-testid="stSidebar"] div[role="radiogroup"] > label:hover {
+        background: rgba(56, 189, 248, 0.1) !important;
+        border-color: rgba(56, 189, 248, 0.3) !important;
+        transform: translateX(4px) !important;
+    }
+    /* Hide native radio bullet */
+    section[data-testid="stSidebar"] div[role="radiogroup"] > label > div:first-child {
+        display: none !important;
+    }
+    section[data-testid="stSidebar"] div[role="radiogroup"] > label div[data-testid="stMarkdownContainer"] p {
+        font-weight: 600 !important;
+        font-size: 0.92rem !important;
+        color: #cbd5e1 !important;
     }
 
-    /* Live Animated Status Badges */
-    .status-pill-normal {
+    /* M3 Category Labels in Sidebar */
+    .sidebar-category {
+        font-size: 0.72rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #64748b;
+        margin: 18px 0 8px 4px;
+    }
+
+    /* Status Badges */
+    .chip-green {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        background: rgba(16, 185, 129, 0.15);
+        background: rgba(16, 185, 129, 0.12);
         color: #34d399;
-        border: 1px solid rgba(52, 211, 153, 0.3);
-        padding: 8px 16px;
+        border: 1px solid rgba(52, 211, 153, 0.25);
+        padding: 6px 14px;
         border-radius: 9999px;
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
-    .status-pill-alert {
+    .chip-red {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        background: rgba(239, 68, 68, 0.2);
+        background: rgba(239, 68, 68, 0.15);
         color: #f87171;
-        border: 1px solid rgba(248, 113, 113, 0.4);
-        padding: 8px 16px;
+        border: 1px solid rgba(248, 113, 113, 0.35);
+        padding: 6px 14px;
         border-radius: 9999px;
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         animation: pulseAlert 2s infinite ease-in-out;
     }
     @keyframes pulseAlert {
         0%, 100% { box-shadow: 0 0 0 rgba(239, 68, 68, 0); }
-        50% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
+        50% { box-shadow: 0 0 24px rgba(239, 68, 68, 0.45); }
     }
-
-    .pulse-dot-green {
-        width: 10px;
-        height: 10px;
-        background-color: #34d399;
+    .dot-live {
+        width: 8px;
+        height: 8px;
         border-radius: 50%;
+        background-color: #34d399;
         box-shadow: 0 0 8px #34d399;
     }
-    .pulse-dot-red {
-        width: 10px;
-        height: 10px;
-        background-color: #f87171;
+    .dot-danger {
+        width: 8px;
+        height: 8px;
         border-radius: 50%;
+        background-color: #f87171;
         box-shadow: 0 0 8px #f87171;
     }
 
-    /* Explanatory Glass Card Header */
-    .guide-banner {
-        background: rgba(30, 41, 59, 0.5);
-        backdrop-filter: blur(12px);
-        border-left: 4px solid #38bdf8;
-        border-radius: 0 16px 16px 0;
-        padding: 16px 20px;
-        margin-bottom: 24px;
-        font-size: 0.95rem;
-        line-height: 1.5;
-        color: #cbd5e1;
+    /* M3 Sliders */
+    [data-baseweb="slider"] {
+        margin-top: 12px;
+    }
+    [data-testid="stSlider"] div[role="slider"] {
+        background: #38bdf8 !important;
+        border: 3px solid #07090e !important;
+        box-shadow: 0 0 16px rgba(56, 189, 248, 0.7) !important;
+        width: 22px !important;
+        height: 22px !important;
+        border-radius: 50% !important;
     }
 
-    /* SCADA Tank Visualizer Box */
-    .scada-tank-container {
+    /* Contextual Page Header Glass Card */
+    .page-hero {
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+        backdrop-filter: blur(18px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-left: 5px solid #38bdf8;
+        border-radius: 18px;
+        padding: 20px 24px;
+        margin-bottom: 22px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    }
+    .page-hero h3 {
+        margin: 0 0 6px 0;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #f8fafc;
+    }
+    .page-hero p {
+        margin: 0;
+        color: #94a3b8;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    /* SCADA Tank Visualizer */
+    .scada-rig {
         display: flex;
+        align-items: center;
         justify-content: center;
-        align-items: flex-end;
-        gap: 24px;
-        padding: 24px;
-        background: rgba(15, 23, 42, 0.6);
-        border-radius: 16px;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        gap: 36px;
+        padding: 28px;
+        background: rgba(11, 17, 33, 0.75);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
     }
-    .scada-tank {
-        width: 130px;
-        height: 220px;
-        border: 3px solid rgba(148, 163, 184, 0.4);
+    .scada-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    .tank-glass {
+        width: 140px;
+        height: 230px;
+        border: 3px solid rgba(148, 163, 184, 0.35);
         border-top: none;
-        border-radius: 0 0 18px 18px;
+        border-radius: 0 0 20px 20px;
         position: relative;
-        background: rgba(15, 23, 42, 0.4);
+        background: rgba(15, 23, 42, 0.5);
         overflow: hidden;
-        box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
     }
-    .scada-water {
+    .liquid-wave {
         position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
-        transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        border-top: 2px solid rgba(255, 255, 255, 0.6);
+        transition: height 0.3s cubic-bezier(0.2, 0, 0, 1);
+        border-top: 2px solid rgba(255, 255, 255, 0.7);
     }
-    .scada-water-true {
+    .liquid-true {
         background: linear-gradient(180deg, #38bdf8 0%, #0369a1 100%);
     }
-    .scada-water-sensor {
-        background: linear-gradient(180deg, #2dd4bf 0%, #0f766e 100%);
+    .liquid-sensor {
+        background: linear-gradient(180deg, #34d399 0%, #047857 100%);
     }
-    .scada-water-spoofed {
+    .liquid-spoofed {
         background: linear-gradient(180deg, #f87171 0%, #b91c1c 100%) !important;
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
     }
-    .scada-threshold {
+    .interlock-line {
         position: absolute;
         left: 0;
         right: 0;
         height: 1px;
-        border-top: 1px dashed rgba(251, 191, 36, 0.8);
-        z-index: 5;
+        border-top: 1px dashed rgba(251, 191, 36, 0.75);
+        z-index: 10;
     }
 
-    /* Sidebar Glassmorphic Styling */
-    section[data-testid="stSidebar"] {
-        background: rgba(11, 15, 25, 0.95) !important;
-        backdrop-filter: blur(20px) !important;
-        border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
-    }
-    
-    /* Code font tags */
-    .scada-tag {
+    .tech-pill {
         font-family: 'JetBrains Mono', monospace;
-        font-size: 0.82rem;
-        background: rgba(30, 41, 59, 0.7);
-        padding: 3px 8px;
-        border-radius: 6px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.75rem;
+        background: rgba(30, 41, 59, 0.65);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 3px 10px;
+        border-radius: 9999px;
         color: #38bdf8;
     }
 </style>
@@ -305,7 +357,7 @@ st.markdown("""
 
 
 # ==============================================================================
-# DATABASE & DATA LOADERS
+# DATA ACCESS & CONFIG
 # ==============================================================================
 @st.cache_resource
 def get_db():
@@ -319,233 +371,311 @@ config = load_system_config()
 
 
 # ==============================================================================
-# SIDEBAR NAVIGATION (Material You Glass Navigation)
+# SIDEBAR NAVIGATION & SYSTEM TELEMETRY DOCK
 # ==============================================================================
 with st.sidebar:
     st.markdown("""
-    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-        <span style="font-size: 2rem;">🛡️</span>
+    <div style="display: flex; align-items: center; gap: 12px; margin: 10px 0 16px 4px;">
+        <div style="background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%); padding: 10px; border-radius: 14px; box-shadow: 0 4px 15px rgba(2,132,199,0.35);">
+            <span style="font-size: 1.5rem; display: block; line-height: 1;">🛡️</span>
+        </div>
         <div>
-            <div style="font-size: 1.25rem; font-weight: 800; color: #f8fafc; letter-spacing: -0.3px;">TwinGuard-OT</div>
-            <div style="font-size: 0.75rem; color: #94a3b8; font-weight: 500;">ICS Cyber-Physical Digital Twin</div>
+            <div style="font-size: 1.15rem; font-weight: 800; color: #f8fafc; letter-spacing: -0.02em;">TwinGuard-OT</div>
+            <div style="font-size: 0.72rem; color: #38bdf8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">ICS Digital Twin v2.2</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("""
-    <div style="background: rgba(15, 23, 42, 0.6); padding: 8px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); font-size: 0.75rem; color: #38bdf8; display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
-        <span class="pulse-dot-green"></span>
-        <span>Localhost Modbus: <strong>127.0.0.1:5020</strong></span>
-    </div>
-    """, unsafe_allow_html=True)
-
+    # Sidebar Navigation Menu Items
+    st.markdown('<div class="sidebar-category">Operations & Telemetry</div>', unsafe_allow_html=True)
     nav_choice = st.radio(
         "Navigation",
         [
-            "🌊 Overview",
-            "🔄 Digital Twin",
-            "📡 Modbus Monitor",
-            "🎯 Attack Simulator",
-            "🛡️ Detection & Alerts",
-            "📊 Analytics & Residuals",
-            "📈 Evaluation & Metrics",
-            "💾 Dataset & Export",
+            "🌊 Process SCADA Overview",
+            "🔄 Digital Twin Shadow Model",
+            "📡 Modbus Protocol Inspector",
+            "🎯 Cyberattack Laboratory",
+            "🛡️ Multi-Tier Anomaly Detection",
+            "📊 Statistical Process Analytics",
+            "🏆 Empirical Evaluation Metrics",
+            "💾 Datasets & Research Artifacts",
         ],
         label_visibility="collapsed"
     )
 
     st.markdown("---")
-    col_sb1, col_sb2 = st.columns(2)
-    with col_sb1:
-        if st.button("📖 Quick Guide", use_container_width=True):
-            st.session_state.show_tour = not st.session_state.show_tour
-    with col_sb2:
-        auto_refresh = st.checkbox("Auto-Sync (3s)", value=False)
-        if auto_refresh:
-            time.sleep(3.0)
-            st.rerun()
 
-    st.markdown("""
-    <div style="margin-top: 20px; font-size: 0.75rem; color: #64748b; line-height: 1.4;">
-        <strong>Academic Context:</strong> RV College of Engineering — Experiential Learning (EL) Batch 2025.
-    </div>
-    """, unsafe_allow_html=True)
+    # Live Streaming Controls (Auto-Sync)
+    st.markdown('<div class="sidebar-category">Telemetry Synchronization</div>', unsafe_allow_html=True)
+    
+    col_sync1, col_sync2 = st.columns([1, 1])
+    with col_sync1:
+        auto_sync = st.toggle("Auto-Refresh", value=st.session_state.auto_refresh)
+        st.session_state.auto_refresh = auto_sync
+    with col_sync2:
+        speed_label = st.selectbox(
+            "Sync Interval",
+            ["Fast (1s)", "Standard (3s)", "Relaxed (5s)"],
+            index=1,
+            label_visibility="collapsed"
+        )
+        speed_map = {"Fast (1s)": 1.0, "Standard (3s)": 3.0, "Relaxed (5s)": 5.0}
+        st.session_state.refresh_speed = speed_map[speed_label]
 
-
-# ==============================================================================
-# INTERACTIVE ONBOARDING TOUR / WELCOME BANNER
-# ==============================================================================
-if st.session_state.show_tour:
-    st.markdown("""
-    <div class="m3-hero">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-            <div>
-                <span class="status-pill-normal" style="margin-bottom: 10px;">🌟 WELCOME & EVALUATION GUIDE</span>
-                <h1 class="gradient-title" style="font-size: 2.2rem; margin-top: 6px;">TwinGuard-OT: Process-Aware Digital Twin</h1>
-                <p style="color: #94a3b8; font-size: 1rem; max-width: 800px; margin-bottom: 16px;">
-                    A software-defined testbed for Industrial Control Systems (ICS). It reproduces closed-loop water tank hydrodynamics,
-                    virtual PLC ladder logic, Modbus TCP industrial protocols, and multi-tier cyber-physical anomaly detection.
-                </p>
-            </div>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 10px;">
-            <div style="background: rgba(15, 23, 42, 0.6); padding: 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06);">
-                <div style="font-size: 1.1rem; font-weight: 700; color: #38bdf8; margin-bottom: 4px;">1. Physics Differential Model</div>
-                <div style="font-size: 0.82rem; color: #cbd5e1;">Continuous mass conservation (<code>dh/dt = (Qin - Qout) / A</code>) governing realistic plant fluid flow.</div>
-            </div>
-            <div style="background: rgba(15, 23, 42, 0.6); padding: 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06);">
-                <div style="font-size: 1.1rem; font-weight: 700; color: #818cf8; margin-bottom: 4px;">2. Modbus TCP & Virtual PLC</div>
-                <div style="font-size: 0.82rem; color: #cbd5e1;">5 Hz cyclic scan maintaining 30% - 80% hysteresis setpoint over real Modbus register mapping.</div>
-            </div>
-            <div style="background: rgba(15, 23, 42, 0.6); padding: 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06);">
-                <div style="font-size: 1.1rem; font-weight: 700; color: #34d399; margin-bottom: 4px;">3. Multi-Tier Anomaly Detection</div>
-                <div style="font-size: 0.82rem; color: #cbd5e1;">Hybrid detection correlating hydrodynamic residuals (<code>|h_sensor - h_true|</code>) with Isolation Forest ML.</div>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-    if st.button("✕ Dismiss Welcome Guide", key="dismiss_tour"):
-        st.session_state.show_tour = False
+    if st.button("⚡ Force Manual Sync", use_container_width=True):
         st.rerun()
 
+    st.markdown("---")
 
-# ==============================================================================
-# 1. OVERVIEW & SCADA TELEMETRY
-# ==============================================================================
-if nav_choice == "🌊 Overview":
-    st.markdown("""
-    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px;">
-        <h2 class="gradient-title" style="margin: 0;">Industrial Process Overview</h2>
-        <span class="scada-tag">SCADA OPERATOR STATION</span>
-    </div>
-    <div class="guide-banner">
-        <strong>📌 What this view does:</strong> Provides real-time supervisory telemetry of the simulated water plant.
-        It displays live physical state measurements, observed sensor readings (susceptible to cyber spoofing), and actuator coil states.
-        <br><strong>💡 Evaluator Tip:</strong> Watch how the Virtual PLC cycles the pump between 30% and 80% to maintain equilibrium.
+    # System Status Dock
+    st.markdown(f"""
+    <div style="background: rgba(15, 23, 42, 0.6); padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06); font-size: 0.75rem; color: #94a3b8; line-height: 1.6;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span>MODBUS HOST:</span>
+            <span style="color: #f8fafc; font-family: monospace;">127.0.0.1:5020</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span>PLC SCAN RATE:</span>
+            <span style="color: #34d399; font-weight: 700;">5.0 Hz (200ms)</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span>DATABASE:</span>
+            <span style="color: #38bdf8; font-weight: 600;">SQLite (WAL Active)</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <span>INSTITUTION:</span>
+            <span style="color: #cbd5e1;">RVCE — III Sem EL</span>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
-    df_telemetry = db.get_all_telemetry()
-    latest_level = 50.0
-    latest_true = 50.0
-    latest_pump = 0
-    latest_valve = 0
-    latest_residual = 0.0
-    latest_label = 0
-    active_exp = "EXP-LIVE-BASELINE"
 
-    if not df_telemetry.empty:
-        latest = df_telemetry.iloc[-1]
-        latest_level = float(latest["sensor_level"])
-        latest_true = float(latest.get("true_level", latest_level))
-        latest_pump = int(latest["pump_state"])
-        latest_valve = int(latest["valve_state"])
-        latest_residual = float(latest["process_residual"])
-        latest_label = int(latest["label"])
-        active_exp = latest["experiment_id"]
+# ==============================================================================
+# TOP APP BAR (Live Status, Breadcrumb, Knowledge Hub Launcher)
+# ==============================================================================
+df_telemetry = db.get_all_telemetry()
+latest_level = 50.0
+latest_true = 50.0
+latest_pump = 0
+latest_valve = 0
+latest_residual = 0.0
+latest_label = 0
+active_exp = "EXP-BASELINE-NORMAL"
 
-    # Metric Row (Material You Metric Cards)
-    m1, m2, m3, m4 = st.columns(4)
-    with m1:
-        st.metric(
-            "Reported Water Level",
-            f"{latest_level:.1f} %",
-            delta=f"{latest_level - config['plc']['default_setpoint']:.1f}% vs Setpoint"
-        )
-    with m2:
-        pump_state_str = "🟢 RUNNING" if latest_pump == 1 else "⚪ IDLE"
-        st.metric("Inflow Pump (40003)", pump_state_str)
-    with m3:
-        valve_state_str = "🟢 DISCHARGING" if latest_valve == 1 else "⚪ CLOSED"
-        st.metric("Drain Valve (40004)", valve_state_str)
-    with m4:
-        st.metric("Physical Residual |r(t)|", f"{latest_residual:.2f} %", delta_color="inverse")
+if not df_telemetry.empty:
+    latest = df_telemetry.iloc[-1]
+    latest_level = float(latest["sensor_level"])
+    latest_true = float(latest.get("true_level", latest_level))
+    latest_pump = int(latest["pump_state"])
+    latest_valve = int(latest["valve_state"])
+    latest_residual = float(latest["process_residual"])
+    latest_label = int(latest["label"])
+    active_exp = latest["experiment_id"]
 
-    # Alarm Alert Status Pill
-    is_anomaly = latest_label == 1 or latest_residual > config["detection"]["residual_threshold"]
+is_anomaly = latest_label == 1 or latest_residual > config["detection"]["residual_threshold"]
+
+col_tb1, col_tb2 = st.columns([3, 1])
+with col_tb1:
     if is_anomaly:
         st.markdown(f"""
-        <div class="status-pill-alert" style="width: 100%; margin: 15px 0;">
-            <span class="pulse-dot-red"></span>
-            <strong>CRITICAL PROCESS DISCREPANCY:</strong> Active Experiment [{active_exp}] | Physical Residual: {latest_residual:.1f}% (Exceeds safety limit of {config['detection']['residual_threshold']}%)
+        <div class="m3-top-bar">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <span class="chip-red"><span class="dot-danger"></span> CYBER-PHYSICAL ANOMALY DETECTED</span>
+                <span class="tech-pill">ACTIVE EXP: {active_exp}</span>
+                <span style="font-size: 0.85rem; color: #f87171; font-weight: 600;">Physical Residual: {latest_residual:.2f}% &gt; {config['detection']['residual_threshold']}%</span>
+            </div>
         </div>
         """, unsafe_allow_html=True)
     else:
         st.markdown(f"""
-        <div class="status-pill-normal" style="width: 100%; margin: 15px 0;">
-            <span class="pulse-dot-green"></span>
-            <strong>ALL SYSTEMS SECURE:</strong> Plant Operating Within Safe Envelope | Active Session [{active_exp}] | No Process Residual Violations
+        <div class="m3-top-bar">
+            <div style="display: flex; align-items: center; gap: 14px;">
+                <span class="chip-green"><span class="dot-live"></span> PLANT OPERATING NORMALLY</span>
+                <span class="tech-pill">SESSION: {active_exp}</span>
+                <span style="font-size: 0.85rem; color: #94a3b8;">All safety interlocks clear • Zero residual violations</span>
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
-    # Visualizer & Charts
-    col_vis, col_chart = st.columns([1, 2])
+with col_tb2:
+    if st.button("📘 Engineering Knowledge Hub", use_container_width=True):
+        st.session_state.show_help_hub = not st.session_state.show_help_hub
 
-    with col_vis:
+
+# ==============================================================================
+# HIGH-VALUE ENGINEERING KNOWLEDGE HUB (Help & Documentation Modal/Drawer)
+# ==============================================================================
+if st.session_state.show_help_hub:
+    st.markdown('<div class="glass-card" style="border: 2px solid rgba(56, 189, 248, 0.4); margin-bottom: 25px;">', unsafe_allow_html=True)
+    col_hh_t, col_hh_b = st.columns([4, 1])
+    with col_hh_t:
+        st.markdown('<h2 class="brand-title" style="font-size: 1.5rem;">📖 TwinGuard-OT: Engineering & Evaluation Manual</h2>', unsafe_allow_html=True)
+        st.caption("Deep technical specifications, mathematical equations, register architecture, and evaluation rubrics.")
+    with col_hh_b:
+        if st.button("✕ Close Hub", use_container_width=True):
+            st.session_state.show_help_hub = False
+            st.rerun()
+
+    tab_h1, tab_h2, tab_h3, tab_h4 = st.tabs([
+        "📐 Physical Hydrodynamics",
+        "⚡ Virtual PLC & Modbus Architecture",
+        "🎯 Cyber-Physical Threat Vectors",
+        "🎓 RVCE Rubrics & Evaluation Checklist"
+    ])
+
+    with tab_h1:
+        st.markdown(r"""
+        #### 1. Continuous Hydrodynamic Differential Equation
+        The physical water plant is modelled mathematically using first-principles continuous mass balance:
+        """)
+        st.latex(r"\frac{dh(t)}{dt} = \frac{Q_{in}(t) - Q_{out}(t)}{A_{tank}}")
+        st.markdown(r"""
+        * **Inflow Dynamics ($Q_{in}$)**: Governed by the virtual positive displacement pump:
+          $$Q_{in}(t) = P_{state} \times 3.0\,\%/s$$
+        * **Outflow Dynamics ($Q_{out}$)**: Follows Torricelli's Law of Fluid Efflux combined with discharge valve state:
+          $$Q_{out}(t) = V_{state} \times \left(1.2 + 0.05 \sqrt{h(t)}\right)\,\%/s + Q_{leak}$$
+        * **Physical Invariant**: Water level is physically constrained to $[0.0\%, 100.0\%]$. Overflow ($h \ge 100\%$) and dry-run cavitation ($h \le 0\%$) trigger physical safety interlocks.
+        * **Sensor Decoupling**: Crucial to digital twin research:
+          * $h_{true}(t)$: Actual physical water level in the tank.
+          * $h_{sensor}(t)$: Measurement transmitted to PLC over Modbus (may include Gaussian telemetry noise $\mathcal{N}(0, \sigma^2)$ or cyber spoofing overrides).
+        """)
+
+    with tab_h2:
+        st.markdown(r"""
+        #### 2. Virtual PLC Scan Loop & Industrial Modbus Register Mapping
+        The virtual Programmable Logic Controller executes a deterministic cyclic scan at **5.0 Hz (200 ms)**:
+        1. **Input Scan**: Samples observed level from holding register `40001`.
+        2. **Hysteresis Setpoint Control**:
+           * If $h_{sensor} < 30.0\% \rightarrow$ Energize Pump (`ON`), Close Valve (`CLOSED`).
+           * If $h_{sensor} \ge 80.0\% \rightarrow$ De-energize Pump (`OFF`), Open Valve (`OPEN`).
+           * If $30.0\% \le h_{sensor} < 80.0\% \rightarrow$ Maintain current operational state (hysteresis deadband).
+        3. **Emergency Interlock**: If $h_{sensor} \ge 95.0\%$, hardware failsafe forcibly trips the pump to prevent brim rupture.
+        
+        ##### Official Modbus TCP Register Map (Port 5020, Unit ID 1):
+        | Address | Register Name | Scale | Unit | Type | Description |
+        |:---:|:---|:---:|:---:|:---:|:---|
+        | `40001` | `TANK_LEVEL_SENSOR` | 10.0 | % | RO | Reported tank level from virtual sensor |
+        | `40002` | `SETPOINT_LEVEL` | 10.0 | % | RW | Desired setpoint (Default: 70.0%) |
+        | `40003` | `PUMP_COMMAND` | 1.0 | Binary | RW | Inflow pump control (0=OFF, 1=ON) |
+        | `40004` | `VALVE_COMMAND` | 1.0 | Binary | RW | Drain discharge valve (0=CLOSED, 1=OPEN) |
+        | `40005` | `INFLOW_RATE` | 10.0 | %/s | RO | Flow telemetry sensor |
+        | `40006` | `OUTFLOW_RATE` | 10.0 | %/s | RO | Discharge rate telemetry sensor |
+        | `40007` | `ALARM_STATE` | 1.0 | Enum | RO | 0=Normal, 1=Low, 2=High, 3=Interlock |
+        | `40011` | `TRUE_TANK_LEVEL` | 10.0 | % | RO | Ground-truth plant level (hidden from PLC) |
+        | `40012` | `PHYSICAL_RESIDUAL`| 10.0 | % | RO | Instantaneous divergence $\|h_{sensor} - h_{shadow}\|$ |
+        """)
+
+    with tab_h3:
+        st.markdown(r"""
+        #### 3. Industrial Cyber-Physical Attack Taxonomy
+        All attacks are executed against local loopback `127.0.0.1:5020` without external network exposure:
+        1. **Sensor Spoofing (`sensor_spoofing.py`)**: Intercepts the sensor register and overwrites it with an artificially low value (e.g. 20%) while the tank is full, deceiving the PLC into overfilling.
+        2. **Unauthorized Register Write (`unauthorized_write.py`)**: Rogue Modbus client injects unauthorized Function Code 06 writes directly to `PUMP_COMMAND` coil.
+        3. **Replay Attack (`replay.py`)**: Records legitimate filling phase packets and replays them out-of-context during discharge, hiding real process drain.
+        4. **Command Flooding (`command_flood.py`)**: Modbus TCP Denial-of-Service burst ($150 - 300\text{ req/s}$) starving the PLC scan cycle.
+        5. **Abnormal Setpoint Manipulation (`setpoint_manipulation.py`)**: Manipulates holding register `40002` to an out-of-envelope boundary ($98.0\%$).
+        """)
+
+    with tab_h4:
         st.markdown("""
-        <div class="glass-card" style="text-align: center;">
-            <div style="font-size: 0.9rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 16px;">
-                Physical Plant vs Sensor Telemetry
-            </div>
-        """, unsafe_allow_html=True)
+        #### 4. RVCE Experiential Learning (EL) Batch 2025 Rubrics Alignment
+        * **Phase I (40 Marks)**: Problem Definition (20M), Objectives (10M), Methodology Flowchart (10M).
+        * **Phase II (60 Marks)**: Project Execution (30M), Tools & Integration (20M), Partial Results (10M).
+        * **Phase III (100 Marks)**: 
+          * Prototype Demonstration (30M) — *Use this dashboard to trigger an attack live!*
+          * Results & Discussion (20M) — *Show the Isolation Forest F1-score of 0.705 and ROC metrics*.
+          * Report Completeness (20M) — *Attach exported CSV datasets and Modbus map*.
+          * Poster & PPT (10M) — *Use the A3 poster template with dual-tank SCADA screenshots*.
+          * Notable Outcome / Publication (20M) — *Benchmark run with N=1133 samples ready for IEEE student paper submission*.
+        """)
+    st.markdown('</div>', unsafe_allow_html=True)
 
-        is_spoofed = abs(latest_level - latest_true) > 5.0
-        sensor_class = "scada-water scada-water-sensor"
+
+# ==============================================================================
+# 1. PROCESS SCADA OVERVIEW
+# ==============================================================================
+if nav_choice == "🌊 Process SCADA Overview":
+    st.markdown("""
+    <div class="page-hero">
+        <h3>Industrial Supervisory Control & Data Acquisition (SCADA)</h3>
+        <p>Real-time physical process telemetry, closed-loop PLC actuator states, and process-aware residual monitoring.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Metric Row
+    m1, m2, m3, m4 = st.columns(4)
+    with m1:
+        st.metric(
+            "Reported Tank Level",
+            f"{latest_level:.1f} %",
+            delta=f"{latest_level - config['plc']['default_setpoint']:.1f}% to Setpoint"
+        )
+    with m2:
+        st.metric("Inflow Pump (Coil 40003)", "🟢 ENERGIZED" if latest_pump == 1 else "⚪ IDLE")
+    with m3:
+        st.metric("Discharge Valve (Coil 40004)", "🟢 OPEN" if latest_valve == 1 else "⚪ CLOSED")
+    with m4:
+        st.metric("Physical Residual |r(t)|", f"{latest_residual:.2f} %", delta_color="inverse")
+
+    col_scada1, col_scada2 = st.columns([1, 2])
+
+    with col_scada1:
+        st.markdown('<div class="glass-card" style="text-align: center;">', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 0.85rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 14px;">Cyber-Physical Tank Rig</div>', unsafe_allow_html=True)
+
+        is_spoofed = abs(latest_level - latest_true) > 4.0
+        sensor_color_cls = "liquid-wave liquid-sensor"
         if is_spoofed:
-            sensor_class = "scada-water scada-water-spoofed"
+            sensor_color_cls = "liquid-wave liquid-spoofed"
 
-        high_t = config['plc']['high_threshold']
-        low_t = config['plc']['low_threshold']
+        high_line = config['plc']['high_threshold']
+        low_line = config['plc']['low_threshold']
 
         st.markdown(f"""
-        <div class="scada-tank-container">
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
-                <div style="font-size: 0.75rem; color: #38bdf8; font-weight: 700;">TRUE GROUND TRUTH</div>
-                <div class="scada-tank">
-                    <div class="scada-threshold" style="bottom: {high_t}%;"></div>
-                    <div class="scada-threshold" style="bottom: {low_t}%;"></div>
-                    <div class="scada-water scada-water-true" style="height: {latest_true}%;"></div>
+        <div class="scada-rig">
+            <div class="scada-column">
+                <span style="font-size: 0.72rem; color: #38bdf8; font-weight: 800;">GROUND TRUTH</span>
+                <div class="tank-glass">
+                    <div class="interlock-line" style="bottom: {high_line}%;"></div>
+                    <div class="interlock-line" style="bottom: {low_line}%;"></div>
+                    <div class="liquid-wave liquid-true" style="height: {latest_true}%;"></div>
                 </div>
-                <div style="font-size: 1.1rem; font-weight: 800; color: #38bdf8;">{latest_true:.1f}%</div>
+                <span style="font-size: 1.15rem; font-weight: 800; color: #38bdf8;">{latest_true:.1f}%</span>
             </div>
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
-                <div style="font-size: 0.75rem; color: {'#f87171' if is_spoofed else '#2dd4bf'}; font-weight: 700;">
+            <div class="scada-column">
+                <span style="font-size: 0.72rem; color: {'#f87171' if is_spoofed else '#34d399'}; font-weight: 800;">
                     REPORTED SENSOR {('(SPOOFED)' if is_spoofed else '')}
+                </span>
+                <div class="tank-glass">
+                    <div class="interlock-line" style="bottom: {high_line}%;"></div>
+                    <div class="interlock-line" style="bottom: {low_line}%;"></div>
+                    <div class="{sensor_color_cls}" style="height: {latest_level}%;"></div>
                 </div>
-                <div class="scada-tank">
-                    <div class="scada-threshold" style="bottom: {high_t}%;"></div>
-                    <div class="scada-threshold" style="bottom: {low_t}%;"></div>
-                    <div class="{sensor_class}" style="height: {latest_level}%;"></div>
-                </div>
-                <div style="font-size: 1.1rem; font-weight: 800; color: {'#f87171' if is_spoofed else '#2dd4bf'};">{latest_level:.1f}%</div>
+                <span style="font-size: 1.15rem; font-weight: 800; color: {'#f87171' if is_spoofed else '#34d399'};">{latest_level:.1f}%</span>
             </div>
         </div>
-        <div style="font-size: 0.75rem; color: #64748b; margin-top: 12px;">
-            Dashed Lines: High Interlock ({high_t}%) & Low Interlock ({low_t}%)
+        <div style="font-size: 0.75rem; color: #64748b; margin-top: 14px;">
+            Dashed Markers: Hysteresis Cutoff ({high_line}%) & Refill Trigger ({low_line}%)
         </div>
         </div>
         """, unsafe_allow_html=True)
 
-    with col_chart:
-        st.markdown("""
-        <div class="glass-card">
-            <div style="font-size: 0.9rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px;">
-                Live Process Trajectory (Last 100 Samples)
-            </div>
-        """, unsafe_allow_html=True)
+    with col_scada2:
+        st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+        st.markdown('<div style="font-size: 0.85rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 12px;">Real-Time Hydrodynamic Trajectory</div>', unsafe_allow_html=True)
 
         if not df_telemetry.empty:
-            recent_df = df_telemetry.tail(100).copy()
+            recent_df = df_telemetry.tail(120).copy()
             recent_df["Time_Sec"] = (recent_df["timestamp"] - recent_df["timestamp"].iloc[0]).round(1)
             fig_trend = px.line(
                 recent_df,
                 x="Time_Sec",
                 y=["sensor_level", "true_level"],
-                labels={"value": "Level (%)", "Time_Sec": "Elapsed (s)", "variable": "Signal"},
-                color_discrete_map={"sensor_level": "#2dd4bf", "true_level": "#38bdf8"},
+                labels={"value": "Level (%)", "Time_Sec": "Elapsed (s)", "variable": "Telemetry Stream"},
+                color_discrete_map={"sensor_level": "#34d399", "true_level": "#38bdf8"},
             )
             fig_trend.update_layout(
-                height=290,
+                height=285,
                 margin=dict(l=10, r=10, t=10, b=10),
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
@@ -556,38 +686,30 @@ if nav_choice == "🌊 Overview":
             st.plotly_chart(fig_trend, use_container_width=True)
         else:
             st.info("System initializing... telemetry stream will populate automatically.")
-        st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
 
 # ==============================================================================
 # 2. DIGITAL TWIN RESIDUAL ANALYSIS
 # ==============================================================================
-elif nav_choice == "🔄 Digital Twin":
+elif nav_choice == "🔄 Digital Twin Shadow Model":
     st.markdown("""
-    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px;">
-        <h2 class="gradient-title" style="margin: 0;">Digital Twin Shadow Model</h2>
-        <span class="scada-tag">PHYSICAL RESIDUAL r(t)</span>
-    </div>
-    <div class="guide-banner">
-        <strong>📌 What this view does:</strong> Computes the mathematical divergence between the plant's true hydrodynamic model
-        and the reported sensor measurements: <code>r(t) = |h_sensor(t) - h_expected(t)|</code>.
-        <br><strong>💡 Evaluator Tip:</strong> During normal operation, <code>r(t) ≈ 0</code> (within sensor noise margin).
-        When a stealthy cyberattack occurs, network packets may appear valid, but <code>r(t)</code> spikes immediately!
+    <div class="page-hero">
+        <h3>Digital Twin Shadow Model & Hydrodynamic Residuals</h3>
+        <p>Continuous residual computation r(t) = |h_sensor(t) - h_shadow(t)| revealing cyber-physical discrepancy.</p>
     </div>
     """, unsafe_allow_html=True)
 
-    df_telemetry = db.get_all_telemetry()
     if df_telemetry.empty:
         st.info("No recorded telemetry available. Run an attack experiment to inspect residuals.")
     else:
         exp_list = list(df_telemetry["experiment_id"].unique())
-        selected_exp = st.selectbox("Select Experiment Run to Analyze", exp_list, index=len(exp_list) - 1)
+        selected_exp = st.selectbox("Select Experiment Run", exp_list, index=len(exp_list) - 1)
         exp_df = df_telemetry[df_telemetry["experiment_id"] == selected_exp].copy()
         exp_df["Elapsed_Sec"] = (exp_df["timestamp"] - exp_df["timestamp"].iloc[0]).round(1)
 
-        # Plot 1: True vs Observed
         st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        st.subheader("1. Ground Truth Level vs Observed Sensor Signal")
+        st.subheader("1. True Physical Level vs Observed Sensor Signal")
         fig1 = go.Figure()
         fig1.add_trace(go.Scatter(x=exp_df["Elapsed_Sec"], y=exp_df["true_level"], mode="lines", name="Ground Truth Physical Level", line=dict(color="#38bdf8", width=3)))
         fig1.add_trace(go.Scatter(x=exp_df["Elapsed_Sec"], y=exp_df["sensor_level"], mode="lines", name="Reported Sensor Signal", line=dict(color="#f87171", width=2, dash="dot")))
@@ -597,7 +719,6 @@ elif nav_choice == "🔄 Digital Twin":
         st.plotly_chart(fig1, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
 
-        # Plot 2: Physical Residual
         st.markdown('<div class="glass-card">', unsafe_allow_html=True)
         st.subheader("2. Instantaneous Physical Residual: |Observed - Expected|")
         fig2 = go.Figure()
@@ -611,16 +732,11 @@ elif nav_choice == "🔄 Digital Twin":
 # ==============================================================================
 # 3. MODBUS PROTOCOL MONITOR
 # ==============================================================================
-elif nav_choice == "📡 Modbus Monitor":
+elif nav_choice == "📡 Modbus Protocol Inspector":
     st.markdown("""
-    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px;">
-        <h2 class="gradient-title" style="margin: 0;">Modbus TCP Protocol Inspector</h2>
-        <span class="scada-tag">PORT 5020 • DEEP PACKET INSPECTION</span>
-    </div>
-    <div class="guide-banner">
-        <strong>📌 What this view does:</strong> Intercepts and parses low-level industrial transactions on the Modbus TCP bus.
-        Monitors query frequency (request rate), function codes (FC03 Read, FC06/FC16 Write), and client origin addresses.
-        <br><strong>💡 Evaluator Tip:</strong> Demonstrates network-layer anomaly detection (e.g., detecting command flooding attacks that exceed 30 req/s).
+    <div class="page-hero">
+        <h3>Industrial Modbus TCP Deep Packet Inspector</h3>
+        <p>Live transaction logging, function code analysis, and packet arrival rate tracking on port 5020.</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -632,7 +748,7 @@ elif nav_choice == "📡 Modbus Monitor":
 
         with col_m1:
             st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-            st.subheader("Transaction Rate (Requests / sec)")
+            st.subheader("Packet Arrival Rate (Requests / sec)")
             df_events["Time"] = pd.to_datetime(df_events["timestamp"], unit="s")
             fig_rate = px.line(
                 df_events.tail(120),
@@ -667,26 +783,21 @@ elif nav_choice == "📡 Modbus Monitor":
 
 
 # ==============================================================================
-# 4. ATTACK SIMULATOR (Interactive Cyber Lab)
+# 4. CYBERATTACK LABORATORY
 # ==============================================================================
-elif nav_choice == "🎯 Attack Simulator":
+elif nav_choice == "🎯 Cyberattack Laboratory":
     st.markdown("""
-    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px;">
-        <h2 class="gradient-title" style="margin: 0;">Cyberattack Injection Laboratory</h2>
-        <span class="scada-tag">CONTROLLED THREAT GENERATION</span>
-    </div>
-    <div class="guide-banner">
-        <strong>📌 What this view does:</strong> Allows authorized security researchers to inject controlled industrial cyberattacks
-        against the local virtual PLC.
-        <br><strong>🔒 Loopback Guardrail:</strong> Attacks are restricted strictly to loopback IP <code>127.0.0.1:5020</code> by hardcoded safety checks.
+    <div class="page-hero">
+        <h3>ICS Threat Injection & Penetration Laboratory</h3>
+        <p>Safely inject controlled OT cyberattacks against the virtual PLC on localhost 127.0.0.1:5020.</p>
     </div>
     """, unsafe_allow_html=True)
 
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.subheader("Select & Parameterize Attack Vector")
+    st.subheader("Configure Threat Scenario")
 
     attack_type = st.selectbox(
-        "Choose Cyberattack Scenario",
+        "Choose Attack Vector",
         [
             "Sensor Spoofing",
             "Unauthorized Register Write",
@@ -703,22 +814,22 @@ elif nav_choice == "🎯 Attack Simulator":
     with c_at2:
         if attack_type == "Sensor Spoofing":
             spoof_val = st.slider("Falsified Tank Level (%)", min_value=0.0, max_value=100.0, value=20.0)
-            st.caption("Target: Spoofs tank sensor to report low water level while tank is actually full, forcing pump to overfill.")
+            st.caption("Reports falsified low level to PLC, forcing pump to cause an overflow disaster.")
         elif attack_type == "Unauthorized Register Write":
             target_reg = st.selectbox("Target Control Register", ["PUMP_COMMAND (40003)", "VALVE_COMMAND (40004)"])
-            st.caption("Target: Rogue client sends unauthorized Modbus write commands to actuator coils.")
+            st.caption("Sends unauthorized FC06 write packets directly to physical actuator holding registers.")
         elif attack_type == "Command Flooding":
             flood_rate = st.slider("Target Request Rate (req/s)", min_value=50, max_value=300, value=150)
-            st.caption("Target: Modbus TCP DoS burst targeting virtual PLC scan loop.")
+            st.caption("Floods PLC network socket with high-frequency queries to trigger CPU starvation.")
         elif attack_type == "Abnormal Setpoint Manipulation":
-            setpoint_val = st.slider("Out-of-Specification Setpoint (%)", min_value=5.0, max_value=99.0, value=98.0)
-            st.caption("Target: Changes setpoint to unsafe threshold beyond design envelope.")
+            setpoint_val = st.slider("Out-of-Envelope Setpoint (%)", min_value=5.0, max_value=99.0, value=98.0)
+            st.caption("Forces PLC setpoint outside the safe operational design envelope.")
         else:
-            st.caption("Target: Captures valid normal filling telemetry and replays it during discharge.")
+            st.caption("Captures legitimate filling sequence frames and replays them during plant drain.")
 
     st.markdown("<br>", unsafe_allow_html=True)
     if st.button("🚀 INJECT CYBERATTACK SCENARIO", type="primary", use_container_width=True):
-        st.info(f"Executing {attack_type} against local simulation...")
+        st.info(f"Injecting {attack_type} against local simulation...")
         attack_key_map = {
             "Sensor Spoofing": "sensor_spoofing",
             "Unauthorized Register Write": "unauthorized_write",
@@ -728,14 +839,14 @@ elif nav_choice == "🎯 Attack Simulator":
         }
         internal_name = attack_key_map[attack_type]
 
-        with st.spinner(f"Injecting {attack_type} for {duration}s..."):
+        with st.spinner(f"Executing {attack_type} for {duration} seconds..."):
             csv_path = run_attack_experiment(
                 attack_name=internal_name,
                 warmup_sec=3.0,
                 attack_duration_sec=float(duration),
                 cooldown_sec=3.0,
             )
-            st.success(f"Attack successfully completed! Labelled telemetry logged to: {csv_path}")
+            st.success(f"Attack execution completed! Telemetry recorded and exported to: {csv_path}")
             time.sleep(1.0)
             st.rerun()
 
@@ -743,18 +854,13 @@ elif nav_choice == "🎯 Attack Simulator":
 
 
 # ==============================================================================
-# 5. DETECTION & ALERTS
+# 5. MULTI-TIER ANOMALY DETECTION
 # ==============================================================================
-elif nav_choice == "🛡️ Detection & Alerts":
+elif nav_choice == "🛡️ Multi-Tier Anomaly Detection":
     st.markdown("""
-    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px;">
-        <h2 class="gradient-title" style="margin: 0;">Multi-Tier Process-Aware Detection</h2>
-        <span class="scada-tag">HYBRID AI + RULE ENGINE</span>
-    </div>
-    <div class="guide-banner">
-        <strong>📌 What this view does:</strong> Merges findings from 3 detection tiers:
-        (1) Deterministic domain rules, (2) Physics residual shadow model, and (3) Unsupervised Isolation Forest Machine Learning.
-        <br><strong>💡 Correlator Categories:</strong> Differentiates between <code>NORMAL</code>, <code>CYBER_ONLY</code>, <code>PROCESS_ONLY</code>, and full <code>CYBER_PHYSICAL_ATTACK</code>.
+    <div class="page-hero">
+        <h3>Multi-Tier Process-Aware Detection & Correlation</h3>
+        <p>Hybrid engine unifying deterministic domain rules, hydrodynamic shadow models, and Isolation Forest ML.</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -807,21 +913,16 @@ elif nav_choice == "🛡️ Detection & Alerts":
 
 
 # ==============================================================================
-# 6. ANALYTICS & RESIDUALS
+# 6. STATISTICAL PROCESS ANALYTICS
 # ==============================================================================
-elif nav_choice == "📊 Analytics & Residuals":
+elif nav_choice == "📊 Statistical Process Analytics":
     st.markdown("""
-    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px;">
-        <h2 class="gradient-title" style="margin: 0;">Statistical Process Analytics</h2>
-        <span class="scada-tag">FEATURE DYNAMICS & RESIDUAL DISTRIBUTIONS</span>
-    </div>
-    <div class="guide-banner">
-        <strong>📌 What this view does:</strong> Provides academic statistical distributions of physical variables,
-        sensor error margins, and correlation clusters comparing normal baseline vs active attack states.
+    <div class="page-hero">
+        <h3>Process Variable Dynamics & Residual Distributions</h3>
+        <p>Continuous statistical inspection of sensor drift, actuator correlation, and error margins.</p>
     </div>
     """, unsafe_allow_html=True)
 
-    df_telemetry = db.get_all_telemetry()
     if df_telemetry.empty:
         st.info("No recorded telemetry available for analytics.")
     else:
@@ -857,18 +958,13 @@ elif nav_choice == "📊 Analytics & Residuals":
 
 
 # ==============================================================================
-# 7. EVALUATION & BENCHMARKS
+# 7. EMPIRICAL EVALUATION METRICS
 # ==============================================================================
-elif nav_choice == "📈 Evaluation & Metrics":
+elif nav_choice == "🏆 Empirical Evaluation Metrics":
     st.markdown("""
-    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px;">
-        <h2 class="gradient-title" style="margin: 0;">Empirical Research Evaluation</h2>
-        <span class="scada-tag">GROUND-TRUTH BENCHMARKS (N = 1133)</span>
-    </div>
-    <div class="guide-banner">
-        <strong>📌 What this view does:</strong> Verifies mathematical detection efficacy (Accuracy, Precision, Recall, F1, FPR)
-        calculated directly from real experimental runs with ground-truth labels. (Zero hardcoded metrics).
-        <br><strong>💡 Deliverable Ready:</strong> These exact numbers fulfill the RVCE Phase II & III rubrics for research publication.
+    <div class="page-hero">
+        <h3>Empirical Model Evaluation & Benchmark Metrics</h3>
+        <p>Mathematical verification of detection performance against actual ground-truth labelled datasets (N = 1133).</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -908,21 +1004,16 @@ elif nav_choice == "📈 Evaluation & Metrics":
 
 
 # ==============================================================================
-# 8. DATASET & REPORT EXPORT
+# 8. DATASETS & RESEARCH ARTIFACTS
 # ==============================================================================
-elif nav_choice == "💾 Dataset & Export":
+elif nav_choice == "💾 Datasets & Research Artifacts":
     st.markdown("""
-    <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px;">
-        <h2 class="gradient-title" style="margin: 0;">Dataset Inspector & Export</h2>
-        <span class="scada-tag">CSV ARTIFACT GENERATOR</span>
-    </div>
-    <div class="guide-banner">
-        <strong>📌 What this view does:</strong> Allows exporting ground-truth time-series datasets recorded during experiments.
-        Use these CSV files as empirical evidence in your final EL Report and presentation appendix.
+    <div class="page-hero">
+        <h3>Experimental Datasets & Publication Artifacts</h3>
+        <p>Inspect recorded time-series telemetry and export CSV datasets for academic report appendices.</p>
     </div>
     """, unsafe_allow_html=True)
 
-    df_telemetry = db.get_all_telemetry()
     if df_telemetry.empty:
         st.info("No recorded datasets found in database.")
     else:
@@ -943,3 +1034,11 @@ elif nav_choice == "💾 Dataset & Export":
             use_container_width=True,
         )
         st.markdown('</div>', unsafe_allow_html=True)
+
+
+# ==============================================================================
+# AUTO-REFRESH EXECUTION LOOP (Kept Active & Configurable)
+# ==============================================================================
+if st.session_state.auto_refresh:
+    time.sleep(float(st.session_state.refresh_speed))
+    st.rerun()
