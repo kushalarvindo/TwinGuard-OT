@@ -1,7 +1,8 @@
 """
 TwinGuard-OT: Process-Aware Digital Twin for Cybersecurity Testing and Anomaly Detection in ICS.
-Material 3 Expressive SCADA & Security Operations Center (SOC) Platform.
+Material Design 3 (MD3) Expressive SCADA & Security Operations Center (SOC) Platform.
 Designed for high-impact academic demonstration, empirical research, and industrial emulation.
+Reference Architecture: Material Design 3 (https://m3.material.io/develop/web)
 """
 
 import sys
@@ -51,7 +52,8 @@ if "nav_choice" not in st.session_state:
     st.session_state.nav_choice = "🌊 Process SCADA Overview"
 
 # ==============================================================================
-# MATERIAL 3 EXPRESSIVE & SOC DESIGN SYSTEM
+# MATERIAL DESIGN 3 (MD3) SYSTEM STYLES
+# Clean, modern, executive light-tonal theme inspired by m3.material.io
 # ==============================================================================
 st.markdown("""
 <style>
@@ -63,111 +65,103 @@ st.markdown("""
         letter-spacing: -0.01em;
     }
 
+    /* Soft Tonal MD3 Background */
     .stApp {
-        background-color: #07090e;
-        background-image: 
-            radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.12) 0px, transparent 50%),
-            radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
-            radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
-        background-attachment: fixed;
-        color: #f1f5f9;
+        background-color: #f3f4f8 !important;
+        background-image: none !important;
+        color: #0f172a !important;
     }
 
-    /* Container Border Cards (Replaces broken unclosed glass-card divs) */
+    /* MD3 Container Cards (Clean White Surfaces, Elevation-1) */
     div[data-testid="stVerticalBlockBorderWrapper"] {
-        background: rgba(15, 23, 42, 0.72) !important;
-        backdrop-filter: blur(20px) saturate(180%) !important;
-        -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 20px !important;
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 18px !important;
         padding: 20px 24px !important;
-        box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.45) !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03) !important;
         margin-bottom: 16px !important;
-        transition: border-color 0.25s ease, transform 0.25s ease !important;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
     }
     div[data-testid="stVerticalBlockBorderWrapper"]:hover {
-        border-color: rgba(56, 189, 248, 0.35) !important;
+        border-color: #cbd5e1 !important;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06) !important;
     }
     div[data-testid="stVerticalBlockBorderWrapper"] > div {
         border: none !important;
     }
 
-    /* Gradient Brand Headings */
-    .brand-title {
-        background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 40%, #38bdf8 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-weight: 800;
-        font-size: 1.85rem;
-        letter-spacing: -0.03em;
-        margin: 0;
-    }
-
-    /* Metric Cards */
+    /* MD3 Metric Cards */
     [data-testid="stMetric"] {
-        background: rgba(15, 23, 42, 0.72) !important;
-        backdrop-filter: blur(16px) !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 20px !important;
-        padding: 16px 22px !important;
-        box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.35) !important;
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 18px !important;
+        padding: 16px 20px !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03) !important;
         transition: all 0.2s ease !important;
     }
     [data-testid="stMetric"]:hover {
-        border-color: rgba(56, 189, 248, 0.4) !important;
-        transform: translateY(-2px) !important;
+        border-color: #cbd5e1 !important;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05) !important;
     }
     [data-testid="stMetricLabel"] {
-        color: #94a3b8 !important;
-        font-size: 0.8rem !important;
+        color: #64748b !important;
+        font-size: 0.78rem !important;
         font-weight: 700 !important;
         text-transform: uppercase !important;
-        letter-spacing: 0.05em !important;
+        letter-spacing: 0.06em !important;
     }
     [data-testid="stMetricValue"] {
-        color: #ffffff !important;
+        color: #0f172a !important;
         font-weight: 800 !important;
-        font-size: 1.9rem !important;
+        font-size: 1.85rem !important;
         letter-spacing: -0.02em !important;
     }
 
-    /* Material You Expressive Buttons */
+    /* MD3 Expressive Buttons */
     .stButton > button {
         border-radius: 9999px !important;
-        padding: 9px 22px !important;
+        padding: 9px 20px !important;
         font-weight: 600 !important;
-        font-size: 0.9rem !important;
-        border: 1px solid rgba(255, 255, 255, 0.12) !important;
-        background: rgba(30, 41, 59, 0.75) !important;
-        color: #f8fafc !important;
-        backdrop-filter: blur(12px) !important;
+        font-size: 0.88rem !important;
+        border: 1px solid #e2e8f0 !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
         transition: all 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
     }
     .stButton > button:hover {
-        background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%) !important;
-        border-color: rgba(56, 189, 248, 0.6) !important;
-        color: #ffffff !important;
-        transform: translateY(-2px) !important;
-        box-shadow: 0 8px 24px rgba(2, 132, 199, 0.45) !important;
+        background: #f8fafc !important;
+        border-color: #cbd5e1 !important;
+        color: #0f172a !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08) !important;
     }
     .stButton > button[kind="primary"] {
-        background: linear-gradient(135deg, #0284c7 0%, #3b82f6 100%) !important;
-        border: 1px solid rgba(56, 189, 248, 0.7) !important;
-        box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35) !important;
+        background: #0284c7 !important;
+        color: #ffffff !important;
+        border: 1px solid #0284c7 !important;
+        box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25) !important;
+    }
+    .stButton > button[kind="primary"]:hover {
+        background: #0369a1 !important;
+        border-color: #0369a1 !important;
+        color: #ffffff !important;
     }
 
-    /* Sidebar Navigation Menu Items (Button-based MD3 Expressive) */
+    /* MD3 Sidebar Drawer */
     section[data-testid="stSidebar"] {
-        background: rgba(10, 14, 24, 0.95) !important;
-        backdrop-filter: blur(28px) !important;
-        border-right: 1px solid rgba(255, 255, 255, 0.07) !important;
+        background: #ffffff !important;
+        border-right: 1px solid #e2e8f0 !important;
+        box-shadow: 2px 0 16px rgba(0, 0, 0, 0.02) !important;
     }
+
+    /* Sidebar Navigation Menu (Matches M3 Reference Image Pill Buttons) */
     section[data-testid="stSidebar"] .stButton > button {
         width: 100% !important;
         text-align: left !important;
         justify-content: flex-start !important;
-        padding: 10px 14px !important;
-        border-radius: 12px !important;
+        padding: 9px 16px !important;
+        border-radius: 9999px !important;
         font-size: 0.88rem !important;
         font-weight: 600 !important;
         margin-bottom: 2px !important;
@@ -175,36 +169,35 @@ st.markdown("""
         display: flex !important;
         align-items: center !important;
         gap: 10px !important;
-        transition: all 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
+        transition: all 0.18s ease !important;
     }
+
     /* Inactive Sidebar Nav Button */
     section[data-testid="stSidebar"] .stButton > button[kind="secondary"] {
-        background: rgba(255, 255, 255, 0.02) !important;
-        border: 1px solid rgba(255, 255, 255, 0.05) !important;
-        color: #94a3b8 !important;
-        backdrop-filter: blur(8px) !important;
+        background: transparent !important;
+        border: 1px solid transparent !important;
+        color: #475569 !important;
+        box-shadow: none !important;
     }
     section[data-testid="stSidebar"] .stButton > button[kind="secondary"]:hover {
-        background: rgba(56, 189, 248, 0.1) !important;
-        border-color: rgba(56, 189, 248, 0.35) !important;
-        color: #ffffff !important;
-        transform: translateX(4px) !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+        background: #f1f5f9 !important;
+        color: #0f172a !important;
+        border-color: #e2e8f0 !important;
+        transform: translateX(3px) !important;
     }
-    /* Active Sidebar Nav Button */
+
+    /* Active Sidebar Nav Button (M3 Tonal Pill matching Reference Image) */
     section[data-testid="stSidebar"] .stButton > button[kind="primary"] {
-        background: linear-gradient(90deg, rgba(14, 165, 233, 0.25) 0%, rgba(99, 102, 241, 0.18) 100%) !important;
-        border: 1px solid rgba(56, 189, 248, 0.55) !important;
-        border-left: 5px solid #38bdf8 !important;
-        color: #38bdf8 !important;
-        box-shadow: 0 4px 18px -2px rgba(14, 165, 233, 0.35) !important;
+        background: #e2e8f0 !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #0f172a !important;
         font-weight: 700 !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
         transform: none !important;
     }
     section[data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {
-        border-color: #38bdf8 !important;
-        color: #ffffff !important;
-        box-shadow: 0 4px 22px rgba(56, 189, 248, 0.4) !important;
+        background: #cbd5e1 !important;
+        color: #0f172a !important;
     }
 
     /* M3 Category Labels in Sidebar */
@@ -212,9 +205,9 @@ st.markdown("""
         font-size: 0.72rem;
         font-weight: 800;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.08em;
         color: #64748b;
-        margin: 16px 0 6px 4px;
+        margin: 16px 0 6px 6px;
     }
 
     /* Status Badges */
@@ -222,80 +215,92 @@ st.markdown("""
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        background: rgba(16, 185, 129, 0.12);
-        color: #34d399;
-        border: 1px solid rgba(52, 211, 153, 0.25);
-        padding: 5px 12px;
+        background: #dcfce7;
+        color: #15803d;
+        border: 1px solid #bbf7d0;
+        padding: 5px 14px;
         border-radius: 9999px;
-        font-weight: 600;
-        font-size: 0.82rem;
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 0.02em;
     }
     .chip-red {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        background: rgba(239, 68, 68, 0.15);
-        color: #f87171;
-        border: 1px solid rgba(248, 113, 113, 0.35);
-        padding: 5px 12px;
+        background: #fee2e2;
+        color: #b91c1c;
+        border: 1px solid #fecaca;
+        padding: 5px 14px;
         border-radius: 9999px;
-        font-weight: 600;
-        font-size: 0.82rem;
-        animation: pulseAlert 2s infinite ease-in-out;
+        font-weight: 700;
+        font-size: 0.8rem;
+        letter-spacing: 0.02em;
+        animation: pulseAlertLight 2s infinite ease-in-out;
     }
-    @keyframes pulseAlert {
+    @keyframes pulseAlertLight {
         0%, 100% { box-shadow: 0 0 0 rgba(239, 68, 68, 0); }
-        50% { box-shadow: 0 0 24px rgba(239, 68, 68, 0.45); }
+        50% { box-shadow: 0 0 16px rgba(239, 68, 68, 0.25); }
     }
     .dot-live {
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background-color: #34d399;
-        box-shadow: 0 0 8px #34d399;
+        background-color: #16a34a;
+        box-shadow: 0 0 6px #16a34a;
     }
     .dot-danger {
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background-color: #f87171;
-        box-shadow: 0 0 8px #f87171;
+        background-color: #dc2626;
+        box-shadow: 0 0 6px #dc2626;
     }
 
-    /* Contextual Page Header */
+    .tech-pill {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.76rem;
+        background: #f1f5f9;
+        border: 1px solid #e2e8f0;
+        padding: 4px 12px;
+        border-radius: 9999px;
+        color: #0284c7;
+        font-weight: 600;
+    }
+
+    /* Page Hero (Clean M3 Headline Card) */
     .page-hero {
-        background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.75) 100%);
-        backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.07);
-        border-left: 4px solid #38bdf8;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-left: 5px solid #0284c7;
         border-radius: 16px;
-        padding: 14px 20px;
+        padding: 14px 22px;
         margin-bottom: 16px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
     }
     .page-hero h3 {
         margin: 0 0 4px 0;
-        font-size: 1.15rem;
+        font-size: 1.18rem;
         font-weight: 700;
-        color: #f8fafc;
+        color: #0f172a;
     }
     .page-hero p {
         margin: 0;
-        color: #94a3b8;
+        color: #64748b;
         font-size: 0.85rem;
-        line-height: 1.4;
+        line-height: 1.45;
     }
 
-    /* SCADA Tank Visualizer */
+    /* SCADA Tank Visualizer (Clean Light Lab Style) */
     .scada-rig {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 32px;
         padding: 16px 20px;
-        background: rgba(11, 17, 33, 0.7);
+        background: #f8fafc;
         border-radius: 16px;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        border: 1px solid #e2e8f0;
     }
     .scada-column {
         display: flex;
@@ -306,13 +311,13 @@ st.markdown("""
     .tank-glass {
         width: 130px;
         height: 210px;
-        border: 3px solid rgba(148, 163, 184, 0.35);
+        border: 3px solid #cbd5e1;
         border-top: none;
         border-radius: 0 0 18px 18px;
         position: relative;
-        background: rgba(15, 23, 42, 0.55);
+        background: #ffffff;
         overflow: hidden;
-        box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+        box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.04);
     }
     .liquid-wave {
         position: absolute;
@@ -320,92 +325,80 @@ st.markdown("""
         left: 0;
         right: 0;
         transition: height 0.3s cubic-bezier(0.2, 0, 0, 1);
-        border-top: 2px solid rgba(255, 255, 255, 0.7);
+        border-top: 2px solid rgba(255, 255, 255, 0.85);
     }
     .liquid-true {
-        background: linear-gradient(180deg, #38bdf8 0%, #0369a1 100%);
+        background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
     }
     .liquid-sensor {
-        background: linear-gradient(180deg, #34d399 0%, #047857 100%);
+        background: linear-gradient(180deg, #34d399 0%, #059669 100%);
     }
     .liquid-spoofed {
-        background: linear-gradient(180deg, #f87171 0%, #b91c1c 100%) !important;
-        box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+        background: linear-gradient(180deg, #f87171 0%, #dc2626 100%) !important;
+        box-shadow: 0 0 16px rgba(239, 68, 68, 0.4);
     }
     .interlock-line {
         position: absolute;
         left: 0;
         right: 0;
         height: 1px;
-        border-top: 1px dashed rgba(251, 191, 36, 0.75);
+        border-top: 1px dashed #d97706;
         z-index: 10;
     }
 
-    .tech-pill {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 0.75rem;
-        background: rgba(30, 41, 59, 0.65);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        padding: 3px 10px;
-        border-radius: 9999px;
-        color: #38bdf8;
+    /* M3 Tabs (Segmented Button Pills matching Reference Image) */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 6px;
+        background: #f1f5f9 !important;
+        padding: 5px;
+        border-radius: 14px !important;
+        border: 1px solid #e2e8f0 !important;
+    }
+    .stTabs [data-baseweb="tab"] {
+        height: auto;
+        padding: 7px 18px !important;
+        border-radius: 10px !important;
+        color: #64748b !important;
+        font-weight: 600 !important;
+        font-size: 0.88rem !important;
+        transition: all 0.2s ease !important;
+        border: none !important;
+        background: transparent !important;
+    }
+    .stTabs [aria-selected="true"] {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        font-weight: 700 !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
     }
 
-    /* MD3 Expressive Dialog & Onboarding Modal */
+    /* MD3 Expressive Dialog & Onboarding Modal (Clean Light Tonal) */
     div[data-testid="stDialog"] div[role="dialog"] {
-        background: rgba(11, 17, 32, 0.98) !important;
-        backdrop-filter: blur(36px) saturate(200%) !important;
-        -webkit-backdrop-filter: blur(36px) saturate(200%) !important;
-        border: 1px solid rgba(56, 189, 248, 0.35) !important;
-        border-radius: 28px !important;
-        box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.85),
-                    0 0 50px rgba(14, 165, 233, 0.2) !important;
-        color: #f1f5f9 !important;
+        background: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 24px !important;
+        box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.2) !important;
+        color: #0f172a !important;
         max-width: 94vw !important;
         width: 1060px !important;
         padding: 28px 32px !important;
     }
+    div[data-testid="stDialog"] div[role="dialog"] h2 {
+        color: #0f172a !important;
+    }
     div[data-testid="stDialog"] div[role="dialog"] button[aria-label="Close"] {
-        color: #94a3b8 !important;
+        color: #64748b !important;
     }
     div[data-testid="stDialog"] div[role="dialog"] button[aria-label="Close"]:hover {
-        color: #ffffff !important;
+        color: #0f172a !important;
     }
 
-    /* MD3 Tabs */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-        background: rgba(15, 23, 42, 0.6);
-        padding: 6px;
-        border-radius: 16px;
-        border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-    .stTabs [data-baseweb="tab"] {
-        height: auto;
-        padding: 8px 18px;
-        border-radius: 12px;
-        color: #94a3b8;
-        font-weight: 600;
-        font-size: 0.88rem;
-        transition: all 0.2s ease;
-        border: none !important;
-    }
-    .stTabs [data-baseweb="tab"]:hover {
-        color: #f8fafc;
-        background: rgba(255, 255, 255, 0.05);
-    }
-    .stTabs [aria-selected="true"] {
-        background: rgba(14, 165, 233, 0.2) !important;
-        color: #38bdf8 !important;
-        border: 1px solid rgba(56, 189, 248, 0.35) !important;
-    }
-
-    /* Onboarding Card Grid */
+    /* Onboarding Card Grid (Clean Light Cards) */
     .onboarding-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
-        margin: 18px 0;
+        gap: 14px;
+        margin: 16px 0;
     }
     @media (max-width: 768px) {
         .onboarding-grid {
@@ -413,21 +406,22 @@ st.markdown("""
         }
     }
     .onboarding-card {
-        background: rgba(18, 26, 46, 0.75);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 18px;
-        padding: 18px 20px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 16px 18px;
         transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
     }
     .onboarding-card:hover {
-        border-color: rgba(56, 189, 248, 0.4);
-        background: rgba(22, 32, 56, 0.85);
+        border-color: #0284c7;
+        background: #ffffff;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
         transform: translateY(-2px);
     }
     .onboarding-card-title {
-        font-size: 1.02rem;
+        font-size: 0.98rem;
         font-weight: 700;
-        color: #ffffff;
+        color: #0f172a;
         margin-bottom: 6px;
         display: flex;
         align-items: center;
@@ -441,50 +435,50 @@ st.markdown("""
         letter-spacing: 0.06em;
         padding: 3px 8px;
         border-radius: 9999px;
-        background: rgba(14, 165, 233, 0.15);
-        color: #38bdf8;
-        border: 1px solid rgba(56, 189, 248, 0.25);
+        background: #e0f2fe;
+        color: #0284c7;
+        border: 1px solid #bae6fd;
     }
     .onboarding-card-desc {
-        font-size: 0.84rem;
-        color: #94a3b8;
+        font-size: 0.83rem;
+        color: #475569;
         line-height: 1.5;
         margin: 0 0 10px 0;
     }
     .onboarding-card-tip {
-        font-size: 0.76rem;
-        color: #38bdf8;
-        background: rgba(14, 165, 233, 0.08);
-        border-left: 3px solid #38bdf8;
+        font-size: 0.75rem;
+        color: #0284c7;
+        background: #f0f9ff;
+        border-left: 3px solid #0284c7;
         padding: 6px 10px;
-        border-radius: 6px;
+        border-radius: 4px;
         margin: 0;
     }
 
     /* Onboarding Step Cards */
     .onboarding-step {
         display: flex;
-        gap: 18px;
-        background: rgba(18, 26, 46, 0.7);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 18px;
-        padding: 18px 22px;
-        margin-bottom: 14px;
+        gap: 16px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 16px 20px;
+        margin-bottom: 12px;
         align-items: flex-start;
     }
     .onboarding-step-num {
-        width: 38px;
-        height: 38px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%);
+        background: #0284c7;
         color: #ffffff;
         font-weight: 800;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.05rem;
+        font-size: 1rem;
         flex-shrink: 0;
-        box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+        box-shadow: 0 3px 10px rgba(2, 132, 199, 0.3);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -506,16 +500,17 @@ config = load_system_config()
 
 # ==============================================================================
 # SIDEBAR NAVIGATION & SYSTEM TELEMETRY DOCK
+# Modeled after MD3 Drawer & Reference Image Navigation Pills
 # ==============================================================================
 with st.sidebar:
     st.markdown("""
-    <div style="display: flex; align-items: center; gap: 12px; margin: 10px 0 16px 4px;">
-        <div style="background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%); padding: 10px; border-radius: 14px; box-shadow: 0 4px 15px rgba(2,132,199,0.35);">
-            <span style="font-size: 1.5rem; display: block; line-height: 1;">🛡️</span>
+    <div style="display: flex; align-items: center; gap: 12px; margin: 8px 0 16px 2px;">
+        <div style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); padding: 10px; border-radius: 12px; box-shadow: 0 3px 12px rgba(2,132,199,0.25);">
+            <span style="font-size: 1.4rem; display: block; line-height: 1;">🛡️</span>
         </div>
         <div>
-            <div style="font-size: 1.15rem; font-weight: 800; color: #f8fafc; letter-spacing: -0.02em;">TwinGuard-OT</div>
-            <div style="font-size: 0.72rem; color: #38bdf8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">ICS Digital Twin v2.2</div>
+            <div style="font-size: 1.15rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em;">TwinGuard-OT</div>
+            <div style="font-size: 0.72rem; color: #0284c7; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">ICS Digital Twin v2.2</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -579,22 +574,22 @@ with st.sidebar:
 
     # System Status Dock
     st.markdown(f"""
-    <div style="background: rgba(15, 23, 42, 0.6); padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.06); font-size: 0.75rem; color: #94a3b8; line-height: 1.6;">
+    <div style="background: #f8fafc; padding: 14px; border-radius: 14px; border: 1px solid #e2e8f0; font-size: 0.75rem; color: #64748b; line-height: 1.6;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
             <span>MODBUS HOST:</span>
-            <span style="color: #f8fafc; font-family: monospace;">127.0.0.1:5020</span>
+            <span style="color: #0f172a; font-family: monospace; font-weight: 600;">127.0.0.1:5020</span>
         </div>
         <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
             <span>PLC SCAN RATE:</span>
-            <span style="color: #34d399; font-weight: 700;">5.0 Hz (200ms)</span>
+            <span style="color: #16a34a; font-weight: 700;">5.0 Hz (200ms)</span>
         </div>
         <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
             <span>DATABASE:</span>
-            <span style="color: #38bdf8; font-weight: 600;">SQLite (WAL Active)</span>
+            <span style="color: #0284c7; font-weight: 600;">SQLite (WAL Active)</span>
         </div>
         <div style="display: flex; justify-content: space-between;">
             <span>INSTITUTION:</span>
-            <span style="color: #cbd5e1;">RVCE — III Sem EL</span>
+            <span style="color: #334155; font-weight: 500;">RVCE — III Sem EL</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -614,13 +609,13 @@ def on_dialog_dismiss():
 def show_onboarding_tutorial():
     st.markdown("""
     <div style="margin-bottom: 20px;">
-        <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(14, 165, 233, 0.15); border: 1px solid rgba(56, 189, 248, 0.3); padding: 5px 14px; border-radius: 9999px; font-size: 0.75rem; color: #38bdf8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; background: #e0f2fe; border: 1px solid #bae6fd; padding: 5px 14px; border-radius: 9999px; font-size: 0.75rem; color: #0284c7; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;">
             <span>🛡️ ICS CYBERSECURITY PLATFORM</span>
         </div>
-        <h2 style="font-size: 1.7rem; font-weight: 800; margin: 0 0 6px 0; background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #38bdf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        <h2 style="font-size: 1.65rem; font-weight: 800; margin: 0 0 6px 0; color: #0f172a;">
             TwinGuard-OT: Process-Aware Digital Twin
         </h2>
-        <p style="color: #94a3b8; font-size: 0.92rem; margin: 0; line-height: 1.55;">
+        <p style="color: #475569; font-size: 0.92rem; margin: 0; line-height: 1.55;">
             Welcome to the TwinGuard-OT industrial operations & cybersecurity operations center. 
             TwinGuard-OT pairs continuous hydrodynamic physical process simulation with virtual PLC control, 
             industrial Modbus TCP networking, controlled threat injection, and hybrid physics-ML anomaly detection.
@@ -742,8 +737,8 @@ def show_onboarding_tutorial():
             <div class="onboarding-step">
                 <div class="onboarding-step-num">1</div>
                 <div>
-                    <div style="font-weight: 700; color: #ffffff; font-size: 1.05rem; margin-bottom: 4px;">Step 1: Observe Normal Baseline Operation</div>
-                    <div style="color: #94a3b8; font-size: 0.88rem; line-height: 1.5;">
+                    <div style="font-weight: 700; color: #0f172a; font-size: 1.05rem; margin-bottom: 4px;">Step 1: Observe Normal Baseline Operation</div>
+                    <div style="color: #475569; font-size: 0.88rem; line-height: 1.5;">
                         Navigate to <strong>🌊 Process SCADA Overview</strong>. Confirm that the simulated water level naturally cycles within hysteresis limits (refill at 30%, shutoff at 80%). The top bar displays a green <code>PLANT OPERATING NORMALLY</code> badge with near-zero physical residual (&lt; 5%).
                     </div>
                 </div>
@@ -751,8 +746,8 @@ def show_onboarding_tutorial():
             <div class="onboarding-step">
                 <div class="onboarding-step-num">2</div>
                 <div>
-                    <div style="font-weight: 700; color: #ffffff; font-size: 1.05rem; margin-bottom: 4px;">Step 2: Inject a Controlled Cyber Threat</div>
-                    <div style="color: #94a3b8; font-size: 0.88rem; line-height: 1.5;">
+                    <div style="font-weight: 700; color: #0f172a; font-size: 1.05rem; margin-bottom: 4px;">Step 2: Inject a Controlled Cyber Threat</div>
+                    <div style="color: #475569; font-size: 0.88rem; line-height: 1.5;">
                         Switch to <strong>🎯 Cyberattack Laboratory</strong>. Select <em>Sensor Spoofing</em> (falsified level = 20%) or <em>Command Flooding</em> (150 req/s), set duration to 12s, and click <strong>INJECT CYBERATTACK SCENARIO</strong>. The attack runs against localhost:5020 without risking physical equipment.
                     </div>
                 </div>
@@ -760,8 +755,8 @@ def show_onboarding_tutorial():
             <div class="onboarding-step">
                 <div class="onboarding-step-num">3</div>
                 <div>
-                    <div style="font-weight: 700; color: #ffffff; font-size: 1.05rem; margin-bottom: 4px;">Step 3: Analyze Multi-Tier Detection & Verification</div>
-                    <div style="color: #94a3b8; font-size: 0.88rem; line-height: 1.5;">
+                    <div style="font-weight: 700; color: #0f172a; font-size: 1.05rem; margin-bottom: 4px;">Step 3: Analyze Multi-Tier Detection & Verification</div>
+                    <div style="color: #475569; font-size: 0.88rem; line-height: 1.5;">
                         Go to <strong>🛡️ Multi-Tier Anomaly Detection</strong> and <strong>🔄 Digital Twin Shadow Model</strong>. Notice how the physical residual diverges past the 5.0% threshold while the reported sensor lies, triggering the Isolation Forest and cyber-physical correlation alarm. Then inspect <strong>🏆 Empirical Evaluation Metrics</strong> for quantitative F1-scores.
                     </div>
                 </div>
@@ -771,32 +766,32 @@ def show_onboarding_tutorial():
 
     with tab_sys:
         st.markdown("""
-        <div style="background: rgba(18, 26, 46, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 20px; margin: 16px 0;">
-            <h4 style="color: #ffffff; margin-top: 0; font-size: 1.05rem;">Closed-Loop Cyber-Physical Digital Twin Architecture</h4>
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 18px; padding: 20px; margin: 16px 0;">
+            <h4 style="color: #0f172a; margin-top: 0; font-size: 1.05rem;">Closed-Loop Cyber-Physical Digital Twin Architecture</h4>
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; font-size: 0.82rem;">
-                <div style="background: rgba(15, 23, 42, 0.8); padding: 12px; border-radius: 12px; border-left: 3px solid #38bdf8;">
-                    <div style="font-weight: 700; color: #38bdf8;">1. Physical Plant</div>
-                    <div style="color: #94a3b8; margin-top: 4px;">Continuous mass-balance dh/dt = (Qin - Qout)/A with Torricelli efflux discharge.</div>
+                <div style="background: #ffffff; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 3px solid #0284c7;">
+                    <div style="font-weight: 700; color: #0284c7;">1. Physical Plant</div>
+                    <div style="color: #64748b; margin-top: 4px;">Continuous mass-balance dh/dt = (Qin - Qout)/A with Torricelli efflux discharge.</div>
                 </div>
-                <div style="background: rgba(15, 23, 42, 0.8); padding: 12px; border-radius: 12px; border-left: 3px solid #818cf8;">
-                    <div style="font-weight: 700; color: #818cf8;">2. Virtual PLC</div>
-                    <div style="color: #94a3b8; margin-top: 4px;">Deterministic 5.0 Hz cyclic scan with hysteresis pump/valve control logic.</div>
+                <div style="background: #ffffff; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 3px solid #6366f1;">
+                    <div style="font-weight: 700; color: #6366f1;">2. Virtual PLC</div>
+                    <div style="color: #64748b; margin-top: 4px;">Deterministic 5.0 Hz cyclic scan with hysteresis pump/valve control logic.</div>
                 </div>
-                <div style="background: rgba(15, 23, 42, 0.8); padding: 12px; border-radius: 12px; border-left: 3px solid #34d399;">
-                    <div style="font-weight: 700; color: #34d399;">3. Modbus TCP</div>
-                    <div style="color: #94a3b8; margin-top: 4px;">Port 5020 slave holding registers 40001–40012 for industrial telemetry & commands.</div>
+                <div style="background: #ffffff; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 3px solid #16a34a;">
+                    <div style="font-weight: 700; color: #16a34a;">3. Modbus TCP</div>
+                    <div style="color: #64748b; margin-top: 4px;">Port 5020 slave holding registers 40001–40012 for industrial telemetry & commands.</div>
                 </div>
-                <div style="background: rgba(15, 23, 42, 0.8); padding: 12px; border-radius: 12px; border-left: 3px solid #fbbf24;">
-                    <div style="font-weight: 700; color: #fbbf24;">4. Digital Twin</div>
-                    <div style="color: #94a3b8; margin-top: 4px;">Shadow physics reference calculating instantaneous residual |h_sensor - h_shadow|.</div>
+                <div style="background: #ffffff; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 3px solid #d97706;">
+                    <div style="font-weight: 700; color: #d97706;">4. Digital Twin</div>
+                    <div style="color: #64748b; margin-top: 4px;">Shadow physics reference calculating instantaneous residual |h_sensor - h_shadow|.</div>
                 </div>
-                <div style="background: rgba(15, 23, 42, 0.8); padding: 12px; border-radius: 12px; border-left: 3px solid #f87171;">
-                    <div style="font-weight: 700; color: #f87171;">5. Threat Simulator</div>
-                    <div style="color: #94a3b8; margin-top: 4px;">Red team injector targeting Modbus registers with spoofing, writes, floods, replays.</div>
+                <div style="background: #ffffff; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 3px solid #dc2626;">
+                    <div style="font-weight: 700; color: #dc2626;">5. Threat Simulator</div>
+                    <div style="color: #64748b; margin-top: 4px;">Red team injector targeting Modbus registers with spoofing, writes, floods, replays.</div>
                 </div>
-                <div style="background: rgba(15, 23, 42, 0.8); padding: 12px; border-radius: 12px; border-left: 3px solid #c084fc;">
-                    <div style="font-weight: 700; color: #c084fc;">6. Hybrid Detection</div>
-                    <div style="color: #94a3b8; margin-top: 4px;">Rule invariants + residual thresholding + scikit-learn Isolation Forest ML.</div>
+                <div style="background: #ffffff; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; border-left: 3px solid #7c3aed;">
+                    <div style="font-weight: 700; color: #7c3aed;">6. Hybrid Detection</div>
+                    <div style="color: #64748b; margin-top: 4px;">Rule invariants + residual thresholding + scikit-learn Isolation Forest ML.</div>
                 </div>
             </div>
         </div>
@@ -819,7 +814,7 @@ if st.session_state.show_onboarding:
 
 
 # ==============================================================================
-# TOP APP BAR (Unified Status & Single Tour Button)
+# TOP APP BAR (Unified White Header Card with Single Tour Button)
 # ==============================================================================
 df_telemetry = db.get_all_telemetry()
 latest_level = 50.0
@@ -847,23 +842,23 @@ with st.container(border=True):
     with col_tb1:
         if is_anomaly:
             st.markdown(f"""
-            <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
                 <span class="chip-red"><span class="dot-danger"></span> CYBER-PHYSICAL ANOMALY DETECTED</span>
                 <span class="tech-pill">ACTIVE EXP: {active_exp}</span>
-                <span style="font-size: 0.85rem; color: #f87171; font-weight: 600;">Physical Residual: {latest_residual:.2f}% &gt; {config['detection']['residual_threshold']}%</span>
+                <span style="font-size: 0.85rem; color: #b91c1c; font-weight: 600;">Physical Residual: {latest_residual:.2f}% &gt; {config['detection']['residual_threshold']}%</span>
             </div>
             """, unsafe_allow_html=True)
         else:
             st.markdown(f"""
-            <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
                 <span class="chip-green"><span class="dot-live"></span> PLANT OPERATING NORMALLY</span>
                 <span class="tech-pill">SESSION: {active_exp}</span>
-                <span style="font-size: 0.85rem; color: #94a3b8;">All safety interlocks clear • Zero residual violations</span>
+                <span style="font-size: 0.85rem; color: #64748b; font-weight: 500;">All safety interlocks clear • Zero residual violations</span>
             </div>
             """, unsafe_allow_html=True)
 
     with col_tb2:
-        if st.button("🧭 Platform Tour", use_container_width=True):
+        if st.button("🧭 Platform Tour", key="top_bar_tour", use_container_width=True):
             st.session_state.show_onboarding = True
             st.rerun()
 
@@ -898,7 +893,7 @@ if nav_choice == "🌊 Process SCADA Overview":
 
     with col_scada1:
         with st.container(border=True):
-            st.markdown('<div style="font-size: 0.82rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; text-align: center;">Cyber-Physical Tank Rig</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size: 0.82rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; text-align: center;">Cyber-Physical Tank Rig</div>', unsafe_allow_html=True)
 
             is_spoofed = abs(latest_level - latest_true) > 4.0
             sensor_color_cls = "liquid-wave liquid-sensor"
@@ -911,16 +906,16 @@ if nav_choice == "🌊 Process SCADA Overview":
             st.markdown(f"""
             <div class="scada-rig">
                 <div class="scada-column">
-                    <span style="font-size: 0.72rem; color: #38bdf8; font-weight: 800;">GROUND TRUTH</span>
+                    <span style="font-size: 0.72rem; color: #0284c7; font-weight: 800;">GROUND TRUTH</span>
                     <div class="tank-glass">
                         <div class="interlock-line" style="bottom: {high_line}%;"></div>
                         <div class="interlock-line" style="bottom: {low_line}%;"></div>
                         <div class="liquid-wave liquid-true" style="height: {latest_true}%;"></div>
                     </div>
-                    <span style="font-size: 1.15rem; font-weight: 800; color: #38bdf8;">{latest_true:.1f}%</span>
+                    <span style="font-size: 1.15rem; font-weight: 800; color: #0284c7;">{latest_true:.1f}%</span>
                 </div>
                 <div class="scada-column">
-                    <span style="font-size: 0.72rem; color: {'#f87171' if is_spoofed else '#34d399'}; font-weight: 800;">
+                    <span style="font-size: 0.72rem; color: {'#dc2626' if is_spoofed else '#16a34a'}; font-weight: 800;">
                         REPORTED SENSOR {('(SPOOFED)' if is_spoofed else '')}
                     </span>
                     <div class="tank-glass">
@@ -928,7 +923,7 @@ if nav_choice == "🌊 Process SCADA Overview":
                         <div class="interlock-line" style="bottom: {low_line}%;"></div>
                         <div class="{sensor_color_cls}" style="height: {latest_level}%;"></div>
                     </div>
-                    <span style="font-size: 1.15rem; font-weight: 800; color: {'#f87171' if is_spoofed else '#34d399'};">{latest_level:.1f}%</span>
+                    <span style="font-size: 1.15rem; font-weight: 800; color: {'#dc2626' if is_spoofed else '#16a34a'};">{latest_level:.1f}%</span>
                 </div>
             </div>
             <div style="font-size: 0.75rem; color: #64748b; margin-top: 12px; text-align: center;">
@@ -938,7 +933,7 @@ if nav_choice == "🌊 Process SCADA Overview":
 
     with col_scada2:
         with st.container(border=True):
-            st.markdown('<div style="font-size: 0.82rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;">Real-Time Hydrodynamic Trajectory</div>', unsafe_allow_html=True)
+            st.markdown('<div style="font-size: 0.82rem; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;">Real-Time Hydrodynamic Trajectory</div>', unsafe_allow_html=True)
 
             if not df_telemetry.empty:
                 recent_df = df_telemetry.tail(120).copy()
@@ -948,16 +943,17 @@ if nav_choice == "🌊 Process SCADA Overview":
                     x="Time_Sec",
                     y=["sensor_level", "true_level"],
                     labels={"value": "Level (%)", "Time_Sec": "Elapsed (s)", "variable": "Telemetry Stream"},
-                    color_discrete_map={"sensor_level": "#34d399", "true_level": "#38bdf8"},
+                    color_discrete_map={"sensor_level": "#10b981", "true_level": "#0284c7"},
                 )
                 fig_trend.update_layout(
                     height=285,
                     margin=dict(l=10, r=10, t=10, b=10),
                     paper_bgcolor="rgba(0,0,0,0)",
                     plot_bgcolor="rgba(0,0,0,0)",
-                    xaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.06)"),
-                    yaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.06)", range=[0, 105]),
-                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+                    font=dict(color="#334155", family="Plus Jakarta Sans"),
+                    xaxis=dict(showgrid=True, gridcolor="#f1f5f9", tickfont=dict(color="#64748b")),
+                    yaxis=dict(showgrid=True, gridcolor="#f1f5f9", range=[0, 105], tickfont=dict(color="#64748b")),
+                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color="#334155")),
                 )
                 st.plotly_chart(fig_trend, use_container_width=True)
             else:
@@ -986,19 +982,37 @@ elif nav_choice == "🔄 Digital Twin Shadow Model":
         with st.container(border=True):
             st.subheader("1. True Physical Level vs Observed Sensor Signal")
             fig1 = go.Figure()
-            fig1.add_trace(go.Scatter(x=exp_df["Elapsed_Sec"], y=exp_df["true_level"], mode="lines", name="Ground Truth Physical Level", line=dict(color="#38bdf8", width=3)))
-            fig1.add_trace(go.Scatter(x=exp_df["Elapsed_Sec"], y=exp_df["sensor_level"], mode="lines", name="Reported Sensor Signal", line=dict(color="#f87171", width=2, dash="dot")))
-            fig1.add_hline(y=config["plc"]["high_threshold"], line_dash="dash", line_color="#fbbf24", annotation_text="High Hysteresis (80%)")
-            fig1.add_hline(y=config["plc"]["low_threshold"], line_dash="dash", line_color="#fbbf24", annotation_text="Low Hysteresis (30%)")
-            fig1.update_layout(height=320, xaxis_title="Elapsed Time (s)", yaxis_title="Water Level (%)", paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+            fig1.add_trace(go.Scatter(x=exp_df["Elapsed_Sec"], y=exp_df["true_level"], mode="lines", name="Ground Truth Physical Level", line=dict(color="#0284c7", width=3)))
+            fig1.add_trace(go.Scatter(x=exp_df["Elapsed_Sec"], y=exp_df["sensor_level"], mode="lines", name="Reported Sensor Signal", line=dict(color="#dc2626", width=2, dash="dot")))
+            fig1.add_hline(y=config["plc"]["high_threshold"], line_dash="dash", line_color="#d97706", annotation_text="High Hysteresis (80%)")
+            fig1.add_hline(y=config["plc"]["low_threshold"], line_dash="dash", line_color="#d97706", annotation_text="Low Hysteresis (30%)")
+            fig1.update_layout(
+                height=320,
+                xaxis_title="Elapsed Time (s)",
+                yaxis_title="Water Level (%)",
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(color="#334155", family="Plus Jakarta Sans"),
+                xaxis=dict(showgrid=True, gridcolor="#f1f5f9"),
+                yaxis=dict(showgrid=True, gridcolor="#f1f5f9"),
+            )
             st.plotly_chart(fig1, use_container_width=True)
 
         with st.container(border=True):
             st.subheader("2. Instantaneous Physical Residual: |Observed - Expected|")
             fig2 = go.Figure()
-            fig2.add_trace(go.Scatter(x=exp_df["Elapsed_Sec"], y=exp_df["process_residual"], mode="lines", name="Process Residual r(t)", line=dict(color="#c084fc", width=2.5)))
-            fig2.add_hline(y=config["detection"]["residual_threshold"], line_dash="dash", line_color="#ef4444", annotation_text=f"Anomaly Threshold ({config['detection']['residual_threshold']}%)")
-            fig2.update_layout(height=260, xaxis_title="Elapsed Time (s)", yaxis_title="Residual Deviation (%)", paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+            fig2.add_trace(go.Scatter(x=exp_df["Elapsed_Sec"], y=exp_df["process_residual"], mode="lines", name="Process Residual r(t)", line=dict(color="#7c3aed", width=2.5)))
+            fig2.add_hline(y=config["detection"]["residual_threshold"], line_dash="dash", line_color="#dc2626", annotation_text=f"Anomaly Threshold ({config['detection']['residual_threshold']}%)")
+            fig2.update_layout(
+                height=260,
+                xaxis_title="Elapsed Time (s)",
+                yaxis_title="Residual Deviation (%)",
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(color="#334155", family="Plus Jakarta Sans"),
+                xaxis=dict(showgrid=True, gridcolor="#f1f5f9"),
+                yaxis=dict(showgrid=True, gridcolor="#f1f5f9"),
+            )
             st.plotly_chart(fig2, use_container_width=True)
 
 
@@ -1028,10 +1042,17 @@ elif nav_choice == "📡 Modbus Protocol Inspector":
                     x="Time",
                     y="request_rate",
                     labels={"request_rate": "Requests / sec", "Time": "Timestamp"},
-                    color_discrete_sequence=["#38bdf8"],
+                    color_discrete_sequence=["#0284c7"],
                 )
-                fig_rate.add_hline(y=config["detection"]["request_rate_flood_threshold"], line_dash="dash", line_color="#ef4444", annotation_text="Flood Alarm (30 req/s)")
-                fig_rate.update_layout(height=280, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+                fig_rate.add_hline(y=config["detection"]["request_rate_flood_threshold"], line_dash="dash", line_color="#dc2626", annotation_text="Flood Alarm (30 req/s)")
+                fig_rate.update_layout(
+                    height=280,
+                    paper_bgcolor="rgba(0,0,0,0)",
+                    plot_bgcolor="rgba(0,0,0,0)",
+                    font=dict(color="#334155", family="Plus Jakarta Sans"),
+                    xaxis=dict(showgrid=True, gridcolor="#f1f5f9"),
+                    yaxis=dict(showgrid=True, gridcolor="#f1f5f9"),
+                )
                 st.plotly_chart(fig_rate, use_container_width=True)
 
         with col_m2:
@@ -1039,8 +1060,12 @@ elif nav_choice == "📡 Modbus Protocol Inspector":
                 st.subheader("Function Code Breakdown")
                 fc_counts = df_events["function_name"].value_counts().reset_index()
                 fc_counts.columns = ["Function", "Count"]
-                fig_pie = px.pie(fc_counts, values="Count", names="Function", color_discrete_sequence=px.colors.qualitative.Prism)
-                fig_pie.update_layout(height=280, paper_bgcolor="rgba(0,0,0,0)")
+                fig_pie = px.pie(fc_counts, values="Count", names="Function", color_discrete_sequence=["#0284c7", "#6366f1", "#10b981", "#f59e0b", "#ef4444"])
+                fig_pie.update_layout(
+                    height=280,
+                    paper_bgcolor="rgba(0,0,0,0)",
+                    font=dict(color="#334155", family="Plus Jakarta Sans"),
+                )
                 st.plotly_chart(fig_pie, use_container_width=True)
 
         with st.container(border=True):
@@ -1157,13 +1182,20 @@ elif nav_choice == "🛡️ Multi-Tier Anomaly Detection":
                 y="Count",
                 color="Category",
                 color_discrete_map={
-                    "NORMAL": "#34d399",
-                    "CYBER_ONLY": "#38bdf8",
-                    "PROCESS_ONLY": "#fbbf24",
-                    "CYBER_PHYSICAL_ATTACK": "#f87171",
+                    "NORMAL": "#10b981",
+                    "CYBER_ONLY": "#0284c7",
+                    "PROCESS_ONLY": "#f59e0b",
+                    "CYBER_PHYSICAL_ATTACK": "#ef4444",
                 }
             )
-            fig_cat.update_layout(height=280, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+            fig_cat.update_layout(
+                height=280,
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(color="#334155", family="Plus Jakarta Sans"),
+                xaxis=dict(showgrid=True, gridcolor="#f1f5f9"),
+                yaxis=dict(showgrid=True, gridcolor="#f1f5f9"),
+            )
             st.plotly_chart(fig_cat, use_container_width=True)
 
         with st.container(border=True):
@@ -1203,8 +1235,16 @@ elif nav_choice == "📊 Statistical Process Analytics":
                     color="attack_type",
                     nbins=35,
                     labels={"process_residual": "Residual Error (%)", "count": "Sample Count"},
+                    color_discrete_sequence=["#0284c7", "#6366f1", "#10b981", "#f59e0b", "#ef4444"],
                 )
-                fig_hist.update_layout(height=320, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+                fig_hist.update_layout(
+                    height=320,
+                    paper_bgcolor="rgba(0,0,0,0)",
+                    plot_bgcolor="rgba(0,0,0,0)",
+                    font=dict(color="#334155", family="Plus Jakarta Sans"),
+                    xaxis=dict(showgrid=True, gridcolor="#f1f5f9"),
+                    yaxis=dict(showgrid=True, gridcolor="#f1f5f9"),
+                )
                 st.plotly_chart(fig_hist, use_container_width=True)
 
         with col_a2:
@@ -1216,8 +1256,16 @@ elif nav_choice == "📊 Statistical Process Analytics":
                     y="sensor_level",
                     color="attack_type",
                     labels={"true_level": "True Plant Level (%)", "sensor_level": "Reported Sensor (%)"},
+                    color_discrete_sequence=["#0284c7", "#6366f1", "#10b981", "#f59e0b", "#ef4444"],
                 )
-                fig_scatter.update_layout(height=320, paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+                fig_scatter.update_layout(
+                    height=320,
+                    paper_bgcolor="rgba(0,0,0,0)",
+                    plot_bgcolor="rgba(0,0,0,0)",
+                    font=dict(color="#334155", family="Plus Jakarta Sans"),
+                    xaxis=dict(showgrid=True, gridcolor="#f1f5f9"),
+                    yaxis=dict(showgrid=True, gridcolor="#f1f5f9"),
+                )
                 st.plotly_chart(fig_scatter, use_container_width=True)
 
 
@@ -1259,9 +1307,17 @@ elif nav_choice == "🏆 Empirical Evaluation Metrics":
                 y=["accuracy", "precision", "recall", "f1_score"],
                 barmode="group",
                 labels={"value": "Score (0.0 to 1.0)", "model_name": "Detection Approach"},
-                color_discrete_sequence=["#38bdf8", "#818cf8", "#34d399", "#f87171"],
+                color_discrete_sequence=["#0284c7", "#6366f1", "#10b981", "#ef4444"],
             )
-            fig_bar.update_layout(height=340, yaxis_range=[0, 1.05], paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+            fig_bar.update_layout(
+                height=340,
+                yaxis_range=[0, 1.05],
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(color="#334155", family="Plus Jakarta Sans"),
+                xaxis=dict(showgrid=True, gridcolor="#f1f5f9"),
+                yaxis=dict(showgrid=True, gridcolor="#f1f5f9"),
+            )
             st.plotly_chart(fig_bar, use_container_width=True)
 
 
