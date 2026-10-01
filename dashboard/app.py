@@ -44,6 +44,8 @@ if "onboarding_completed" not in st.session_state:
     st.session_state.onboarding_completed = False
 if "show_onboarding" not in st.session_state:
     st.session_state.show_onboarding = not st.session_state.onboarding_completed
+if "show_settings" not in st.session_state:
+    st.session_state.show_settings = False
 if "refresh_speed" not in st.session_state:
     st.session_state.refresh_speed = 3.0
 if "auto_refresh" not in st.session_state:
@@ -806,44 +808,33 @@ with st.sidebar:
         st.rerun()
 
     # -------------------------------------------------------------
-    # SECTION 04: TELEMETRY CONTROLS (Full-Width Cadence Slider)
+    # SYSTEM CONTROLS & DIAGNOSTICS DOCK
     # -------------------------------------------------------------
-    st.markdown('<div class="nav-section-title">TELEMETRY CONTROLS</div>', unsafe_allow_html=True)
+    st.markdown('<div class="nav-section-title">PLATFORM CONTROL</div>', unsafe_allow_html=True)
 
-    auto_sync = st.toggle("Auto-Refresh Stream", value=st.session_state.auto_refresh, key="sb_autorefresh")
-    st.session_state.auto_refresh = auto_sync
-
-    current_cadence_label = "3s (Standard)"
-    if st.session_state.refresh_speed == 1.0:
-        current_cadence_label = "1s (Fast)"
-    elif st.session_state.refresh_speed == 5.0:
-        current_cadence_label = "5s (Relaxed)"
-
-    speed_choice = st.select_slider(
-        "Cadence Rate",
-        options=["1s (Fast)", "3s (Standard)", "5s (Relaxed)"],
-        value=current_cadence_label,
-        key="sb_cadence_rate",
-    )
-    speed_map = {"1s (Fast)": 1.0, "3s (Standard)": 3.0, "5s (Relaxed)": 5.0}
-    st.session_state.refresh_speed = speed_map[speed_choice]
-
-    if st.button("⚡ Force Manual Sync", key="sb_force_sync", use_container_width=True):
-        st.rerun()
+    col_sb_a, col_sb_b = st.columns(2)
+    with col_sb_a:
+        if st.button("⚙️ Settings", key="sb_btn_settings", use_container_width=True):
+            st.session_state.show_settings = True
+            st.rerun()
+    with col_sb_b:
+        if st.button("🧭 Tour", key="sb_btn_tour", use_container_width=True):
+            st.session_state.show_onboarding = True
+            st.rerun()
 
     # System Status Diagnostics Dock
     st.markdown("""
     <div class="sidebar-diagnostics">
         <div class="diag-row">
-            <span>MODBUS TARGET:</span>
+            <span>MODBUS:</span>
             <code>127.0.0.1:5020</code>
         </div>
         <div class="diag-row">
-            <span>PLC SCAN RATE:</span>
+            <span>PLC RATE:</span>
             <span style="color: #4ade80; font-weight: 700;">5.0 Hz (200ms)</span>
         </div>
         <div class="diag-row">
-            <span>DATABASE:</span>
+            <span>STORAGE:</span>
             <span style="color: #38bdf8; font-weight: 600;">SQLite (WAL Active)</span>
         </div>
     </div>
@@ -1069,7 +1060,166 @@ if st.session_state.show_onboarding:
 
 
 # ==============================================================================
-# TOP APP BAR (Unified White Header Card with Single Tour Button)
+# SETTINGS & SAFETY CONTROLS MODAL (Centralized Platform Configuration)
+# Includes all parameters, safety notices, and controls from earlier versions
+# ==============================================================================
+def on_settings_dismiss():
+    st.session_state.show_settings = False
+
+
+@st.dialog("⚙️ Platform Settings & Safety Controls", width="large", on_dismiss=on_settings_dismiss)
+def show_settings_modal():
+    st.markdown("""
+    <div style="margin-bottom: 14px;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.28); padding: 4px 12px; border-radius: 9999px; font-size: 0.72rem; color: #38bdf8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;">
+            <span>🛡️ CONTROL & CONFIGURATION</span>
+        </div>
+        <h3 style="font-size: 1.25rem; font-weight: 800; margin: 0 0 4px 0; color: #f8fafc;">
+            Platform Settings & Operational Parameters
+        </h3>
+        <p style="color: #94a3b8; font-size: 0.84rem; margin: 0; line-height: 1.45;">
+            Configure real-time telemetry streaming, plant safety thresholds, physical process setpoints, and view the localhost safety enclosure.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    tab_telemetry, tab_process, tab_detect, tab_safety = st.tabs([
+        "⚡ Telemetry & Polling",
+        "🎛️ Process Setpoints",
+        "🛡️ Anomaly Thresholds",
+        "🔒 Localhost Isolation",
+    ])
+
+    with tab_telemetry:
+        st.markdown("##### ⚡ Real-Time Polling & Ingestion Cadence")
+        st.caption("Control live dashboard synchronization with the industrial SQLite database and virtual PLC.")
+
+        c_sync1, c_sync2 = st.columns([1.5, 1])
+        with c_sync1:
+            auto_sync = st.toggle("Auto-Refresh Telemetry Stream", value=st.session_state.auto_refresh, key="dlg_autorefresh")
+            st.session_state.auto_refresh = auto_sync
+        with c_sync2:
+            current_cadence_label = "3s (Standard)"
+            if st.session_state.refresh_speed == 1.0:
+                current_cadence_label = "1s (Fast)"
+            elif st.session_state.refresh_speed == 5.0:
+                current_cadence_label = "5s (Relaxed)"
+
+            speed_choice = st.select_slider(
+                "Polling Cadence",
+                options=["1s (Fast)", "3s (Standard)", "5s (Relaxed)"],
+                value=current_cadence_label,
+                key="dlg_cadence_rate",
+            )
+            speed_map = {"1s (Fast)": 1.0, "3s (Standard)": 3.0, "5s (Relaxed)": 5.0}
+            st.session_state.refresh_speed = speed_map[speed_choice]
+
+        c_f1, c_f2 = st.columns([1, 1])
+        with c_f1:
+            if st.button("⚡ Force Immediate Resync", key="dlg_force_sync", use_container_width=True):
+                st.session_state.show_settings = False
+                st.rerun()
+        with c_f2:
+            if st.button("🧹 Clear Streamlit Cache", key="dlg_clear_cache", use_container_width=True):
+                st.cache_resource.clear()
+                st.success("Cache invalidated.")
+
+    with tab_process:
+        st.markdown("##### 🎛️ Plant Physical Setpoints & Limits")
+        st.caption("Configured hysteresis thresholds governing virtual PLC automated pump and valve sequencing.")
+
+        col_p1, col_p2, col_p3 = st.columns(3)
+        with col_p1:
+            st.metric("Target Setpoint", f"{config.get('plc', {}).get('default_setpoint', 70.0):.1f}%", help="Holding register 40003")
+        with col_p2:
+            st.metric("High-Level Cutoff", f"{config.get('plc', {}).get('high_threshold', 80.0):.1f}%", help="Pump auto-trips above this level")
+        with col_p3:
+            st.metric("Low-Level Refill", f"{config.get('plc', {}).get('low_threshold', 30.0):.1f}%", help="Pump energizes below this level")
+
+        st.markdown("""
+        <div style="background: #090e18; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 12px 14px; margin-top: 10px; font-size: 0.80rem; color: #94a3b8;">
+            <div style="font-weight: 700; color: #f8fafc; margin-bottom: 6px;">Tank Physical Model Constants (Hydrodynamic Equations):</div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                <div>• Max Height: <code>100.0 cm</code></div>
+                <div>• Tank Area: <code>1.20 m²</code></div>
+                <div>• Inflow Rate: <code>15.0 L/s</code></div>
+                <div>• Outflow Coeff: <code>0.60</code></div>
+                <div>• Sensor Noise σ: <code>0.15%</code></div>
+                <div>• Gravity g: <code>9.81 m/s²</code></div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with tab_detect:
+        st.markdown("##### 🛡️ Anomaly Detection & Invariant Thresholds")
+        st.caption("Deterministic residual bounds and Machine Learning contamination parameters.")
+
+        col_d1, col_d2 = st.columns(2)
+        with col_d1:
+            st.metric("Residual Alarm Threshold", f"{config.get('detection', {}).get('residual_threshold', 5.0):.1f}%", help="R03: |h_sensor - h_shadow| > 5%")
+            st.metric("Command Flood Limit", f"{config.get('detection', {}).get('flood_threshold', 30)} req/s", help="R05: Packet frequency > 30 req/s")
+        with col_d2:
+            st.metric("Critical Deviation Threshold", "10.0%", help="Emergency physical divergence trip")
+            st.metric("Isolation Forest Contamination", "0.10", help="scikit-learn outlier fraction")
+
+        st.markdown("---")
+        st.markdown("**Empirical Benchmark Verification:**")
+        if st.button("🔄 Recompute Evaluation Metrics Now", key="dlg_recompute_eval", type="primary", use_container_width=True):
+            with st.spinner("Calculating actual evaluation metrics from recorded database..."):
+                try:
+                    evaluate_experiment()
+                    st.success("Evaluation recalculation completed! Metrics refreshed.")
+                    time.sleep(1.0)
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Error computing evaluation metrics: {e}")
+
+    with tab_safety:
+        st.markdown("""
+        <div style="background: rgba(30, 58, 138, 0.25); border: 1px solid rgba(56, 189, 248, 0.35); border-left: 4px solid #38bdf8; border-radius: 10px; padding: 14px 16px; margin-bottom: 14px;">
+            <div style="font-size: 0.90rem; font-weight: 700; color: #38bdf8; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+                <span>🛡️ Localhost Isolation Safety Notice (Shivam Requirement)</span>
+            </div>
+            <div style="font-size: 0.82rem; color: #cbd5e1; line-height: 1.5;">
+                All packets, Modbus TCP transactions, red team attacks, and telemetry operate strictly inside virtual local memory (<code>127.0.0.1:5020</code>). 
+                External industrial systems, physical PLCs, SCADA networks, and remote hosts are completely isolated and will never be targeted.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        col_s1, col_s2 = st.columns(2)
+        with col_s1:
+            st.markdown("""
+            <div class="sidebar-diagnostics" style="margin-top: 0;">
+                <div class="diag-row"><span>MODBUS HOST:</span> <code>127.0.0.1</code></div>
+                <div class="diag-row"><span>MODBUS PORT:</span> <code>5020</code></div>
+                <div class="diag-row"><span>SLAVE / UNIT ID:</span> <code>1</code></div>
+                <div class="diag-row"><span>PLC SCAN RATE:</span> <span style="color: #4ade80; font-weight: 700;">5.0 Hz (200ms)</span></div>
+            </div>
+            """, unsafe_allow_html=True)
+        with col_s2:
+            st.markdown(f"""
+            <div class="sidebar-diagnostics" style="margin-top: 0;">
+                <div class="diag-row"><span>DATABASE:</span> <span style="color: #38bdf8; font-weight: 600;">SQLite (WAL Mode)</span></div>
+                <div class="diag-row"><span>TELEMETRY ROWS:</span> <code>{len(df_telemetry):,}</code></div>
+                <div class="diag-row"><span>ENVIRONMENT:</span> <span style="color: #a78bfa; font-weight: 600;">Local Sandbox</span></div>
+                <div class="diag-row"><span>SAFETY STATUS:</span> <span style="color: #4ade80; font-weight: 700;">ENCLOSED</span></div>
+            </div>
+            """, unsafe_allow_html=True)
+
+    st.markdown("---")
+    if st.button("Done & Close Settings", type="primary", use_container_width=True, key="dlg_close_settings"):
+        st.session_state.show_settings = False
+        st.rerun()
+
+
+# Trigger Settings Dialog when Requested
+if st.session_state.get("show_settings", False):
+    show_settings_modal()
+
+
+# ==============================================================================
+# TOP APP BAR (Uncluttered, Sleek MD3 Industrial Header with Settings & Tour)
 # ==============================================================================
 df_telemetry = db.get_all_telemetry()
 latest_level = 50.0
@@ -1094,70 +1244,78 @@ is_anomaly = latest_label == 1 or latest_residual > config["detection"]["residua
 
 view_headers = {
     "🌊 Process SCADA Overview": (
-        "Industrial Supervisory Control & Data Acquisition (SCADA)",
-        "Real-time physical process telemetry, closed-loop PLC actuator states, and process-aware residual monitoring.",
+        "Process Overview & HMI",
+        "Live water tank level, pump/valve telemetry, and closed-loop hysteresis control.",
     ),
     "🔄 Digital Twin Shadow Model": (
-        "Digital Twin Shadow Model & Hydrodynamic Residuals",
-        "Continuous residual computation r(t) = |h_sensor(t) - h_shadow(t)| revealing cyber-physical discrepancy.",
+        "Digital Twin Shadow Model",
+        "Hydrodynamic mass-balance model and continuous residual r(t) = |h_sensor - h_shadow|.",
     ),
     "📡 Modbus Protocol Inspector": (
-        "Industrial Modbus TCP Deep Packet Inspector",
-        "Live transaction logging, function code analysis, and packet arrival rate tracking on port 5020.",
+        "Modbus TCP Inspector",
+        "Transaction logging, register memory map, and packet arrival rate tracking (port 5020).",
     ),
     "🎯 Cyberattack Laboratory": (
-        "ICS Threat Injection & Penetration Laboratory",
-        "Safely inject controlled OT cyberattacks against the virtual PLC on localhost 127.0.0.1:5020.",
+        "Cyberattack Laboratory",
+        "Isolated localhost threat injection and red team attack scenarios against virtual PLC.",
     ),
     "🛡️ Multi-Tier Anomaly Detection": (
-        "Multi-Tier Process-Aware Detection & Correlation",
-        "Hybrid engine unifying deterministic domain rules, hydrodynamic shadow models, and Isolation Forest ML.",
+        "Multi-Tier Anomaly Detection",
+        "Domain invariant rules, hydrodynamic shadow model, and Isolation Forest ML.",
     ),
     "📊 Statistical Process Analytics": (
-        "Process Variable Dynamics & Residual Distributions",
-        "Continuous statistical inspection of sensor drift, actuator correlation, and error margins.",
+        "Process Dynamics & Analytics",
+        "Sensor drift, residual error distributions, and physical actuator correlation.",
     ),
     "🏆 Empirical Evaluation Metrics": (
-        "Empirical Model Evaluation & Benchmark Metrics",
-        "Mathematical verification of detection performance against actual ground-truth labelled datasets.",
+        "Empirical Model Benchmarks",
+        "Precision, Recall, F1-Score, and FPR verification against ground-truth datasets.",
     ),
     "💾 Datasets & Research Artifacts": (
-        "Experimental Datasets & Publication Artifacts",
-        "Inspect recorded time-series telemetry and export CSV datasets for academic report appendices.",
+        "Datasets & Export",
+        "Recorded telemetry logs, experiment filtering, and CSV export for research reports.",
     ),
 }
 
 current_title, current_desc = view_headers.get(nav_choice, ("TwinGuard-OT SCADA", "Industrial Cyber-Physical Platform"))
 
 with st.container(border=True):
-    col_tb1, col_tb2, col_tb3 = st.columns([3.8, 2.2, 0.9], vertical_alignment="center")
-    with col_tb1:
+    col_tb_title, col_tb_status, col_tb_tour, col_tb_settings = st.columns([3.6, 2.2, 0.8, 0.9], vertical_alignment="center")
+    with col_tb_title:
         st.markdown(f"""
         <div style="display: flex; flex-direction: column; gap: 2px;">
-            <div style="font-size: 1.15rem; font-weight: 800; color: #f8fafc; letter-spacing: -0.01em;">{current_title}</div>
-            <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.35;">{current_desc}</div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.68rem; color: #38bdf8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">TWINGUARD-OT</span>
+                <span style="color: rgba(255,255,255,0.2); font-size: 0.72rem;">/</span>
+                <span style="font-size: 1.08rem; font-weight: 800; color: #f8fafc; letter-spacing: -0.01em;">{current_title}</span>
+            </div>
+            <div style="font-size: 0.76rem; color: #94a3b8; line-height: 1.3;">{current_desc}</div>
         </div>
         """, unsafe_allow_html=True)
-    with col_tb2:
+    with col_tb_status:
         if is_anomaly:
             st.markdown(f"""
             <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap;">
-                <span class="chip-red"><span class="dot-danger"></span> ANOMALY DETECTED</span>
+                <span class="chip-red"><span class="dot-danger"></span> ALERT</span>
                 <span class="tech-pill">{active_exp}</span>
-                <span style="font-size: 0.76rem; color: #f87171; font-weight: 600; font-family: 'JetBrains Mono', monospace;">|r| = {latest_residual:.2f}%</span>
+                <span style="font-size: 0.76rem; color: #f87171; font-weight: 600; font-family: 'JetBrains Mono', monospace;">|r| = {latest_residual:.1f}%</span>
             </div>
             """, unsafe_allow_html=True)
         else:
             st.markdown(f"""
             <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap;">
-                <span class="chip-green"><span class="dot-live"></span> PLANT NORMAL</span>
+                <span class="chip-green"><span class="dot-live"></span> NORMAL</span>
                 <span class="tech-pill">{active_exp}</span>
-                <span style="font-size: 0.76rem; color: #4ade80; font-weight: 600; font-family: 'JetBrains Mono', monospace;">|r| = {latest_residual:.2f}%</span>
+                <span style="font-size: 0.76rem; color: #4ade80; font-weight: 600; font-family: 'JetBrains Mono', monospace;">|r| = {latest_residual:.1f}%</span>
             </div>
             """, unsafe_allow_html=True)
-    with col_tb3:
+    with col_tb_tour:
         if st.button("🧭 Tour", key="top_bar_tour", use_container_width=True):
             st.session_state.show_onboarding = True
+            st.rerun()
+    with col_tb_settings:
+        if st.button("⚙️ Settings", key="top_bar_settings", use_container_width=True):
+            st.session_state.show_settings = True
             st.rerun()
 
 
@@ -1766,6 +1924,6 @@ elif nav_choice == "💾 Datasets & Research Artifacts":
 # ==============================================================================
 # AUTO-REFRESH EXECUTION LOOP (Kept Active & Configurable)
 # ==============================================================================
-if st.session_state.auto_refresh:
+if st.session_state.auto_refresh and not st.session_state.get("show_onboarding", False) and not st.session_state.get("show_settings", False):
     time.sleep(float(st.session_state.refresh_speed))
     st.rerun()
