@@ -52,23 +52,25 @@ if "nav_choice" not in st.session_state:
     st.session_state.nav_choice = "🌊 Process SCADA Overview"
 
 # ==============================================================================
-# HIGH-PERFORMANCE TELEMETRY & MD3 DARK SYSTEM STYLES
-# Formula 1 Telemetry & Material Design 3 Dark Theme Architecture
+# ==============================================================================
+# ENTERPRISE MD3 & F1 TELEMETRY SYSTEM STYLES
+# Material Design 3 Expressive Architecture & Industrial Telemetry Controls
+# Reference: https://m3.material.io/develop/web
 # ==============================================================================
 st.markdown("""
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
-
     /* Global Typography & Telemetry Canvas */
     html, body, [class*="css"] {
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         letter-spacing: -0.01em;
     }
 
-    /* Ultra-Dense Telemetry Canvas (F1 Dark Carbon Slate) */
+    /* Enterprise Dark Canvas */
     .stApp {
         background-color: #080c14 !important;
-        background-image: radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.05) 0%, transparent 60%) !important;
+        background-image: radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.06) 0%, transparent 55%) !important;
         color: #f1f5f9 !important;
     }
 
@@ -76,86 +78,130 @@ st.markdown("""
     .block-container {
         padding-top: 0.85rem !important;
         padding-bottom: 2rem !important;
-        padding-left: 1.25rem !important;
-        padding-right: 1.25rem !important;
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
         max-width: 100% !important;
     }
     header[data-testid="stHeader"] {
         background: transparent !important;
-        height: 1.8rem !important;
+        height: 1.6rem !important;
     }
     [data-testid="stVerticalBlock"] {
-        gap: 0.55rem !important;
-    }
-    [data-testid="stHorizontalBlock"] {
         gap: 0.65rem !important;
     }
+    [data-testid="stHorizontalBlock"] {
+        gap: 0.75rem !important;
+    }
 
-    /* MD3 Dark Container Cards (Elevation-1 Dark Carbon Surfaces) */
+    /* MD3 Expressive Surface Cards */
     div[data-testid="stVerticalBlockBorderWrapper"] {
-        background: #0f1523 !important;
+        background: #0d1322 !important;
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 12px !important;
-        padding: 12px 18px !important;
-        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35) !important;
-        margin-bottom: 6px !important;
-        transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+        border-radius: 14px !important;
+        padding: 16px 20px !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+        margin-bottom: 8px !important;
+        transition: border-color 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
     }
     div[data-testid="stVerticalBlockBorderWrapper"]:hover {
-        border-color: rgba(255, 255, 255, 0.14) !important;
-        box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45) !important;
+        border-color: rgba(56, 189, 248, 0.25) !important;
+        box-shadow: 0 6px 26px rgba(0, 0, 0, 0.55) !important;
     }
     div[data-testid="stVerticalBlockBorderWrapper"] > div {
         border: none !important;
     }
 
-    /* MD3 Dark Metric Telemetry Tiles */
-    [data-testid="stMetric"] {
-        background: #0f1523 !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 12px !important;
-        padding: 10px 14px !important;
-        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25) !important;
-        transition: all 0.15s ease !important;
-    }
-    [data-testid="stMetric"]:hover {
-        border-color: rgba(56, 189, 248, 0.3) !important;
-        background: #131a2c !important;
-    }
-    [data-testid="stMetricLabel"] {
-        color: #94a3b8 !important;
-        font-size: 0.72rem !important;
-        font-weight: 700 !important;
-        text-transform: uppercase !important;
-        letter-spacing: 0.07em !important;
-        margin-bottom: 2px !important;
-    }
-    [data-testid="stMetricValue"] {
-        color: #f8fafc !important;
-        font-weight: 800 !important;
-        font-size: 1.55rem !important;
-        font-family: 'JetBrains Mono', monospace !important;
-        letter-spacing: -0.01em !important;
-    }
-    [data-testid="stMetricDelta"] {
-        font-size: 0.76rem !important;
-        font-family: 'JetBrains Mono', monospace !important;
+    /* Header Icon Box */
+    .header-icon-box {
+        background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 3px 12px rgba(2, 132, 199, 0.35);
+        flex-shrink: 0;
     }
 
-    /* Standard Interactive Buttons */
+    /* Navigation Drawer & Section Titles */
+    section[data-testid="stSidebar"] {
+        background: #0b101c !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5) !important;
+    }
+    section[data-testid="stSidebar"] .block-container {
+        padding-top: 1rem !important;
+        padding-left: 0.95rem !important;
+        padding-right: 0.95rem !important;
+    }
+    .nav-section-title {
+        font-size: 0.68rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: #64748b;
+        padding: 14px 6px 4px 6px;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        margin-top: 6px;
+    }
+
+    /* Navigation Buttons (MD3 Pill Hierarchy) */
+    section[data-testid="stSidebar"] .stButton > button {
+        width: 100% !important;
+        text-align: left !important;
+        justify-content: flex-start !important;
+        padding: 8px 14px !important;
+        border-radius: 10px !important;
+        font-size: 0.84rem !important;
+        font-weight: 600 !important;
+        margin-bottom: 3px !important;
+        letter-spacing: -0.01em !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        transition: all 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
+    }
+    section[data-testid="stSidebar"] .stButton > button[kind="secondary"] {
+        background: transparent !important;
+        border: 1px solid transparent !important;
+        color: #94a3b8 !important;
+        box-shadow: none !important;
+    }
+    section[data-testid="stSidebar"] .stButton > button[kind="secondary"]:hover {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border-color: rgba(255, 255, 255, 0.10) !important;
+        color: #f8fafc !important;
+        transform: translateX(3px) !important;
+    }
+    section[data-testid="stSidebar"] .stButton > button[kind="primary"] {
+        background: rgba(14, 165, 233, 0.16) !important;
+        border: 1px solid rgba(56, 189, 248, 0.4) !important;
+        border-left: 4px solid #38bdf8 !important;
+        color: #38bdf8 !important;
+        font-weight: 700 !important;
+        box-shadow: 0 2px 12px rgba(2, 132, 199, 0.25) !important;
+        transform: none !important;
+    }
+    section[data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {
+        background: rgba(14, 165, 233, 0.22) !important;
+        color: #7dd3fc !important;
+    }
+
+    /* Standard Action Buttons */
     .stButton > button {
         border-radius: 8px !important;
         padding: 7px 16px !important;
         font-weight: 600 !important;
         font-size: 0.84rem !important;
         border: 1px solid rgba(255, 255, 255, 0.10) !important;
-        background: #141c2c !important;
+        background: #141c2e !important;
         color: #f1f5f9 !important;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25) !important;
-        transition: all 0.15s cubic-bezier(0.2, 0, 0, 1) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+        transition: all 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
     }
     .stButton > button:hover {
-        background: #1a2438 !important;
+        background: #1a253d !important;
         border-color: rgba(255, 255, 255, 0.18) !important;
         color: #ffffff !important;
         transform: translateY(-1px) !important;
@@ -164,7 +210,7 @@ st.markdown("""
         background: #0284c7 !important;
         color: #ffffff !important;
         border: 1px solid #38bdf8 !important;
-        box-shadow: 0 2px 10px rgba(2, 132, 199, 0.35) !important;
+        box-shadow: 0 2px 12px rgba(2, 132, 199, 0.4) !important;
     }
     .stButton > button[kind="primary"]:hover {
         background: #0369a1 !important;
@@ -172,90 +218,234 @@ st.markdown("""
         color: #ffffff !important;
     }
 
-    /* MD3 Dark Sidebar Drawer */
-    section[data-testid="stSidebar"] {
-        background: #090e18 !important;
-        border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
-        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5) !important;
+    /* Custom 4-Card Telemetry Instrumentation Grid */
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-bottom: 8px;
     }
-    section[data-testid="stSidebar"] .block-container {
-        padding-top: 1rem !important;
-        padding-left: 0.85rem !important;
-        padding-right: 0.85rem !important;
+    @media (max-width: 900px) {
+        .metrics-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media (max-width: 550px) {
+        .metrics-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    .telemetry-card {
+        background: #0d1322;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 14px 16px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+        transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+    }
+    .telemetry-card:hover {
+        border-color: rgba(56, 189, 248, 0.3);
+        background: #11192b;
+        transform: translateY(-1px);
+    }
+    .telemetry-card-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+    }
+    .telemetry-icon {
+        width: 24px;
+        height: 24px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+    }
+    .icon-cyan { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+    .icon-indigo { background: rgba(99, 102, 241, 0.15); color: #818cf8; }
+    .icon-emerald { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .icon-amber { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .icon-red { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+    .icon-muted { background: rgba(255, 255, 255, 0.05); color: #64748b; }
+
+    .telemetry-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: #94a3b8;
+    }
+    .telemetry-value {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 1.55rem;
+        font-weight: 800;
+        color: #f8fafc;
+        line-height: 1.15;
+        margin-bottom: 6px;
+    }
+    .telemetry-unit {
+        font-size: 0.92rem;
+        color: #64748b;
+        font-weight: 500;
+    }
+    .text-cyan { color: #38bdf8 !important; }
+    .text-emerald { color: #34d399 !important; }
+    .text-red { color: #f87171 !important; }
+    .text-white { color: #f8fafc !important; }
+    .text-muted { color: #64748b !important; }
+
+    .telemetry-footer {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .telemetry-pill {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.70rem;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 4px;
+    }
+    .pill-cyan { background: rgba(56, 189, 248, 0.12); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.25); }
+    .pill-emerald { background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.25); }
+    .pill-amber { background: rgba(245, 158, 11, 0.12); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.25); }
+    .pill-red { background: rgba(239, 68, 68, 0.14); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .pill-muted { background: rgba(255, 255, 255, 0.04); color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.08); }
+
+    .telemetry-progress-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.06);
     }
 
-    /* Sidebar Navigation Subdivisions */
-    .sidebar-section-divider {
+    /* Panel Headers */
+    .panel-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin: 10px 2px 4px 2px;
-        padding-top: 8px;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        margin-bottom: 10px;
     }
-    .subdivision-tag {
+    .panel-title {
+        font-size: 0.76rem;
+        font-weight: 800;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+    .panel-badge {
         font-family: 'JetBrains Mono', monospace;
-        font-size: 0.62rem;
+        font-size: 0.65rem;
         font-weight: 700;
         color: #38bdf8;
         background: rgba(56, 189, 248, 0.10);
-        border: 1px solid rgba(56, 189, 248, 0.22);
-        padding: 1px 5px;
+        border: 1px solid rgba(56, 189, 248, 0.25);
+        padding: 2px 7px;
         border-radius: 4px;
-        letter-spacing: 0.06em;
+        letter-spacing: 0.05em;
     }
-    .subdivision-title {
-        font-size: 0.68rem;
+
+    /* SCADA Dual-Tank Rig (Industrial Telemetry Glass) */
+    .scada-rig-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        padding: 12px 14px;
+        background: #090e18;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        position: relative;
+    }
+    .scale-column {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 190px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.62rem;
+        color: #64748b;
+        text-align: right;
+        padding-right: 6px;
+        border-right: 1px dashed rgba(255, 255, 255, 0.12);
+    }
+    .tank-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        flex: 1;
+        max-width: 120px;
+    }
+    .tank-vessel {
+        width: 100%;
+        height: 190px;
+        border: 2px solid rgba(255, 255, 255, 0.22);
+        border-top: 1px solid rgba(255, 255, 255, 0.35);
+        border-radius: 4px 4px 14px 14px;
+        position: relative;
+        background: radial-gradient(circle at 50% 50%, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.95) 100%);
+        overflow: hidden;
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    .liquid-wave-surface {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        transition: height 0.4s cubic-bezier(0.2, 0, 0, 1);
+        border-top: 2px solid rgba(255, 255, 255, 0.85);
+    }
+    .wave-glow-true {
+        background: linear-gradient(180deg, #38bdf8 0%, #0284c7 60%, #034f75 100%);
+        box-shadow: 0 -2px 16px rgba(56, 189, 248, 0.45);
+    }
+    .wave-glow-sensor {
+        background: linear-gradient(180deg, #34d399 0%, #059669 60%, #064e3b 100%);
+        box-shadow: 0 -2px 16px rgba(52, 211, 153, 0.45);
+    }
+    .wave-glow-spoofed {
+        background: linear-gradient(180deg, #f87171 0%, #dc2626 60%, #7f1d1d 100%) !important;
+        box-shadow: 0 -2px 20px rgba(239, 68, 68, 0.65) !important;
+        animation: pulseSpoofed 1.8s infinite ease-in-out;
+    }
+    @keyframes pulseSpoofed {
+        0%, 100% { opacity: 0.92; }
+        50% { opacity: 1; }
+    }
+    .interlock-line {
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 1px;
+        border-top: 1px dashed #f59e0b;
+        z-index: 10;
+    }
+    .tank-readout-tile {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 8px;
+        padding: 4px 8px;
+        text-align: center;
+        width: 100%;
+    }
+    .tank-readout-val {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 1.15rem;
         font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
+        line-height: 1;
+    }
+    .tank-readout-sub {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.64rem;
         color: #94a3b8;
-    }
-
-    /* Sidebar Navigation Button Pills */
-    section[data-testid="stSidebar"] .stButton > button {
-        width: 100% !important;
-        text-align: left !important;
-        justify-content: flex-start !important;
-        padding: 7px 12px !important;
-        border-radius: 8px !important;
-        font-size: 0.82rem !important;
-        font-weight: 600 !important;
-        margin-bottom: 2px !important;
-        letter-spacing: -0.01em !important;
-        display: flex !important;
-        align-items: center !important;
-        gap: 8px !important;
-        transition: all 0.15s ease !important;
-    }
-
-    /* Inactive Nav Item */
-    section[data-testid="stSidebar"] .stButton > button[kind="secondary"] {
-        background: rgba(255, 255, 255, 0.02) !important;
-        border: 1px solid rgba(255, 255, 255, 0.05) !important;
-        color: #94a3b8 !important;
-        box-shadow: none !important;
-    }
-    section[data-testid="stSidebar"] .stButton > button[kind="secondary"]:hover {
-        background: rgba(255, 255, 255, 0.06) !important;
-        color: #f1f5f9 !important;
-        border-color: rgba(255, 255, 255, 0.14) !important;
-        transform: translateX(2px) !important;
-    }
-
-    /* Active Nav Item (F1 Telemetry Focus Pill) */
-    section[data-testid="stSidebar"] .stButton > button[kind="primary"] {
-        background: rgba(56, 189, 248, 0.14) !important;
-        border: 1px solid rgba(56, 189, 248, 0.40) !important;
-        border-left: 3px solid #38bdf8 !important;
-        color: #38bdf8 !important;
-        font-weight: 700 !important;
-        box-shadow: 0 2px 8px rgba(56, 189, 248, 0.15) !important;
-        transform: none !important;
-    }
-    section[data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {
-        background: rgba(56, 189, 248, 0.20) !important;
-        color: #e0f2fe !important;
+        margin-top: 2px;
     }
 
     /* Status Badges */
@@ -265,7 +455,7 @@ st.markdown("""
         gap: 7px;
         background: rgba(34, 197, 94, 0.12);
         color: #4ade80;
-        border: 1px solid rgba(34, 197, 94, 0.32);
+        border: 1px solid rgba(34, 197, 94, 0.35);
         padding: 4px 12px;
         border-radius: 9999px;
         font-weight: 700;
@@ -296,6 +486,12 @@ st.markdown("""
         border-radius: 50%;
         background-color: #22c55e;
         box-shadow: 0 0 8px #22c55e;
+        animation: pulseRing 1.8s infinite;
+    }
+    @keyframes pulseRing {
+        0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+        70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
     }
     .dot-danger {
         width: 7px;
@@ -303,6 +499,12 @@ st.markdown("""
         border-radius: 50%;
         background-color: #ef4444;
         box-shadow: 0 0 8px #ef4444;
+        animation: pulseRingRed 1.8s infinite;
+    }
+    @keyframes pulseRingRed {
+        0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8); }
+        70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
     }
 
     .tech-pill {
@@ -316,87 +518,29 @@ st.markdown("""
         font-weight: 600;
     }
 
-    /* Page Hero (Compact Dark Telemetry Header) */
-    .page-hero {
-        background: #0f1523;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-left: 4px solid #38bdf8;
-        border-radius: 10px;
-        padding: 9px 16px;
-        margin-bottom: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
-    }
-    .page-hero h3 {
-        margin: 0 0 2px 0;
-        font-size: 1.06rem;
-        font-weight: 700;
-        color: #f8fafc;
-    }
-    .page-hero p {
-        margin: 0;
-        color: #94a3b8;
-        font-size: 0.80rem;
-        line-height: 1.4;
-    }
-
-    /* SCADA Tank Visualizer (Dark F1 Telemetry Glass) */
-    .scada-rig {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 28px;
-        padding: 14px 18px;
+    /* Sidebar Diagnostics Dock */
+    .sidebar-diagnostics {
         background: #090e18;
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        font-size: 0.70rem;
+        color: #94a3b8;
+        line-height: 1.6;
+        margin-top: 8px;
     }
-    .scada-column {
+    .diag-row {
         display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 6px;
+        justify-content: space-between;
+        margin-bottom: 2px;
     }
-    .tank-glass {
-        width: 120px;
-        height: 195px;
-        border: 2px solid rgba(255, 255, 255, 0.18);
-        border-top: none;
-        border-radius: 0 0 14px 14px;
-        position: relative;
-        background: rgba(15, 23, 42, 0.85);
-        overflow: hidden;
-        box-shadow: inset 0 0 16px rgba(0, 0, 0, 0.7);
-    }
-    .liquid-wave {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        transition: height 0.35s cubic-bezier(0.2, 0, 0, 1);
-        border-top: 2px solid rgba(255, 255, 255, 0.85);
-    }
-    .liquid-true {
-        background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%);
-        box-shadow: 0 -2px 14px rgba(56, 189, 248, 0.35);
-    }
-    .liquid-sensor {
-        background: linear-gradient(180deg, #34d399 0%, #059669 100%);
-        box-shadow: 0 -2px 14px rgba(52, 211, 153, 0.35);
-    }
-    .liquid-spoofed {
-        background: linear-gradient(180deg, #f87171 0%, #dc2626 100%) !important;
-        box-shadow: 0 -2px 18px rgba(239, 68, 68, 0.55) !important;
-    }
-    .interlock-line {
-        position: absolute;
-        left: 0;
-        right: 0;
-        height: 1px;
-        border-top: 1px dashed #f59e0b;
-        z-index: 10;
+    .diag-row code {
+        font-family: 'JetBrains Mono', monospace;
+        color: #f8fafc;
+        font-weight: 600;
     }
 
-    /* M3 Dark Segmented Tabs */
+    /* MD3 Segmented Tabs */
     .stTabs [data-baseweb="tab-list"] {
         gap: 4px;
         background: #090e18 !important;
@@ -416,14 +560,14 @@ st.markdown("""
         background: transparent !important;
     }
     .stTabs [aria-selected="true"] {
-        background: #141c2c !important;
+        background: #141c2e !important;
         color: #38bdf8 !important;
         font-weight: 700 !important;
         border: 1px solid rgba(56, 189, 248, 0.25) !important;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
     }
 
-    /* MD3 Dark Dialog & Onboarding Modal */
+    /* MD3 Dialog Modal */
     div[data-testid="stDialog"] div[role="dialog"] {
         background: #0d121f !important;
         border: 1px solid rgba(255, 255, 255, 0.12) !important;
@@ -444,7 +588,6 @@ st.markdown("""
         color: #f8fafc !important;
     }
 
-    /* Onboarding Card Grid (Dark Telemetry Cards) */
     .onboarding-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -461,7 +604,7 @@ st.markdown("""
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 12px;
         padding: 14px 16px;
-        transition: all 0.15s cubic-bezier(0.2, 0, 0, 1);
+        transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
     }
     .onboarding-card:hover {
         border-color: #38bdf8;
@@ -506,7 +649,6 @@ st.markdown("""
         margin: 0;
     }
 
-    /* Onboarding Step Cards */
     .onboarding-step {
         display: flex;
         gap: 14px;
@@ -555,26 +697,21 @@ config = load_system_config()
 # ==============================================================================
 with st.sidebar:
     st.markdown("""
-    <div style="display: flex; align-items: center; gap: 10px; margin: 4px 0 10px 2px;">
-        <div style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); padding: 8px; border-radius: 10px; box-shadow: 0 2px 10px rgba(2,132,199,0.35);">
-            <span style="font-size: 1.3rem; display: block; line-height: 1;">🛡️</span>
+    <div style="display: flex; align-items: center; gap: 11px; margin: 2px 0 14px 2px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+        <div class="header-icon-box">
+            <span style="font-size: 1.25rem; line-height: 1;">🛡️</span>
         </div>
         <div>
-            <div style="font-size: 1.08rem; font-weight: 800; color: #f8fafc; letter-spacing: -0.02em;">TwinGuard-OT</div>
-            <div style="font-size: 0.66rem; color: #38bdf8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;">ICS DIGITAL TWIN v2.2</div>
+            <div style="font-size: 1.05rem; font-weight: 800; color: #f8fafc; letter-spacing: -0.02em;">TwinGuard-OT</div>
+            <div style="font-size: 0.65rem; color: #38bdf8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;">ICS DIGITAL TWIN v2.2</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
     # -------------------------------------------------------------
-    # SUBDIVISION 01: SCADA & PHYSICAL TWIN
+    # SECTION 01: SCADA OPERATIONS
     # -------------------------------------------------------------
-    st.markdown("""
-    <div class="sidebar-section-divider">
-        <span class="subdivision-tag">DIV 01</span>
-        <span class="subdivision-title">SCADA & DIGITAL TWIN</span>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown('<div class="nav-section-title">SCADA OPERATIONS</div>', unsafe_allow_html=True)
 
     is_scada_active = (st.session_state.nav_choice == "🌊 Process SCADA Overview")
     if st.button("🌊  Process SCADA Overview", key="nav_scada", use_container_width=True, type="primary" if is_scada_active else "secondary"):
@@ -592,14 +729,9 @@ with st.sidebar:
         st.rerun()
 
     # -------------------------------------------------------------
-    # SUBDIVISION 02: CYBER THREAT & DETECTION
+    # SECTION 02: THREAT INTELLIGENCE
     # -------------------------------------------------------------
-    st.markdown("""
-    <div class="sidebar-section-divider">
-        <span class="subdivision-tag">DIV 02</span>
-        <span class="subdivision-title">CYBER THREAT LAB</span>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown('<div class="nav-section-title">THREAT INTELLIGENCE</div>', unsafe_allow_html=True)
 
     is_attacks_active = (st.session_state.nav_choice == "🎯 Cyberattack Laboratory")
     if st.button("🎯  Cyberattack Laboratory", key="nav_attacks", use_container_width=True, type="primary" if is_attacks_active else "secondary"):
@@ -612,14 +744,9 @@ with st.sidebar:
         st.rerun()
 
     # -------------------------------------------------------------
-    # SUBDIVISION 03: BENCHMARKS & RESEARCH DATA
+    # SECTION 03: ANALYTICS & BENCHMARKS
     # -------------------------------------------------------------
-    st.markdown("""
-    <div class="sidebar-section-divider">
-        <span class="subdivision-tag">DIV 03</span>
-        <span class="subdivision-title">ANALYTICS & METRICS</span>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown('<div class="nav-section-title">ANALYTICS & BENCHMARKS</div>', unsafe_allow_html=True)
 
     is_analytics_active = (st.session_state.nav_choice == "📊 Statistical Process Analytics")
     if st.button("📊  Statistical Process Analytics", key="nav_analytics", use_container_width=True, type="primary" if is_analytics_active else "secondary"):
@@ -637,50 +764,49 @@ with st.sidebar:
         st.rerun()
 
     # -------------------------------------------------------------
-    # TELEMETRY SYNCHRONIZATION DOCK
+    # SECTION 04: TELEMETRY CONTROLS (Full-Width Cadence Slider)
     # -------------------------------------------------------------
-    st.markdown("""
-    <div class="sidebar-section-divider">
-        <span class="subdivision-tag">SYNC</span>
-        <span class="subdivision-title">TELEMETRY CONTROLS</span>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown('<div class="nav-section-title">TELEMETRY CONTROLS</div>', unsafe_allow_html=True)
 
-    col_sync1, col_sync2 = st.columns([1, 1])
-    with col_sync1:
-        auto_sync = st.toggle("Auto-Refresh", value=st.session_state.auto_refresh)
-        st.session_state.auto_refresh = auto_sync
-    with col_sync2:
-        speed_label = st.selectbox(
-            "Interval",
-            ["Fast (1s)", "Standard (3s)", "Relaxed (5s)"],
-            index=1,
-            label_visibility="collapsed"
-        )
-        speed_map = {"Fast (1s)": 1.0, "Standard (3s)": 3.0, "Relaxed (5s)": 5.0}
-        st.session_state.refresh_speed = speed_map[speed_label]
+    auto_sync = st.toggle("Auto-Refresh Stream", value=st.session_state.auto_refresh, key="sb_autorefresh")
+    st.session_state.auto_refresh = auto_sync
 
-    if st.button("⚡ Force Manual Sync", use_container_width=True):
+    current_cadence_label = "3s (Standard)"
+    if st.session_state.refresh_speed == 1.0:
+        current_cadence_label = "1s (Fast)"
+    elif st.session_state.refresh_speed == 5.0:
+        current_cadence_label = "5s (Relaxed)"
+
+    speed_choice = st.select_slider(
+        "Cadence Rate",
+        options=["1s (Fast)", "3s (Standard)", "5s (Relaxed)"],
+        value=current_cadence_label,
+        key="sb_cadence_rate",
+    )
+    speed_map = {"1s (Fast)": 1.0, "3s (Standard)": 3.0, "5s (Relaxed)": 5.0}
+    st.session_state.refresh_speed = speed_map[speed_choice]
+
+    if st.button("⚡ Force Manual Sync", key="sb_force_sync", use_container_width=True):
         st.rerun()
 
-    # System Status Dock (Dark Telemetry)
-    st.markdown(f"""
-    <div style="background: #0d121f; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.06); font-size: 0.72rem; color: #94a3b8; line-height: 1.55; margin-top: 8px;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
-            <span>MODBUS HOST:</span>
-            <span style="color: #f8fafc; font-family: monospace; font-weight: 600;">127.0.0.1:5020</span>
+    # System Status Diagnostics Dock
+    st.markdown("""
+    <div class="sidebar-diagnostics">
+        <div class="diag-row">
+            <span>MODBUS TARGET:</span>
+            <code>127.0.0.1:5020</code>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+        <div class="diag-row">
             <span>PLC SCAN RATE:</span>
             <span style="color: #4ade80; font-weight: 700;">5.0 Hz (200ms)</span>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+        <div class="diag-row">
             <span>DATABASE:</span>
             <span style="color: #38bdf8; font-weight: 600;">SQLite (WAL Active)</span>
         </div>
-        <div style="display: flex; justify-content: space-between;">
-            <span>INSTITUTION:</span>
-            <span style="color: #cbd5e1; font-weight: 500;">RVCE — III Sem EL</span>
+        <div class="diag-row">
+            <span>ACADEMIC DEPT:</span>
+            <span style="color: #cbd5e1; font-weight: 500;">RVCE — Dept of ECE</span>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -928,28 +1054,71 @@ if not df_telemetry.empty:
 
 is_anomaly = latest_label == 1 or latest_residual > config["detection"]["residual_threshold"]
 
+view_headers = {
+    "🌊 Process SCADA Overview": (
+        "Industrial Supervisory Control & Data Acquisition (SCADA)",
+        "Real-time physical process telemetry, closed-loop PLC actuator states, and process-aware residual monitoring.",
+    ),
+    "🔄 Digital Twin Shadow Model": (
+        "Digital Twin Shadow Model & Hydrodynamic Residuals",
+        "Continuous residual computation r(t) = |h_sensor(t) - h_shadow(t)| revealing cyber-physical discrepancy.",
+    ),
+    "📡 Modbus Protocol Inspector": (
+        "Industrial Modbus TCP Deep Packet Inspector",
+        "Live transaction logging, function code analysis, and packet arrival rate tracking on port 5020.",
+    ),
+    "🎯 Cyberattack Laboratory": (
+        "ICS Threat Injection & Penetration Laboratory",
+        "Safely inject controlled OT cyberattacks against the virtual PLC on localhost 127.0.0.1:5020.",
+    ),
+    "🛡️ Multi-Tier Anomaly Detection": (
+        "Multi-Tier Process-Aware Detection & Correlation",
+        "Hybrid engine unifying deterministic domain rules, hydrodynamic shadow models, and Isolation Forest ML.",
+    ),
+    "📊 Statistical Process Analytics": (
+        "Process Variable Dynamics & Residual Distributions",
+        "Continuous statistical inspection of sensor drift, actuator correlation, and error margins.",
+    ),
+    "🏆 Empirical Evaluation Metrics": (
+        "Empirical Model Evaluation & Benchmark Metrics",
+        "Mathematical verification of detection performance against actual ground-truth labelled datasets.",
+    ),
+    "💾 Datasets & Research Artifacts": (
+        "Experimental Datasets & Publication Artifacts",
+        "Inspect recorded time-series telemetry and export CSV datasets for academic report appendices.",
+    ),
+}
+
+current_title, current_desc = view_headers.get(nav_choice, ("TwinGuard-OT SCADA", "Industrial Cyber-Physical Platform"))
+
 with st.container(border=True):
-    col_tb1, col_tb2 = st.columns([5, 1], vertical_alignment="center")
+    col_tb1, col_tb2, col_tb3 = st.columns([3.8, 2.2, 0.9], vertical_alignment="center")
     with col_tb1:
+        st.markdown(f"""
+        <div style="display: flex; flex-direction: column; gap: 2px;">
+            <div style="font-size: 1.15rem; font-weight: 800; color: #f8fafc; letter-spacing: -0.01em;">{current_title}</div>
+            <div style="font-size: 0.78rem; color: #94a3b8; line-height: 1.35;">{current_desc}</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with col_tb2:
         if is_anomaly:
             st.markdown(f"""
-            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <span class="chip-red"><span class="dot-danger"></span> CYBER-PHYSICAL ANOMALY DETECTED</span>
-                <span class="tech-pill">ACTIVE EXP: {active_exp}</span>
-                <span style="font-size: 0.82rem; color: #f87171; font-weight: 600;">Residual: {latest_residual:.2f}% &gt; {config['detection']['residual_threshold']}%</span>
+            <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap;">
+                <span class="chip-red"><span class="dot-danger"></span> ANOMALY DETECTED</span>
+                <span class="tech-pill">{active_exp}</span>
+                <span style="font-size: 0.76rem; color: #f87171; font-weight: 600; font-family: 'JetBrains Mono', monospace;">|r| = {latest_residual:.2f}%</span>
             </div>
             """, unsafe_allow_html=True)
         else:
             st.markdown(f"""
-            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <span class="chip-green"><span class="dot-live"></span> PLANT OPERATING NORMALLY</span>
-                <span class="tech-pill">SESSION: {active_exp}</span>
-                <span style="font-size: 0.82rem; color: #94a3b8; font-weight: 500;">All safety interlocks clear • Zero residual violations</span>
+            <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap;">
+                <span class="chip-green"><span class="dot-live"></span> PLANT NORMAL</span>
+                <span class="tech-pill">{active_exp}</span>
+                <span style="font-size: 0.76rem; color: #4ade80; font-weight: 600; font-family: 'JetBrains Mono', monospace;">|r| = {latest_residual:.2f}%</span>
             </div>
             """, unsafe_allow_html=True)
-
-    with col_tb2:
-        if st.button("🧭 Platform Tour", key="top_bar_tour", use_container_width=True):
+    with col_tb3:
+        if st.button("🧭 Tour", key="top_bar_tour", use_container_width=True):
             st.session_state.show_onboarding = True
             st.rerun()
 
@@ -958,93 +1127,184 @@ with st.container(border=True):
 # 1. PROCESS SCADA OVERVIEW
 # ==============================================================================
 if nav_choice == "🌊 Process SCADA Overview":
-    st.markdown("""
-    <div class="page-hero">
-        <h3>Industrial Supervisory Control & Data Acquisition (SCADA)</h3>
-        <p>Real-time physical process telemetry, closed-loop PLC actuator states, and process-aware residual monitoring.</p>
+    # 4-Card Telemetry Instrumentation Grid
+    sp_delta = latest_level - config['plc']['default_setpoint']
+    delta_str = f"{sp_delta:+.1f}% to Setpoint"
+    sp_pill_cls = "pill-cyan" if abs(sp_delta) <= 15.0 else ("pill-amber" if abs(sp_delta) <= 25.0 else "pill-red")
+
+    pump_status_text = "ENERGIZED" if latest_pump == 1 else "IDLE"
+    pump_val_cls = "text-emerald" if latest_pump == 1 else "text-muted"
+    pump_icon_cls = "icon-emerald" if latest_pump == 1 else "icon-muted"
+    pump_pill_cls = "pill-emerald" if latest_pump == 1 else "pill-muted"
+    pump_sub = "PLC AUTO-HYSTERESIS" if latest_pump == 1 else "CUTOFF ACTIVE (>80%)"
+
+    valve_status_text = "OPEN" if latest_valve == 1 else "CLOSED"
+    valve_val_cls = "text-emerald" if latest_valve == 1 else "text-muted"
+    valve_icon_cls = "icon-emerald" if latest_valve == 1 else "icon-muted"
+    valve_pill_cls = "pill-emerald" if latest_valve == 1 else "pill-muted"
+    valve_sub = "GRAVITY DISCHARGE" if latest_valve == 1 else "DRAIN SEALED"
+
+    res_threshold = config['detection']['residual_threshold']
+    res_violated = latest_residual > res_threshold
+    res_val_cls = "text-red" if res_violated else ("text-cyan" if latest_residual < 2.0 else "text-white")
+    res_icon_cls = "icon-red" if res_violated else "icon-indigo"
+    res_pill_cls = "pill-red" if res_violated else "pill-emerald"
+    res_sub = f"THRESHOLD < {res_threshold:.1f}%" if not res_violated else f"VIOLATION > {res_threshold:.1f}%"
+
+    level_pct = min(100.0, max(0.0, latest_level))
+    res_pct = min(100.0, (latest_residual / res_threshold) * 50.0)
+
+    st.markdown(f"""
+    <div class="metrics-grid">
+        <div class="telemetry-card">
+            <div class="telemetry-card-header">
+                <div class="telemetry-icon icon-cyan">🌊</div>
+                <span class="telemetry-label">REPORTED TANK LEVEL</span>
+            </div>
+            <div class="telemetry-value text-cyan">{latest_level:.1f} <span class="telemetry-unit">%</span></div>
+            <div class="telemetry-footer">
+                <span class="telemetry-pill {sp_pill_cls}">{delta_str}</span>
+            </div>
+            <div class="telemetry-progress-bar" style="width: {level_pct}%; background: linear-gradient(90deg, #0284c7, #38bdf8);"></div>
+        </div>
+        <div class="telemetry-card">
+            <div class="telemetry-card-header">
+                <div class="telemetry-icon {pump_icon_cls}">⚡</div>
+                <span class="telemetry-label">INFLOW PUMP (COIL 40003)</span>
+            </div>
+            <div class="telemetry-value {pump_val_cls}">{pump_status_text}</div>
+            <div class="telemetry-footer">
+                <span class="telemetry-pill {pump_pill_cls}">{pump_sub}</span>
+            </div>
+            <div class="telemetry-progress-bar" style="width: {'100%' if latest_pump == 1 else '0%'}; background: #34d399;"></div>
+        </div>
+        <div class="telemetry-card">
+            <div class="telemetry-card-header">
+                <div class="telemetry-icon {valve_icon_cls}">🚰</div>
+                <span class="telemetry-label">DISCHARGE VALVE (COIL 40004)</span>
+            </div>
+            <div class="telemetry-value {valve_val_cls}">{valve_status_text}</div>
+            <div class="telemetry-footer">
+                <span class="telemetry-pill {valve_pill_cls}">{valve_sub}</span>
+            </div>
+            <div class="telemetry-progress-bar" style="width: {'100%' if latest_valve == 1 else '0%'}; background: #34d399;"></div>
+        </div>
+        <div class="telemetry-card">
+            <div class="telemetry-card-header">
+                <div class="telemetry-icon {res_icon_cls}">🛡️</div>
+                <span class="telemetry-label">PHYSICAL RESIDUAL |r(t)|</span>
+            </div>
+            <div class="telemetry-value {res_val_cls}">{latest_residual:.2f} <span class="telemetry-unit">%</span></div>
+            <div class="telemetry-footer">
+                <span class="telemetry-pill {res_pill_cls}">{res_sub}</span>
+            </div>
+            <div class="telemetry-progress-bar" style="width: {res_pct}%; background: {'#ef4444' if res_violated else '#818cf8'};"></div>
+        </div>
     </div>
     """, unsafe_allow_html=True)
-
-    # Metric Row
-    m1, m2, m3, m4 = st.columns(4)
-    with m1:
-        st.metric(
-            "Reported Tank Level",
-            f"{latest_level:.1f} %",
-            delta=f"{latest_level - config['plc']['default_setpoint']:.1f}% to Setpoint"
-        )
-    with m2:
-        st.metric("Inflow Pump (Coil 40003)", "🟢 ENERGIZED" if latest_pump == 1 else "⚪ IDLE")
-    with m3:
-        st.metric("Discharge Valve (Coil 40004)", "🟢 OPEN" if latest_valve == 1 else "⚪ CLOSED")
-    with m4:
-        st.metric("Physical Residual |r(t)|", f"{latest_residual:.2f} %", delta_color="inverse")
 
     col_scada1, col_scada2 = st.columns([1, 2])
 
     with col_scada1:
         with st.container(border=True):
-            st.markdown('<div style="font-size: 0.76rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; text-align: center;">Cyber-Physical Tank Rig</div>', unsafe_allow_html=True)
+            st.markdown("""
+            <div class="panel-header">
+                <span class="panel-title">Cyber-Physical Tank Rig</span>
+                <span class="panel-badge">TORRICELLI TWIN</span>
+            </div>
+            """, unsafe_allow_html=True)
 
             is_spoofed = abs(latest_level - latest_true) > 4.0
-            sensor_color_cls = "liquid-wave liquid-sensor"
-            if is_spoofed:
-                sensor_color_cls = "liquid-wave liquid-spoofed"
-
+            sensor_wave_cls = "liquid-wave-surface wave-glow-spoofed" if is_spoofed else "liquid-wave-surface wave-glow-sensor"
             high_line = config['plc']['high_threshold']
             low_line = config['plc']['low_threshold']
 
             st.markdown(f"""
-            <div class="scada-rig">
-                <div class="scada-column">
-                    <span style="font-size: 0.68rem; color: #38bdf8; font-weight: 800; letter-spacing: 0.05em;">GROUND TRUTH</span>
-                    <div class="tank-glass">
-                        <div class="interlock-line" style="bottom: {high_line}%;"></div>
-                        <div class="interlock-line" style="bottom: {low_line}%;"></div>
-                        <div class="liquid-wave liquid-true" style="height: {latest_true}%;"></div>
-                    </div>
-                    <span style="font-size: 1.15rem; font-weight: 800; color: #38bdf8; font-family: 'JetBrains Mono', monospace;">{latest_true:.1f}%</span>
+            <div class="scada-rig-container">
+                <div class="scale-column">
+                    <span>100%</span>
+                    <span style="color: #f59e0b; font-weight: 700;">80%</span>
+                    <span>60%</span>
+                    <span>40%</span>
+                    <span style="color: #f59e0b; font-weight: 700;">30%</span>
+                    <span>0%</span>
                 </div>
-                <div class="scada-column">
-                    <span style="font-size: 0.68rem; color: {'#f87171' if is_spoofed else '#4ade80'}; font-weight: 800; letter-spacing: 0.05em;">
-                        REPORTED SENSOR {('(SPOOFED)' if is_spoofed else '')}
-                    </span>
-                    <div class="tank-glass">
+                <div class="tank-column">
+                    <span style="font-size: 0.68rem; color: #38bdf8; font-weight: 800; letter-spacing: 0.05em;">GROUND TRUTH</span>
+                    <div class="tank-vessel">
                         <div class="interlock-line" style="bottom: {high_line}%;"></div>
                         <div class="interlock-line" style="bottom: {low_line}%;"></div>
-                        <div class="{sensor_color_cls}" style="height: {latest_level}%;"></div>
+                        <div class="liquid-wave-surface wave-glow-true" style="height: {latest_true}%;"></div>
                     </div>
-                    <span style="font-size: 1.15rem; font-weight: 800; color: {'#f87171' if is_spoofed else '#4ade80'}; font-family: 'JetBrains Mono', monospace;">{latest_level:.1f}%</span>
+                    <div class="tank-readout-tile">
+                        <div class="tank-readout-val" style="color: #38bdf8;">{latest_true:.1f}%</div>
+                        <div class="tank-readout-sub">PHYSICS REFERENCE</div>
+                    </div>
+                </div>
+                <div class="tank-column">
+                    <span style="font-size: 0.68rem; color: {'#f87171' if is_spoofed else '#34d399'}; font-weight: 800; letter-spacing: 0.05em;">
+                        {('⚠️ SPOOFED' if is_spoofed else 'REPORTED SENSOR')}
+                    </span>
+                    <div class="tank-vessel">
+                        <div class="interlock-line" style="bottom: {high_line}%;"></div>
+                        <div class="interlock-line" style="bottom: {low_line}%;"></div>
+                        <div class="{sensor_wave_cls}" style="height: {latest_level}%;"></div>
+                    </div>
+                    <div class="tank-readout-tile">
+                        <div class="tank-readout-val" style="color: {'#f87171' if is_spoofed else '#34d399'};">{latest_level:.1f}%</div>
+                        <div class="tank-readout-sub">{'SPOOFED SIGNAL' if is_spoofed else 'MODBUS TELEMETRY'}</div>
+                    </div>
                 </div>
             </div>
-            <div style="font-size: 0.70rem; color: #94a3b8; margin-top: 6px; text-align: center;">
-                Dashed Markers: Cutoff ({high_line}%) & Refill Trigger ({low_line}%)
+            <div style="display: flex; justify-content: space-between; font-size: 0.68rem; color: #64748b; margin-top: 8px; font-family: 'JetBrains Mono', monospace;">
+                <span>CUTOFF: {high_line}%</span>
+                <span>REFILL: {low_line}%</span>
+                <span style="color: {'#f87171' if is_spoofed else '#34d399'}; font-weight: 700;">Δ {abs(latest_level - latest_true):.2f}%</span>
             </div>
             """, unsafe_allow_html=True)
 
     with col_scada2:
         with st.container(border=True):
-            st.markdown('<div style="font-size: 0.76rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">Real-Time Hydrodynamic Trajectory</div>', unsafe_allow_html=True)
+            st.markdown("""
+            <div class="panel-header">
+                <span class="panel-title">Real-Time Hydrodynamic Trajectory</span>
+                <span class="panel-badge">120-SAMPLE WINDOW</span>
+            </div>
+            """, unsafe_allow_html=True)
 
             if not df_telemetry.empty:
                 recent_df = df_telemetry.tail(120).copy()
                 recent_df["Time_Sec"] = (recent_df["timestamp"] - recent_df["timestamp"].iloc[0]).round(1)
-                fig_trend = px.line(
-                    recent_df,
-                    x="Time_Sec",
-                    y=["sensor_level", "true_level"],
-                    labels={"value": "Level (%)", "Time_Sec": "Elapsed (s)", "variable": "Stream"},
-                    color_discrete_map={"sensor_level": "#34d399", "true_level": "#38bdf8"},
-                )
+
+                fig_trend = go.Figure()
+                fig_trend.add_trace(go.Scatter(
+                    x=recent_df["Time_Sec"],
+                    y=recent_df["true_level"],
+                    mode="lines",
+                    name="Ground Truth Level",
+                    line=dict(color="#38bdf8", width=2.5),
+                    fill="tozeroy",
+                    fillcolor="rgba(56, 189, 248, 0.08)"
+                ))
+                fig_trend.add_trace(go.Scatter(
+                    x=recent_df["Time_Sec"],
+                    y=recent_df["sensor_level"],
+                    mode="lines",
+                    name="Reported Sensor Signal",
+                    line=dict(color="#f87171" if is_spoofed else "#34d399", width=2, dash="dot" if is_spoofed else "solid"),
+                ))
+                fig_trend.add_hline(y=high_line, line_dash="dash", line_color="#f59e0b", annotation_text=f"Cutoff ({high_line}%)", annotation_position="top left", annotation_font=dict(color="#f59e0b", size=10))
+                fig_trend.add_hline(y=low_line, line_dash="dash", line_color="#f59e0b", annotation_text=f"Refill ({low_line}%)", annotation_position="bottom left", annotation_font=dict(color="#f59e0b", size=10))
+
                 fig_trend.update_layout(
-                    height=255,
+                    height=272,
                     margin=dict(l=8, r=8, t=10, b=8),
                     paper_bgcolor="rgba(0,0,0,0)",
                     plot_bgcolor="rgba(0,0,0,0)",
                     font=dict(color="#cbd5e1", family="Plus Jakarta Sans"),
                     xaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.06)", tickfont=dict(color="#94a3b8")),
                     yaxis=dict(showgrid=True, gridcolor="rgba(255,255,255,0.06)", range=[0, 105], tickfont=dict(color="#94a3b8")),
-                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color="#cbd5e1")),
+                    legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, font=dict(color="#cbd5e1", size=11)),
                 )
                 st.plotly_chart(fig_trend, use_container_width=True)
             else:
@@ -1055,13 +1315,6 @@ if nav_choice == "🌊 Process SCADA Overview":
 # 2. DIGITAL TWIN RESIDUAL ANALYSIS
 # ==============================================================================
 elif nav_choice == "🔄 Digital Twin Shadow Model":
-    st.markdown("""
-    <div class="page-hero">
-        <h3>Digital Twin Shadow Model & Hydrodynamic Residuals</h3>
-        <p>Continuous residual computation r(t) = |h_sensor(t) - h_shadow(t)| revealing cyber-physical discrepancy.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
     if df_telemetry.empty:
         st.info("No recorded telemetry available. Run an attack experiment to inspect residuals.")
     else:
@@ -1115,13 +1368,6 @@ elif nav_choice == "🔄 Digital Twin Shadow Model":
 # 3. MODBUS PROTOCOL MONITOR
 # ==============================================================================
 elif nav_choice == "📡 Modbus Protocol Inspector":
-    st.markdown("""
-    <div class="page-hero">
-        <h3>Industrial Modbus TCP Deep Packet Inspector</h3>
-        <p>Live transaction logging, function code analysis, and packet arrival rate tracking on port 5020.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
     df_events = db.get_modbus_events()
     if df_events.empty:
         st.info("No network events recorded yet. Connect a client or trigger attack traffic.")
@@ -1178,13 +1424,6 @@ elif nav_choice == "📡 Modbus Protocol Inspector":
 # 4. CYBERATTACK LABORATORY
 # ==============================================================================
 elif nav_choice == "🎯 Cyberattack Laboratory":
-    st.markdown("""
-    <div class="page-hero">
-        <h3>ICS Threat Injection & Penetration Laboratory</h3>
-        <p>Safely inject controlled OT cyberattacks against the virtual PLC on localhost 127.0.0.1:5020.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
     with st.container(border=True):
         st.subheader("Configure Threat Scenario")
 
@@ -1247,13 +1486,6 @@ elif nav_choice == "🎯 Cyberattack Laboratory":
 # 5. MULTI-TIER ANOMALY DETECTION
 # ==============================================================================
 elif nav_choice == "🛡️ Multi-Tier Anomaly Detection":
-    st.markdown("""
-    <div class="page-hero">
-        <h3>Multi-Tier Process-Aware Detection & Correlation</h3>
-        <p>Hybrid engine unifying deterministic domain rules, hydrodynamic shadow models, and Isolation Forest ML.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
     df_detections = db.get_detections()
     if df_detections.empty:
         st.info("No detection events recorded yet. Run an experiment or attack to generate alerts.")
@@ -1313,13 +1545,6 @@ elif nav_choice == "🛡️ Multi-Tier Anomaly Detection":
 # 6. STATISTICAL PROCESS ANALYTICS
 # ==============================================================================
 elif nav_choice == "📊 Statistical Process Analytics":
-    st.markdown("""
-    <div class="page-hero">
-        <h3>Process Variable Dynamics & Residual Distributions</h3>
-        <p>Continuous statistical inspection of sensor drift, actuator correlation, and error margins.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
     if df_telemetry.empty:
         st.info("No recorded telemetry available for analytics.")
     else:
@@ -1376,13 +1601,6 @@ elif nav_choice == "📊 Statistical Process Analytics":
 # 7. EMPIRICAL EVALUATION METRICS
 # ==============================================================================
 elif nav_choice == "🏆 Empirical Evaluation Metrics":
-    st.markdown("""
-    <div class="page-hero">
-        <h3>Empirical Model Evaluation & Benchmark Metrics</h3>
-        <p>Mathematical verification of detection performance against actual ground-truth labelled datasets (N = 1133).</p>
-    </div>
-    """, unsafe_allow_html=True)
-
     if st.button("🔄 Recompute Metrics from Current Database", use_container_width=True):
         with st.spinner("Executing mathematical evaluation across all recorded datasets..."):
             evaluate_experiment()
@@ -1430,13 +1648,6 @@ elif nav_choice == "🏆 Empirical Evaluation Metrics":
 # 8. DATASETS & RESEARCH ARTIFACTS
 # ==============================================================================
 elif nav_choice == "💾 Datasets & Research Artifacts":
-    st.markdown("""
-    <div class="page-hero">
-        <h3>Experimental Datasets & Publication Artifacts</h3>
-        <p>Inspect recorded time-series telemetry and export CSV datasets for academic report appendices.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
     if df_telemetry.empty:
         st.info("No recorded datasets found in database.")
     else:
