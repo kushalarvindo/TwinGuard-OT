@@ -55,28 +55,81 @@ if "nav_choice" not in st.session_state:
 
 # ==============================================================================
 # ==============================================================================
-# ENTERPRISE MD3 & F1 TELEMETRY SYSTEM STYLES
-# Material Design 3 Expressive Architecture & Industrial Telemetry Controls
-# Reference: https://m3.material.io/develop/web
+# MATERIAL DESIGN 3 (MD3) ENTERPRISE SCADA SYSTEM STYLES
+# Design System Foundations derived from bergside/awesome-design-skills (Material/Enterprise)
+# Reference: https://github.com/bergside/awesome-design-skills & https://m3.material.io/develop/web
 # ==============================================================================
 st.markdown("""
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 <style>
+    /* ==========================================================================
+       MATERIAL DESIGN 3 DESIGN SYSTEM TOKENS (MD3 Dark Tonal Hierarchy)
+       ========================================================================== */
+    :root {
+        /* MD3 Tonal Surfaces (Progressive Dark Elevation) */
+        --md-sys-color-surface: #0a0e17;
+        --md-sys-color-surface-dim: #070a10;
+        --md-sys-color-surface-container-lowest: #0c101b;
+        --md-sys-color-surface-container-low: #101624;
+        --md-sys-color-surface-container: #141c2d;
+        --md-sys-color-surface-container-high: #1a243a;
+        --md-sys-color-surface-container-highest: #212d46;
+
+        /* MD3 Outline & Borders */
+        --md-sys-color-outline: rgba(255, 255, 255, 0.08);
+        --md-sys-color-outline-variant: rgba(255, 255, 255, 0.04);
+        --md-sys-color-outline-focus: rgba(56, 189, 248, 0.45);
+
+        /* MD3 Primary & Semantic Palette */
+        --md-sys-color-primary: #38bdf8;
+        --md-sys-color-on-primary: #042338;
+        --md-sys-color-primary-container: rgba(56, 189, 248, 0.12);
+        --md-sys-color-on-primary-container: #7dd3fc;
+
+        --md-sys-color-secondary: #818cf8;
+        --md-sys-color-secondary-container: rgba(129, 140, 248, 0.12);
+
+        --md-sys-color-success: #34d399;
+        --md-sys-color-success-container: rgba(52, 211, 153, 0.12);
+
+        --md-sys-color-warning: #fbbf24;
+        --md-sys-color-warning-container: rgba(251, 191, 36, 0.12);
+
+        --md-sys-color-error: #f87171;
+        --md-sys-color-error-container: rgba(248, 113, 113, 0.14);
+
+        --md-sys-color-on-surface: #f8fafc;
+        --md-sys-color-on-surface-variant: #94a3b8;
+        --md-sys-color-on-surface-muted: #64748b;
+
+        /* MD3 Shape Scales */
+        --md-sys-shape-corner-xs: 4px;
+        --md-sys-shape-corner-s: 8px;
+        --md-sys-shape-corner-m: 12px;
+        --md-sys-shape-corner-l: 16px;
+        --md-sys-shape-corner-full: 9999px;
+
+        /* MD3 Motion & Easing */
+        --md-sys-motion-easing-standard: cubic-bezier(0.2, 0.0, 0, 1.0);
+        --md-sys-motion-duration-short: 150ms;
+        --md-sys-motion-duration-medium: 250ms;
+    }
+
     /* Global Typography & Telemetry Canvas */
     html, body, [class*="css"] {
-        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
         letter-spacing: -0.01em;
     }
 
-    /* Enterprise Deep Matte Canvas (F1 Reference) */
+    /* Enterprise Deep Matte Canvas with Subtle MD3 Ambient Radial Lighting */
     .stApp {
-        background-color: #060911 !important;
-        background-image: none !important;
-        color: #f1f5f9 !important;
+        background-color: var(--md-sys-color-surface) !important;
+        background-image: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.03) 0%, transparent 60%) !important;
+        color: var(--md-sys-color-on-surface) !important;
     }
 
-    /* Generous Layout Spacing & Breathing Room */
+    /* Generous Layout Spacing & Breathing Room (Strict 8pt Grid Rhythm) */
     .block-container {
         padding-top: 1.6rem !important;
         padding-bottom: 2.8rem !important;
@@ -95,19 +148,20 @@ st.markdown("""
         gap: 1.25rem !important;
     }
 
-    /* MD3 Expressive Surface Cards (Deep Matte Navy) */
+    /* MD3 Expressive Surface Cards (Level 1 Elevation) */
     div[data-testid="stVerticalBlockBorderWrapper"] {
-        background: #0c101d !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 16px !important;
+        background: var(--md-sys-color-surface-container) !important;
+        border: 1px solid var(--md-sys-color-outline) !important;
+        border-radius: var(--md-sys-shape-corner-l) !important;
         padding: 20px 24px !important;
-        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45) !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
         margin-bottom: 14px !important;
-        transition: border-color 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
+        transition: border-color var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard),
+                    box-shadow var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard) !important;
     }
     div[data-testid="stVerticalBlockBorderWrapper"]:hover {
-        border-color: rgba(56, 189, 248, 0.30) !important;
-        box-shadow: 0 6px 30px rgba(0, 0, 0, 0.6) !important;
+        border-color: var(--md-sys-color-outline-focus) !important;
+        box-shadow: 0 6px 28px rgba(0, 0, 0, 0.5) !important;
     }
     div[data-testid="stVerticalBlockBorderWrapper"] > div {
         border: none !important;
@@ -118,7 +172,7 @@ st.markdown("""
         background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
         width: 40px;
         height: 40px;
-        border-radius: 10px;
+        border-radius: var(--md-sys-shape-corner-m);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -128,9 +182,9 @@ st.markdown("""
 
     /* Navigation Drawer & Section Titles */
     section[data-testid="stSidebar"] {
-        background: #0b101c !important;
-        border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
-        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5) !important;
+        background: var(--md-sys-color-surface-container-lowest) !important;
+        border-right: 1px solid var(--md-sys-color-outline) !important;
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.45) !important;
     }
     section[data-testid="stSidebar"] .block-container {
         padding-top: 1rem !important;
@@ -142,19 +196,19 @@ st.markdown("""
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 0.09em;
-        color: #64748b;
+        color: var(--md-sys-color-on-surface-muted);
         padding: 14px 6px 4px 6px;
-        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        border-top: 1px solid var(--md-sys-color-outline);
         margin-top: 6px;
     }
 
-    /* Navigation Buttons (MD3 Pill Hierarchy) */
+    /* Navigation Buttons (MD3 Expressive Pill Hierarchy) */
     section[data-testid="stSidebar"] .stButton > button {
         width: 100% !important;
         text-align: left !important;
         justify-content: flex-start !important;
         padding: 8px 14px !important;
-        border-radius: 10px !important;
+        border-radius: var(--md-sys-shape-corner-s) !important;
         font-size: 0.84rem !important;
         font-weight: 600 !important;
         margin-bottom: 3px !important;
@@ -162,65 +216,69 @@ st.markdown("""
         display: flex !important;
         align-items: center !important;
         gap: 10px !important;
-        transition: all 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
+        transition: all var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard) !important;
     }
     section[data-testid="stSidebar"] .stButton > button[kind="secondary"] {
         background: transparent !important;
         border: 1px solid transparent !important;
-        color: #94a3b8 !important;
+        color: var(--md-sys-color-on-surface-variant) !important;
         box-shadow: none !important;
     }
     section[data-testid="stSidebar"] .stButton > button[kind="secondary"]:hover {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border-color: rgba(255, 255, 255, 0.10) !important;
-        color: #f8fafc !important;
+        background: var(--md-sys-color-surface-container-high) !important;
+        border-color: var(--md-sys-color-outline) !important;
+        color: var(--md-sys-color-on-surface) !important;
         transform: translateX(3px) !important;
     }
     section[data-testid="stSidebar"] .stButton > button[kind="primary"] {
-        background: rgba(14, 165, 233, 0.16) !important;
-        border: 1px solid rgba(56, 189, 248, 0.4) !important;
-        border-left: 4px solid #38bdf8 !important;
-        color: #38bdf8 !important;
+        background: var(--md-sys-color-primary-container) !important;
+        border: 1px solid var(--md-sys-color-outline-focus) !important;
+        border-left: 4px solid var(--md-sys-color-primary) !important;
+        color: var(--md-sys-color-primary) !important;
         font-weight: 700 !important;
         box-shadow: 0 2px 12px rgba(2, 132, 199, 0.25) !important;
         transform: none !important;
     }
     section[data-testid="stSidebar"] .stButton > button[kind="primary"]:hover {
-        background: rgba(14, 165, 233, 0.22) !important;
+        background: rgba(56, 189, 248, 0.20) !important;
         color: #7dd3fc !important;
     }
 
-    /* Standard Action Buttons */
+    /* Standard Action Buttons (MD3 Filled & Tonal) */
     .stButton > button {
-        border-radius: 8px !important;
+        border-radius: var(--md-sys-shape-corner-s) !important;
         padding: 7px 16px !important;
         font-weight: 600 !important;
         font-size: 0.84rem !important;
-        border: 1px solid rgba(255, 255, 255, 0.10) !important;
-        background: #141c2e !important;
-        color: #f1f5f9 !important;
+        border: 1px solid var(--md-sys-color-outline) !important;
+        background: var(--md-sys-color-surface-container-low) !important;
+        color: var(--md-sys-color-on-surface) !important;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
-        transition: all 0.2s cubic-bezier(0.2, 0, 0, 1) !important;
+        transition: all var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard) !important;
     }
     .stButton > button:hover {
-        background: #1a253d !important;
-        border-color: rgba(255, 255, 255, 0.18) !important;
+        background: var(--md-sys-color-surface-container-high) !important;
+        border-color: rgba(255, 255, 255, 0.16) !important;
         color: #ffffff !important;
         transform: translateY(-1px) !important;
     }
+    .stButton > button:focus-visible {
+        outline: 2px solid var(--md-sys-color-primary) !important;
+        outline-offset: 2px !important;
+    }
     .stButton > button[kind="primary"] {
-        background: #0284c7 !important;
+        background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
         color: #ffffff !important;
-        border: 1px solid #38bdf8 !important;
-        box-shadow: 0 2px 12px rgba(2, 132, 199, 0.4) !important;
+        border: 1px solid var(--md-sys-color-primary) !important;
+        box-shadow: 0 2px 12px rgba(2, 132, 199, 0.35) !important;
     }
     .stButton > button[kind="primary"]:hover {
-        background: #0369a1 !important;
+        background: linear-gradient(135deg, #0369a1 0%, #075985 100%) !important;
         border-color: #7dd3fc !important;
         color: #ffffff !important;
     }
 
-    /* Custom 4-Card Telemetry Instrumentation Grid */
+    /* Custom 4-Card Telemetry Instrumentation Grid (MD3 Surfaces) */
     .metrics-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -238,23 +296,23 @@ st.markdown("""
         }
     }
     .telemetry-card {
-        background: #0c101d;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 14px;
+        background: var(--md-sys-color-surface-container-low);
+        border: 1px solid var(--md-sys-color-outline);
+        border-radius: var(--md-sys-shape-corner-m);
         padding: 16px 18px 18px 18px;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-        transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.30);
+        transition: all var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
         min-height: 116px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
     }
     .telemetry-card:hover {
-        border-color: rgba(56, 189, 248, 0.35);
-        background: #11172a;
-        box-shadow: 0 6px 22px rgba(0, 0, 0, 0.5);
+        border-color: var(--md-sys-color-outline-focus);
+        background: var(--md-sys-color-surface-container-high);
+        box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45);
         transform: translateY(-2px);
     }
     .telemetry-card-header {
@@ -266,44 +324,45 @@ st.markdown("""
     .telemetry-icon {
         width: 24px;
         height: 24px;
-        border-radius: 6px;
+        border-radius: var(--md-sys-shape-corner-xs);
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 0.85rem;
     }
-    .icon-cyan { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
-    .icon-indigo { background: rgba(99, 102, 241, 0.15); color: #818cf8; }
-    .icon-emerald { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-    .icon-amber { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
-    .icon-red { background: rgba(239, 68, 68, 0.15); color: #f87171; }
-    .icon-muted { background: rgba(255, 255, 255, 0.05); color: #64748b; }
+    .icon-cyan { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-primary); }
+    .icon-indigo { background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-secondary); }
+    .icon-emerald { background: var(--md-sys-color-success-container); color: var(--md-sys-color-success); }
+    .icon-amber { background: var(--md-sys-color-warning-container); color: var(--md-sys-color-warning); }
+    .icon-red { background: var(--md-sys-color-error-container); color: var(--md-sys-color-error); }
+    .icon-muted { background: rgba(255, 255, 255, 0.05); color: var(--md-sys-color-on-surface-muted); }
 
     .telemetry-label {
         font-size: 0.68rem;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.07em;
-        color: #94a3b8;
+        letter-spacing: 0.08em;
+        color: var(--md-sys-color-on-surface-variant);
     }
     .telemetry-value {
         font-family: 'JetBrains Mono', monospace;
         font-size: 1.55rem;
         font-weight: 800;
-        color: #f8fafc;
+        color: var(--md-sys-color-on-surface);
         line-height: 1.15;
         margin-bottom: 6px;
+        font-variant-numeric: tabular-nums;
     }
     .telemetry-unit {
         font-size: 0.92rem;
-        color: #64748b;
+        color: var(--md-sys-color-on-surface-muted);
         font-weight: 500;
     }
-    .text-cyan { color: #38bdf8 !important; }
-    .text-emerald { color: #34d399 !important; }
-    .text-red { color: #f87171 !important; }
-    .text-white { color: #f8fafc !important; }
-    .text-muted { color: #64748b !important; }
+    .text-cyan { color: var(--md-sys-color-primary) !important; }
+    .text-emerald { color: var(--md-sys-color-success) !important; }
+    .text-red { color: var(--md-sys-color-error) !important; }
+    .text-white { color: var(--md-sys-color-on-surface) !important; }
+    .text-muted { color: var(--md-sys-color-on-surface-muted) !important; }
 
     .telemetry-footer {
         display: flex;
@@ -315,21 +374,25 @@ st.markdown("""
         font-size: 0.70rem;
         font-weight: 600;
         padding: 2px 8px;
-        border-radius: 4px;
+        border-radius: var(--md-sys-shape-corner-xs);
     }
-    .pill-cyan { background: rgba(56, 189, 248, 0.12); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.25); }
-    .pill-emerald { background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.25); }
-    .pill-amber { background: rgba(245, 158, 11, 0.12); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.25); }
-    .pill-red { background: rgba(239, 68, 68, 0.14); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-    .pill-muted { background: rgba(255, 255, 255, 0.04); color: #94a3b8; border: 1px solid rgba(255, 255, 255, 0.08); }
+    .pill-cyan { background: var(--md-sys-color-primary-container); color: var(--md-sys-color-primary); border: 1px solid rgba(56, 189, 248, 0.25); }
+    .pill-emerald { background: var(--md-sys-color-success-container); color: var(--md-sys-color-success); border: 1px solid rgba(52, 211, 153, 0.25); }
+    .pill-amber { background: var(--md-sys-color-warning-container); color: var(--md-sys-color-warning); border: 1px solid rgba(251, 191, 36, 0.25); }
+    .pill-red { background: var(--md-sys-color-error-container); color: var(--md-sys-color-error); border: 1px solid rgba(248, 113, 113, 0.3); }
+    .pill-muted { background: rgba(255, 255, 255, 0.04); color: var(--md-sys-color-on-surface-variant); border: 1px solid var(--md-sys-color-outline); }
 
-    .telemetry-progress-bar {
+    .telemetry-progress-track {
         position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
         height: 3px;
         background: rgba(255, 255, 255, 0.06);
+    }
+    .telemetry-progress-bar {
+        height: 100%;
+        transition: width var(--md-sys-motion-duration-medium) var(--md-sys-motion-easing-standard);
     }
 
     /* Panel Headers */
@@ -342,7 +405,7 @@ st.markdown("""
     .panel-title {
         font-size: 0.76rem;
         font-weight: 800;
-        color: #94a3b8;
+        color: var(--md-sys-color-on-surface-variant);
         text-transform: uppercase;
         letter-spacing: 0.08em;
     }
@@ -350,24 +413,24 @@ st.markdown("""
         font-family: 'JetBrains Mono', monospace;
         font-size: 0.65rem;
         font-weight: 700;
-        color: #38bdf8;
-        background: rgba(56, 189, 248, 0.10);
+        color: var(--md-sys-color-primary);
+        background: var(--md-sys-color-primary-container);
         border: 1px solid rgba(56, 189, 248, 0.25);
         padding: 2px 7px;
-        border-radius: 4px;
+        border-radius: var(--md-sys-shape-corner-xs);
         letter-spacing: 0.05em;
     }
 
-    /* SCADA Dual-Tank Rig (Industrial Telemetry Glass) */
+    /* SCADA Dual-Tank Rig (Industrial Telemetry Glass & MD3 Surface) */
     .scada-rig-container {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 24px;
         padding: 16px 20px;
-        background: #080c16;
-        border-radius: 14px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: var(--md-sys-color-surface-container-lowest);
+        border-radius: var(--md-sys-shape-corner-m);
+        border: 1px solid var(--md-sys-color-outline);
         position: relative;
     }
     .scale-column {
@@ -376,7 +439,7 @@ st.markdown("""
         width: 38px;
         font-family: 'JetBrains Mono', monospace;
         font-size: 0.62rem;
-        color: #64748b;
+        color: var(--md-sys-color-on-surface-muted);
         text-align: right;
         padding-right: 6px;
         border-right: 1px dashed rgba(255, 255, 255, 0.14);
@@ -411,13 +474,13 @@ st.markdown("""
     .tank-vessel {
         width: 100%;
         height: 190px;
-        border: 2px solid rgba(255, 255, 255, 0.22);
-        border-top: 1px solid rgba(255, 255, 255, 0.35);
-        border-radius: 4px 4px 14px 14px;
+        border: 2px solid rgba(255, 255, 255, 0.20);
+        border-top: 1px solid rgba(255, 255, 255, 0.30);
+        border-radius: 4px 4px var(--md-sys-shape-corner-m) var(--md-sys-shape-corner-m);
         position: relative;
-        background: #090e17;
+        background: var(--md-sys-color-surface-dim);
         overflow: hidden;
-        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 4px 12px rgba(0, 0, 0, 0.4);
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8), 0 4px 12px rgba(0, 0, 0, 0.35);
     }
     .tank-glass-sheen {
         position: absolute;
@@ -434,7 +497,7 @@ st.markdown("""
         bottom: 0;
         left: 0;
         right: 0;
-        transition: height 0.4s cubic-bezier(0.2, 0, 0, 1);
+        transition: height 0.4s var(--md-sys-motion-easing-standard);
         border-top: 2px solid rgba(255, 255, 255, 0.85);
     }
     .wave-glow-true {
@@ -459,22 +522,14 @@ st.markdown("""
         left: 0;
         right: 0;
         height: 1px;
-        border-top: 1px dashed rgba(245, 158, 11, 0.75);
+        border-top: 1px dashed rgba(251, 191, 36, 0.75);
         z-index: 10;
         pointer-events: none;
     }
-    .telemetry-progress-track {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: rgba(255, 255, 255, 0.06);
-    }
     .tank-readout-tile {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        border-radius: 8px;
+        background: var(--md-sys-color-surface-container-low);
+        border: 1px solid var(--md-sys-color-outline);
+        border-radius: var(--md-sys-shape-corner-s);
         padding: 4px 8px;
         text-align: center;
         width: 100%;
@@ -488,20 +543,20 @@ st.markdown("""
     .tank-readout-sub {
         font-family: 'JetBrains Mono', monospace;
         font-size: 0.64rem;
-        color: #94a3b8;
+        color: var(--md-sys-color-on-surface-muted);
         margin-top: 2px;
     }
 
-    /* Status Badges */
+    /* MD3 Status Chips & Indicator Dots */
     .chip-green {
         display: inline-flex;
         align-items: center;
         gap: 7px;
-        background: rgba(34, 197, 94, 0.12);
-        color: #4ade80;
-        border: 1px solid rgba(34, 197, 94, 0.35);
+        background: var(--md-sys-color-success-container);
+        color: var(--md-sys-color-success);
+        border: 1px solid rgba(52, 211, 153, 0.35);
         padding: 4px 12px;
-        border-radius: 9999px;
+        border-radius: var(--md-sys-shape-corner-full);
         font-weight: 700;
         font-size: 0.78rem;
         letter-spacing: 0.02em;
@@ -510,66 +565,66 @@ st.markdown("""
         display: inline-flex;
         align-items: center;
         gap: 7px;
-        background: rgba(239, 68, 68, 0.15);
-        color: #f87171;
-        border: 1px solid rgba(239, 68, 68, 0.40);
+        background: var(--md-sys-color-error-container);
+        color: var(--md-sys-color-error);
+        border: 1px solid rgba(248, 113, 113, 0.40);
         padding: 4px 12px;
-        border-radius: 9999px;
+        border-radius: var(--md-sys-shape-corner-full);
         font-weight: 700;
         font-size: 0.78rem;
         letter-spacing: 0.02em;
         animation: pulseAlertDark 2s infinite ease-in-out;
     }
     @keyframes pulseAlertDark {
-        0%, 100% { box-shadow: 0 0 0 rgba(239, 68, 68, 0); }
-        50% { box-shadow: 0 0 16px rgba(239, 68, 68, 0.35); }
+        0%, 100% { box-shadow: 0 0 0 rgba(248, 113, 113, 0); }
+        50% { box-shadow: 0 0 16px rgba(248, 113, 113, 0.35); }
     }
     .dot-live {
         width: 7px;
         height: 7px;
         border-radius: 50%;
-        background-color: #22c55e;
-        box-shadow: 0 0 8px #22c55e;
+        background-color: var(--md-sys-color-success);
+        box-shadow: 0 0 8px var(--md-sys-color-success);
         animation: pulseRing 1.8s infinite;
     }
     @keyframes pulseRing {
-        0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-        70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); }
+        70% { box-shadow: 0 0 0 6px rgba(52, 211, 153, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); }
     }
     .dot-danger {
         width: 7px;
         height: 7px;
         border-radius: 50%;
-        background-color: #ef4444;
-        box-shadow: 0 0 8px #ef4444;
+        background-color: var(--md-sys-color-error);
+        box-shadow: 0 0 8px var(--md-sys-color-error);
         animation: pulseRingRed 1.8s infinite;
     }
     @keyframes pulseRingRed {
-        0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8); }
-        70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        0% { box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.8); }
+        70% { box-shadow: 0 0 0 6px rgba(248, 113, 113, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(248, 113, 113, 0); }
     }
 
     .tech-pill {
         font-family: 'JetBrains Mono', monospace;
         font-size: 0.72rem;
-        background: rgba(56, 189, 248, 0.08);
+        background: var(--md-sys-color-primary-container);
         border: 1px solid rgba(56, 189, 248, 0.22);
         padding: 3px 10px;
-        border-radius: 9999px;
-        color: #38bdf8;
+        border-radius: var(--md-sys-shape-corner-full);
+        color: var(--md-sys-color-primary);
         font-weight: 600;
     }
 
     /* Sidebar Diagnostics Dock */
     .sidebar-diagnostics {
-        background: #090e18;
+        background: var(--md-sys-color-surface-dim);
         padding: 10px 12px;
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: var(--md-sys-shape-corner-s);
+        border: 1px solid var(--md-sys-color-outline);
         font-size: 0.70rem;
-        color: #94a3b8;
+        color: var(--md-sys-color-on-surface-variant);
         line-height: 1.6;
         margin-top: 8px;
     }
@@ -580,56 +635,56 @@ st.markdown("""
     }
     .diag-row code {
         font-family: 'JetBrains Mono', monospace;
-        color: #f8fafc;
+        color: var(--md-sys-color-on-surface);
         font-weight: 600;
     }
 
     /* MD3 Segmented Tabs */
     .stTabs [data-baseweb="tab-list"] {
         gap: 4px;
-        background: #090e18 !important;
+        background: var(--md-sys-color-surface-container-lowest) !important;
         padding: 4px;
-        border-radius: 10px !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: var(--md-sys-shape-corner-s) !important;
+        border: 1px solid var(--md-sys-color-outline) !important;
     }
     .stTabs [data-baseweb="tab"] {
         height: auto;
         padding: 6px 14px !important;
-        border-radius: 8px !important;
-        color: #94a3b8 !important;
+        border-radius: var(--md-sys-shape-corner-s) !important;
+        color: var(--md-sys-color-on-surface-variant) !important;
         font-weight: 600 !important;
         font-size: 0.82rem !important;
-        transition: all 0.15s ease !important;
+        transition: all var(--md-sys-motion-duration-short) ease !important;
         border: none !important;
         background: transparent !important;
     }
     .stTabs [aria-selected="true"] {
-        background: #141c2e !important;
-        color: #38bdf8 !important;
+        background: var(--md-sys-color-surface-container-high) !important;
+        color: var(--md-sys-color-primary) !important;
         font-weight: 700 !important;
-        border: 1px solid rgba(56, 189, 248, 0.25) !important;
+        border: 1px solid var(--md-sys-color-outline-focus) !important;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
     }
 
-    /* MD3 Dialog Modal */
+    /* MD3 Dialog Modal (Level 3 Elevation) */
     div[data-testid="stDialog"] div[role="dialog"] {
-        background: #0d121f !important;
+        background: var(--md-sys-color-surface-container-highest) !important;
         border: 1px solid rgba(255, 255, 255, 0.12) !important;
-        border-radius: 16px !important;
+        border-radius: var(--md-sys-shape-corner-l) !important;
         box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.8) !important;
-        color: #f8fafc !important;
+        color: var(--md-sys-color-on-surface) !important;
         max-width: 94vw !important;
         width: 1040px !important;
         padding: 24px 28px !important;
     }
     div[data-testid="stDialog"] div[role="dialog"] h2 {
-        color: #f8fafc !important;
+        color: var(--md-sys-color-on-surface) !important;
     }
     div[data-testid="stDialog"] div[role="dialog"] button[aria-label="Close"] {
-        color: #94a3b8 !important;
+        color: var(--md-sys-color-on-surface-variant) !important;
     }
     div[data-testid="stDialog"] div[role="dialog"] button[aria-label="Close"]:hover {
-        color: #f8fafc !important;
+        color: var(--md-sys-color-on-surface) !important;
     }
 
     .onboarding-grid {
@@ -644,22 +699,22 @@ st.markdown("""
         }
     }
     .onboarding-card {
-        background: #121827;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 12px;
+        background: var(--md-sys-color-surface-container);
+        border: 1px solid var(--md-sys-color-outline);
+        border-radius: var(--md-sys-shape-corner-m);
         padding: 14px 16px;
-        transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+        transition: all var(--md-sys-motion-duration-short) var(--md-sys-motion-easing-standard);
     }
     .onboarding-card:hover {
-        border-color: #38bdf8;
-        background: #172033;
+        border-color: var(--md-sys-color-primary);
+        background: var(--md-sys-color-surface-container-high);
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
         transform: translateY(-2px);
     }
     .onboarding-card-title {
         font-size: 0.92rem;
         font-weight: 700;
-        color: #f8fafc;
+        color: var(--md-sys-color-on-surface);
         margin-bottom: 4px;
         display: flex;
         align-items: center;
@@ -672,33 +727,33 @@ st.markdown("""
         text-transform: uppercase;
         letter-spacing: 0.06em;
         padding: 2px 7px;
-        border-radius: 4px;
-        background: rgba(56, 189, 248, 0.12);
-        color: #38bdf8;
+        border-radius: var(--md-sys-shape-corner-xs);
+        background: var(--md-sys-color-primary-container);
+        color: var(--md-sys-color-primary);
         border: 1px solid rgba(56, 189, 248, 0.25);
     }
     .onboarding-card-desc {
         font-size: 0.80rem;
-        color: #94a3b8;
+        color: var(--md-sys-color-on-surface-variant);
         line-height: 1.45;
         margin: 0 0 8px 0;
     }
     .onboarding-card-tip {
         font-size: 0.74rem;
         color: #7dd3fc;
-        background: rgba(56, 189, 248, 0.08);
-        border-left: 3px solid #38bdf8;
+        background: var(--md-sys-color-primary-container);
+        border-left: 3px solid var(--md-sys-color-primary);
         padding: 5px 8px;
-        border-radius: 4px;
+        border-radius: var(--md-sys-shape-corner-xs);
         margin: 0;
     }
 
     .onboarding-step {
         display: flex;
         gap: 14px;
-        background: #121827;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 12px;
+        background: var(--md-sys-color-surface-container);
+        border: 1px solid var(--md-sys-color-outline);
+        border-radius: var(--md-sys-shape-corner-m);
         padding: 14px 18px;
         margin-bottom: 10px;
         align-items: flex-start;
@@ -733,6 +788,7 @@ def get_db():
 
 db = get_db()
 config = load_system_config()
+df_telemetry = db.get_all_telemetry()
 
 
 # ==============================================================================
