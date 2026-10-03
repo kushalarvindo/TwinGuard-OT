@@ -22,3 +22,15 @@ def get_process_analytics(experiment_id: Optional[str] = Query(default=None)):
 def get_evaluation_metrics():
     svc = get_simulation_service()
     return svc.get_evaluations_from_db()
+
+
+@router.post("/recompute")
+def recompute_evaluation_metrics():
+    """Triggers evaluate_experiment() pipeline to recalculate metrics from actual DB records."""
+    try:
+        from experiments.evaluate import evaluate_experiment
+        results = evaluate_experiment()
+        return {"status": "SUCCESS", "results": results}
+    except Exception as e:
+        return {"status": "ERROR", "detail": str(e)}
+

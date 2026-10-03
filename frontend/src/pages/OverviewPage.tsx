@@ -11,74 +11,109 @@ interface Props {
 }
 
 function TankVisualization({ frame }: { frame: TelemetryFrame }) {
-  const trueH = frame.true_level;
-  const sensorH = frame.sensor_level;
-  const setpointPct = (frame.setpoint / 100) * 160;
-  const highPct = (frame.high_threshold / 100) * 160;
-  const lowPct = (frame.low_threshold / 100) * 160;
+  const trueH = Math.max(0, Math.min(100, frame.true_level));
+  const sensorH = Math.max(0, Math.min(100, frame.sensor_level));
+  const delta = Math.abs(trueH - sensorH);
+  const isDiverged = delta > 5.0 || frame.sensor_spoofed;
 
   return (
-    <div className="tank-wrapper">
-      {/* Pump */}
-      <div className="flow-component" style={{ alignItems: 'flex-end', paddingBottom: 80 }}>
-        <div className={`flow-box ${frame.pump_state === 1 ? 'online' : 'offline'}`} style={{ minWidth: 64 }}>
-          PUMP
-        </div>
-        <div className="flow-label" style={{ marginTop: 4 }}>
-          {frame.pump_state === 1 ? 'ON' : 'OFF'}
-        </div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+      {/* Top Synchronization Delta Badge */}
+      <div style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 8,
+        padding: '3px 10px',
+        borderRadius: 9999,
+        fontSize: 11,
+        background: isDiverged ? 'rgba(239, 68, 68, 0.12)' : 'rgba(56, 189, 248, 0.10)',
+        border: `1px solid ${isDiverged ? 'rgba(239, 68, 68, 0.35)' : 'rgba(56, 189, 248, 0.25)'}`,
+        color: isDiverged ? 'var(--color-red)' : 'var(--color-teal)',
+        fontFamily: "'JetBrains Mono', monospace",
+        fontWeight: 600,
+      }}>
+        <span>{isDiverged ? '⚡ SENSOR / GROUND-TRUTH DIVERGENCE' : '✔ PROCESS SYNCHRONIZED'}</span>
+        <span>•</span>
+        <span>Δ = {delta.toFixed(2)}%</span>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-        <div style={{ fontSize: 10, color: 'var(--text-muted)', marginBottom: 2 }}>TRUE LEVEL</div>
-        {/* True level tank */}
-        <div className="tank-body">
-          <div
-            className="tank-fill true"
-            style={{ height: `${trueH}%` }}
-          />
-          {/* Threshold lines (relative to tank bottom = 0) */}
-          <div
-            className="threshold-line high"
-            style={{ bottom: `${frame.high_threshold}%` }}
-          />
-          <div
-            className="threshold-line low"
-            style={{ bottom: `${frame.low_threshold}%` }}
-          />
-          <div
-            className="threshold-line setpoint"
-            style={{ bottom: `${frame.setpoint}%` }}
-          />
+      <div className="tank-wrapper">
+        {/* Pump */}
+        <div className="flow-component" style={{ alignItems: 'flex-end', paddingBottom: 80 }}>
+          <div className={`flow-box ${frame.pump_state === 1 ? 'online' : 'offline'}`} style={{ minWidth: 64 }}>
+            PUMP
+          </div>
+          <div className="flow-label" style={{ marginTop: 4 }}>
+            {frame.pump_state === 1 ? 'ON (15 L/s)' : 'IDLE'}
+          </div>
         </div>
-        <div className="tank-value" style={{ color: 'var(--color-blue)' }}>{trueH.toFixed(1)}%</div>
-      </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-        <div style={{ fontSize: 10, color: 'var(--text-muted)', marginBottom: 2 }}>SENSOR READ</div>
-        {/* Sensor level tank */}
-        <div className="tank-body" style={{ borderColor: frame.sensor_spoofed ? 'rgba(239,68,68,0.4)' : undefined }}>
-          <div
-            className="tank-fill sensor"
-            style={{ height: `${sensorH}%` }}
-          />
+        {/* Calibrated Scale */}
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: 160, padding: '4px 0', fontSize: 9, color: 'var(--text-muted)', fontFamily: 'monospace', textAlign: 'right', marginRight: 4 }}>
+          <span>100%</span>
+          <span style={{ color: 'var(--color-amber)' }}>80% (H)</span>
+          <span style={{ color: 'var(--color-green)' }}>70% (SP)</span>
+          <span style={{ color: 'var(--color-blue)' }}>30% (L)</span>
+          <span>0%</span>
         </div>
-        <div
-          className="tank-value"
-          style={{ color: frame.sensor_spoofed ? 'var(--color-red)' : 'var(--color-teal)' }}
-        >
-          {sensorH.toFixed(1)}%
-          {frame.sensor_spoofed && <span style={{ fontSize: 9, marginLeft: 4 }}>SPOOFED</span>}
-        </div>
-      </div>
 
-      {/* Valve */}
-      <div className="flow-component" style={{ alignItems: 'flex-start', paddingBottom: 80 }}>
-        <div className={`flow-box ${frame.valve_state === 1 ? 'online' : 'offline'}`} style={{ minWidth: 64 }}>
-          VALVE
+        {/* True Level Tank */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+          <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.05em' }}>TRUE LEVEL</div>
+          <div className="tank-body">
+            <div
+              className="tank-fill true"
+              style={{ height: `${trueH}%` }}
+            />
+            {/* Threshold lines */}
+            <div
+              className="threshold-line high"
+              style={{ bottom: `${frame.high_threshold}%` }}
+              title="High Threshold (80%)"
+            />
+            <div
+              className="threshold-line low"
+              style={{ bottom: `${frame.low_threshold}%` }}
+              title="Low Threshold (30%)"
+            />
+            <div
+              className="threshold-line setpoint"
+              style={{ bottom: `${frame.setpoint}%` }}
+              title="Target Setpoint (70%)"
+            />
+          </div>
+          <div className="tank-value" style={{ color: 'var(--color-blue)' }}>{trueH.toFixed(1)}%</div>
         </div>
-        <div className="flow-label" style={{ marginTop: 4 }}>
-          {frame.valve_state === 1 ? 'OPEN' : 'CLOSED'}
+
+        {/* Sensor Level Tank */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+          <div style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.05em' }}>SENSOR READ</div>
+          <div className="tank-body" style={{ borderColor: isDiverged ? 'rgba(239,68,68,0.5)' : undefined }}>
+            <div
+              className="tank-fill sensor"
+              style={{
+                height: `${sensorH}%`,
+                background: isDiverged ? 'linear-gradient(180deg, #f87171 0%, #ef4444 100%)' : undefined,
+              }}
+            />
+          </div>
+          <div
+            className="tank-value"
+            style={{ color: isDiverged ? 'var(--color-red)' : 'var(--color-teal)' }}
+          >
+            {sensorH.toFixed(1)}%
+            {frame.sensor_spoofed && <span style={{ fontSize: 9, marginLeft: 4, fontWeight: 700 }}>SPOOFED</span>}
+          </div>
+        </div>
+
+        {/* Valve */}
+        <div className="flow-component" style={{ alignItems: 'flex-start', paddingBottom: 80 }}>
+          <div className={`flow-box ${frame.valve_state === 1 ? 'online' : 'offline'}`} style={{ minWidth: 64 }}>
+            VALVE
+          </div>
+          <div className="flow-label" style={{ marginTop: 4 }}>
+            {frame.valve_state === 1 ? 'OPEN (Gravity)' : 'CLOSED'}
+          </div>
         </div>
       </div>
     </div>

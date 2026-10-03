@@ -11,8 +11,14 @@ The core motivation of the architecture is **Process-Aware Anomaly Detection**: 
 
 ```
                   ┌────────────────────────┐
-                  │ Streamlit HMI Dashboard│
-                  │   (Port 8501 Web UI)   │
+                  │ Modern React/Vite HMI  │
+                  │   (Port 5173 Web UI)   │
+                  └───────────┬────────────┘
+                              │ REST & WebSocket
+                              ▼
+                  ┌────────────────────────┐
+                  │  FastAPI Backend Core  │
+                  │   (Port 8000 Server)   │
                   └───────────┬────────────┘
                               │
                               ▼

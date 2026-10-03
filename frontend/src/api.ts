@@ -71,6 +71,10 @@ export const api = {
     anomaly: (experiment_id?: string) =>
       request<Record<string, unknown>>(`/analytics/anomaly${experiment_id ? `?experiment_id=${experiment_id}` : ''}`),
     evaluation: () => request<Record<string, unknown>[]>('/analytics/evaluation'),
+    recompute: () =>
+      request<{ status: string; results?: unknown; detail?: string }>('/analytics/recompute', {
+        method: 'POST',
+      }),
   },
 
   datasets: {

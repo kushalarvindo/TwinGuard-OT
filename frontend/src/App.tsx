@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTelemetry } from './hooks/useTelemetry';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
+import OnboardingModal from './components/OnboardingModal';
+import SettingsModal from './components/SettingsModal';
+
 import OverviewPage from './pages/OverviewPage';
 import DigitalTwinPage from './pages/DigitalTwinPage';
 import TelemetryPage from './pages/TelemetryPage';
@@ -29,7 +32,17 @@ export type PageId =
 
 export default function App() {
   const [page, setPage] = useState<PageId>('overview');
+  const [isTourOpen, setIsTourOpen] = useState<boolean>(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const telemetry = useTelemetry();
+
+  useEffect(() => {
+    // Show onboarding tour automatically on first visit if not completed
+    const completed = localStorage.getItem('twinguard_onboarding_completed');
+    if (!completed) {
+      setIsTourOpen(true);
+    }
+  }, []);
 
   const renderPage = () => {
     switch (page) {
@@ -50,11 +63,35 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <Sidebar currentPage={page} onNavigate={setPage} />
-      <Header connected={telemetry.connected} latest={telemetry.latest} />
+      <Sidebar
+        currentPage={page}
+        onNavigate={setPage}
+        onOpenSettings={() => setIsSettingsOpen(true)}
+        onOpenTour={() => setIsTourOpen(true)}
+      />
+      <Header
+        connected={telemetry.connected}
+        latest={telemetry.latest}
+        currentPage={page}
+        onOpenTour={() => setIsTourOpen(true)}
+        onOpenSettings={() => setIsSettingsOpen(true)}
+      />
       <main className="main-content">
         {renderPage()}
       </main>
+
+      {/* Onboarding Tour Modal */}
+      <OnboardingModal
+        isOpen={isTourOpen}
+        onClose={() => setIsTourOpen(false)}
+        onNavigate={setPage}
+      />
+
+      {/* Settings & Safety Controls Modal */}
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+      />
     </div>
   );
 }

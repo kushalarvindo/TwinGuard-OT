@@ -2,13 +2,40 @@ import React, { useEffect, useState } from 'react';
 import { api } from '../api';
 import type { EvaluationResult } from '../types';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, CartesianGrid } from 'recharts';
+import { RefreshCw, CheckCircle, AlertTriangle } from 'lucide-react';
 
 export default function EvaluationPage() {
   const [results, setResults] = useState<EvaluationResult[]>([]);
+  const [recomputing, setRecomputing] = useState(false);
+  const [feedback, setFeedback] = useState<string | null>(null);
+
+  const fetchResults = () => {
+    api.analytics.evaluation()
+      .then(r => setResults(r as EvaluationResult[]))
+      .catch(() => {});
+  };
 
   useEffect(() => {
-    api.analytics.evaluation().then(r => setResults(r as EvaluationResult[])).catch(() => {});
+    fetchResults();
   }, []);
+
+  const handleRecompute = async () => {
+    setRecomputing(true);
+    setFeedback(null);
+    try {
+      const res = await api.analytics.recompute();
+      if (res.status === 'SUCCESS') {
+        setFeedback('Evaluation metrics recalculated successfully from ground-truth database.');
+        fetchResults();
+      } else {
+        setFeedback(`Notice: ${res.detail || 'Recalculation complete.'}`);
+      }
+    } catch (err: unknown) {
+      setFeedback(`Error recalculating: ${err instanceof Error ? err.message : String(err)}`);
+    } finally {
+      setRecomputing(false);
+    }
+  };
 
   const chartData = results.map(r => ({
     name: r.experiment_id.replace('EXP-', ''),
@@ -18,20 +45,96 @@ export default function EvaluationPage() {
     F1: Number(r.f1_score) * 100,
   }));
 
+  // Calculate averages across models
+  const avgAcc = results.length > 0
+    ? (results.reduce((acc, r) => acc + Number(r.accuracy), 0) / results.length) * 100
+    : 0;
+  const avgPrec = results.length > 0
+    ? (results.reduce((acc, r) => acc + Number(r.precision), 0) / results.length) * 100
+    : 0;
+  const avgRec = results.length > 0
+    ? (results.reduce((acc, r) => acc + Number(r.recall), 0) / results.length) * 100
+    : 0;
+  const avgF1 = results.length > 0
+    ? (results.reduce((acc, r) => acc + Number(r.f1_score), 0) / results.length) * 100
+    : 0;
+
   return (
     <div>
-      <div className="page-header">
-        <div className="page-title">Evaluation Metrics</div>
-        <div className="page-sub">Global benchmark performance across all recorded attack experiments</div>
+      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div>
+          <div className="page-title">Evaluation Metrics</div>
+          <div className="page-sub">Global benchmark performance across all recorded attack experiments</div>
+        </div>
+        <button
+          className="btn-primary"
+          onClick={handleRecompute}
+          disabled={recomputing}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}
+        >
+          <RefreshCw size={14} className={recomputing ? 'spin' : ''} />
+          {recomputing ? 'Recalculating...' : '🔄 Recompute Metrics Now'}
+        </button>
       </div>
 
+      {feedback && (
+        <div className="feedback-banner" style={{ marginBottom: 14 }}>
+          {feedback.startsWith('Error') ? (
+            <AlertTriangle size={15} style={{ color: 'var(--color-red)' }} />
+          ) : (
+            <CheckCircle size={15} style={{ color: 'var(--color-teal)' }} />
+          )}
+          <span>{feedback}</span>
+        </div>
+      )}
+
+      {results.length > 0 && (
+        <div className="grid-4" style={{ marginBottom: 14 }}>
+          <div className="metric-card">
+            <div className="metric-label">Benchmark Accuracy</div>
+            <div className="metric-value" style={{ color: 'var(--color-blue)' }}>
+              {avgAcc.toFixed(1)}<span className="metric-unit">%</span>
+            </div>
+            <div className="metric-sub">Mean across {results.length} evaluations</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-label">Precision Rate</div>
+            <div className="metric-value" style={{ color: 'var(--color-teal)' }}>
+              {avgPrec.toFixed(1)}<span className="metric-unit">%</span>
+            </div>
+            <div className="metric-sub">True Positive / Total Detected</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-label">Recall Coverage</div>
+            <div className="metric-value" style={{ color: 'var(--color-amber)' }}>
+              {avgRec.toFixed(1)}<span className="metric-unit">%</span>
+            </div>
+            <div className="metric-sub">Attacks Captured / Total Attacks</div>
+          </div>
+          <div className="metric-card">
+            <div className="metric-label">Harmonic F1-Score</div>
+            <div className="metric-value" style={{ color: 'var(--color-purple)' }}>
+              {avgF1.toFixed(1)}<span className="metric-unit">%</span>
+            </div>
+            <div className="metric-sub">Balanced Detection Efficacy</div>
+          </div>
+        </div>
+      )}
+
       {results.length === 0 ? (
-        <div className="empty-state">No evaluation metrics computed yet. Run the full experiment suite.</div>
+        <div className="empty-state">
+          <div>No evaluation metrics computed yet.</div>
+          <button className="btn-secondary" onClick={handleRecompute} style={{ marginTop: 10 }}>
+            Run Benchmark Evaluation Pipeline
+          </button>
+        </div>
       ) : (
         <>
           {/* Chart */}
           <div className="panel" style={{ marginBottom: 14 }}>
-            <div className="panel-header"><span className="panel-title">Detection Performance (%)</span></div>
+            <div className="panel-header">
+              <span className="panel-title">Detection Performance Across Experiments (%)</span>
+            </div>
             <div className="panel-body">
               <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
@@ -55,7 +158,9 @@ export default function EvaluationPage() {
 
           {/* Table */}
           <div className="panel">
-            <div className="panel-header"><span className="panel-title">Detailed Results</span></div>
+            <div className="panel-header">
+              <span className="panel-title">Empirical Benchmark Verification Table</span>
+            </div>
             <div className="panel-body no-pad">
               <table className="data-table">
                 <thead>

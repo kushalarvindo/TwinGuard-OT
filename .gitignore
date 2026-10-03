@@ -54,3 +54,13 @@ Thumbs.db
 *.sqlite3
 *.log
 
+# Node & Frontend
+node_modules/
+*/node_modules/
+dist/
+*/dist/
+.vite/
+*/.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

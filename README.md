@@ -29,11 +29,15 @@ Direct cybersecurity testing on real industrial hardware is prohibitive:
 The system operates around two concurrent, real-time loops:
 
 ```
-               [ HMI / Streamlit Web Dashboard ]
-                              │
-                              │ Modbus TCP (Port 5020)
-                              ▼
-               [ Modbus TCP Holding Registers ]
+           [ Modern React/Vite HMI Dashboard ]
+                          │
+                          │ REST & WebSocket
+                          ▼
+           [ FastAPI Simulation & Security Core ]
+                          │
+                          │ Modbus TCP (Port 5020)
+                          ▼
+           [ Modbus TCP Holding Registers ]
                               │
                               ▼
                [ Virtual PLC Control Logic ]
@@ -209,28 +213,48 @@ cd ..
 
 ## 9. Running the System
 
-TwinGuard-OT uses a modern decoupled architecture: a FastAPI backend that drives the simulation, and a React/Vite frontend for the interactive HMI dashboard.
+TwinGuard-OT features an enterprise decoupled architecture consisting of a high-performance **FastAPI backend** driving the real-time simulation, physics equations, virtual PLC, and Modbus TCP server, paired with a modern **React/Vite HMI dashboard**.
 
-### 1. Start the Backend API & Simulation (FastAPI)
-Open a terminal and run the backend server. The physical simulation, PLC, and Modbus server will automatically start with the API:
+### Step 1: Start the Backend API & Simulation Engine
+Open a terminal in the project root directory and start the FastAPI service:
 ```bash
-# From the project root
-uvicorn backend.main:app --reload
+# Start backend server with automatic reload
+uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload
 ```
-The API will be available at **http://localhost:8000** (with Swagger docs at `/docs`).
+- **REST API & Interactive Docs**: [http://localhost:8000/docs](http://localhost:8000/docs) (OpenAPI / Swagger UI)
+- **WebSocket Telemetry Stream**: `ws://localhost:8000/ws/telemetry`
+- The background physics engine, virtual PLC hysteresis controller, and Modbus TCP slave (`127.0.0.1:5020`) initialize automatically upon startup.
 
-### 2. Start the Frontend Dashboard (React/Vite)
-Open a new terminal, and start the Vite development server:
+### Step 2: Start the Modern React HMI Dashboard
+Open a second terminal, install dependencies (if not already done), and launch the Vite development server:
 ```bash
+# Navigate to frontend directory
 cd frontend
+
+# Install dependencies (first run only)
+npm install
+
+# Start Vite development server
 npm run dev
 ```
-Open **http://localhost:5173** in your browser to view the interactive Digital Twin dashboard.
+- **Web Dashboard**: [http://localhost:5173](http://localhost:5173)
+- Features include real-time hydrodynamic dual-tank telemetry, 5 red-team attack injection vectors, multi-tier rule and Isolation Forest anomaly SOC, dynamic evaluation benchmarks, and CSV dataset export.
+- Access the **Platform Tour** (`🧭 Tour`) or **Settings & Safety Controls** (`⚙️ Settings`) directly from the top navigation bar.
 
-### (Alternative) Legacy Streamlit Launcher:
-You can still run the old monolithic system with the legacy Streamlit dashboard if preferred:
+### Step 3: (Optional) Headless CLI Simulation Runner
+To run the physical water tank simulation, virtual PLC, and Modbus server in standalone headless mode (without web servers):
 ```bash
-python scripts/start_system.py --dashboard
+python scripts/start_system.py
+```
+- To run headlessly and simultaneously launch the FastAPI backend:
+```bash
+python scripts/start_system.py --backend
+```
+
+### Step 4: Verification & Automated Tests
+Execute the full test suite to verify physical dynamics, PLC invariants, Modbus protocol transactions, and anomaly detection engines:
+```bash
+python -m pytest tests/ -v
 ```
 
 ---

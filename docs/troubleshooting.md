@@ -30,10 +30,14 @@
 
 ---
 
-## 3. Streamlit Dashboard Connection Issues
-- **Symptom**: Dashboard shows "No telemetry data available" or metrics are blank.
+## 3. Frontend / Backend Connection Issues
+- **Symptom**: Dashboard shows "Connecting to simulation..." or metrics are blank.
 - **Resolution**:
-  - TwinGuard-OT does not fabricate fake metrics. If the database was recently cleared with `reset.py`, you must run either:
+  - TwinGuard-OT does not fabricate fake metrics. Ensure the FastAPI backend is running:
+    ```bash
+    uvicorn backend.main:app --port 8000 --reload
+    ```
+  - Verify that the simulation is active or run an experiment suite:
     ```bash
     python scripts/start_system.py
     ```
@@ -41,7 +45,7 @@
     ```bash
     python experiments/run_all_experiments.py
     ```
-  - Click the **"Auto Refresh"** checkbox in the sidebar or hit the `R` key inside the browser to refresh Streamlit.
+  - Ensure the React frontend dev server is active at `http://localhost:5173`. If WebSocket disconnects, check that port 8000 is accessible on localhost.
 
 ---
 

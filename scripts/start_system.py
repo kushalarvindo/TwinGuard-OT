@@ -1,7 +1,7 @@
 """
 One-Command System Launcher for TwinGuard-OT.
 Starts the Water Tank Digital Twin, Virtual PLC, Modbus TCP Server, Telemetry Collector,
-and optionally the interactive Streamlit Dashboard with graceful shutdown.
+and optionally the FastAPI REST/WebSocket Backend with graceful shutdown.
 """
 
 import argparse
@@ -31,7 +31,7 @@ from twinguard.database.db import DatabaseManager
 from twinguard.monitoring.collector import DataCollector
 
 
-def start_system(launch_dashboard: bool = True):
+def start_system(launch_backend: bool = False):
     config = load_system_config()
     logger = setup_logger("twinguard.system")
 
@@ -95,13 +95,12 @@ def start_system(launch_dashboard: bool = True):
     plc.start()
     collector.start()
 
-    dashboard_process = None
-    if launch_dashboard:
-        logger.info("Launching Streamlit Dashboard...")
-        dashboard_app = str(root_dir / "dashboard" / "app.py")
-        cmd = [sys.executable, "-m", "streamlit", "run", dashboard_app, "--server.headless", "true"]
-        dashboard_process = subprocess.Popen(cmd)
-        logger.info(f"Streamlit Dashboard running at http://localhost:8501 (PID {dashboard_process.pid})")
+    backend_process = None
+    if launch_backend:
+        logger.info("Launching FastAPI Backend Server...")
+        cmd = [sys.executable, "-m", "uvicorn", "backend.main:app", "--host", "127.0.0.1", "--port", "8000"]
+        backend_process = subprocess.Popen(cmd)
+        logger.info(f"FastAPI Backend running at http://localhost:8000 (PID {backend_process.pid})")
 
     logger.info("\n>>> SYSTEM OPERATIONAL! Press Ctrl+C to stop cleanly. <<<\n")
 
@@ -111,8 +110,8 @@ def start_system(launch_dashboard: bool = True):
         plc.stop()
         server.stop()
         db.finish_experiment(exp_id, status="COMPLETED")
-        if dashboard_process:
-            dashboard_process.terminate()
+        if backend_process:
+            backend_process.terminate()
         logger.info("TwinGuard-OT stopped cleanly. Goodbye.")
         sys.exit(0)
 
@@ -130,8 +129,8 @@ def start_system(launch_dashboard: bool = True):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="TwinGuard-OT Master System Launcher")
-    parser.add_argument("--dashboard", action="store_true", default=False, help="Launch Streamlit dashboard automatically")
-    parser.add_argument("--no-dashboard", dest="dashboard", action="store_false", help="Run simulation headlessly")
+    parser.add_argument("--backend", action="store_true", default=False, help="Launch FastAPI backend API automatically")
+    parser.add_argument("--headless", dest="backend", action="store_false", help="Run simulation headlessly")
     args = parser.parse_args()
 
-    start_system(launch_dashboard=args.dashboard)
+    start_system(launch_backend=args.backend)
