@@ -4,10 +4,7 @@ import { ShieldAlert, ShieldOff } from 'lucide-react';
 
 interface Props { telemetry: ReturnType<typeof useTelemetry>; }
 
-function severityColor(s: string) {
-  const m: Record<string, string> = { CRITICAL: 'red', HIGH: 'amber', MEDIUM: 'blue', INFO: 'gray' };
-  return m[s] ?? 'gray';
-}
+
 
 function fmtTs(ts: number) {
   return new Date(ts * 1000).toLocaleString();

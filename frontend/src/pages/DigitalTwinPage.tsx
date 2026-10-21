@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTelemetry } from '../hooks/useTelemetry';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
+import ThreeTankRig from '../components/ThreeTankRig';
 
 interface Props { telemetry: ReturnType<typeof useTelemetry>; }
 
@@ -66,6 +67,22 @@ export default function DigitalTwinPage({ telemetry }: Props) {
         </div>
       </div>
 
+      {/* 3D Cyber-Physical Shadow Rig */}
+      <div className="panel" style={{ marginBottom: 14 }}>
+        <div className="panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span className="panel-title">3D Cyber-Physical Digital Twin Rig</span>
+            <span className="badge blue">PBR REAL-TIME</span>
+          </div>
+          <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+            Physical Ground Truth (Left) vs. Sensor Reported (Right)
+          </span>
+        </div>
+        <div className="panel-body no-pad">
+          <ThreeTankRig frame={latest} height={320} />
+        </div>
+      </div>
+
       {/* Twin chart */}
       <div className="panel" style={{ marginBottom: 14 }}>
         <div className="panel-header">
@@ -75,7 +92,7 @@ export default function DigitalTwinPage({ telemetry }: Props) {
               <span style={{ width: 12, height: 2, background: 'var(--color-blue)', display: 'inline-block' }} /> True
             </span>
             <span style={{ fontSize: 10, color: 'var(--color-teal)', display: 'flex', alignItems: 'center', gap: 4 }}>
-              <span style={{ width: 12, height: 2, background: 'var(--color-teal)', display: 'inline-block', borderTop: '2px dashed var(--color-teal)', background: 'transparent' }} /> Sensor
+              <span style={{ width: 12, height: 2, display: 'inline-block', borderTop: '2px dashed var(--color-teal)', background: 'transparent' }} /> Sensor
             </span>
           </div>
         </div>

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type { TelemetryFrame } from '../types';
 import { useTelemetry } from '../hooks/useTelemetry';
 import {
   AreaChart, Area, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine
 } from 'recharts';
-import { AlertTriangle, Zap } from 'lucide-react';
+import { Zap, Box, Layers } from 'lucide-react';
+import ThreeTankRig from '../components/ThreeTankRig';
 
 interface Props {
   telemetry: ReturnType<typeof useTelemetry>;
@@ -126,6 +127,7 @@ function fmtTime(ts: number) {
 
 export default function OverviewPage({ telemetry }: Props) {
   const { latest, history } = telemetry;
+  const [rigViewMode, setRigViewMode] = useState<'3d' | '2d'>('3d');
 
   if (!latest) {
     return (
@@ -144,7 +146,6 @@ export default function OverviewPage({ telemetry }: Props) {
     anomaly_score: f.anomaly_score,
   }));
 
-  const severityColor = latest.is_anomaly ? 'var(--color-red)' : 'var(--color-green)';
   const alarmText = ['NORMAL', 'LOW LEVEL', 'HIGH LEVEL', 'SAFETY INTERLOCK'][latest.alarm_state] ?? 'NORMAL';
 
   return (
@@ -208,25 +209,51 @@ export default function OverviewPage({ telemetry }: Props) {
       {/* Tank viz + chart */}
       <div className="grid-2-1" style={{ marginBottom: 14 }}>
         <div className="panel">
-          <div className="panel-header">
-            <span className="panel-title">Live Process — Water Tank</span>
-            <span className="badge blue">LIVE</span>
-          </div>
-          <div className="panel-body">
-            <TankVisualization frame={latest} />
-            {/* Threshold legend */}
-            <div style={{ display: 'flex', gap: 16, justifyContent: 'center', marginTop: 8 }}>
-              {[
-                { label: 'Low', color: 'var(--color-blue)' },
-                { label: 'Setpoint', color: 'var(--color-green)' },
-                { label: 'High', color: 'var(--color-amber)' },
-              ].map(t => (
-                <span key={t.label} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: 'var(--text-muted)' }}>
-                  <span style={{ width: 14, height: 1, background: t.color, display: 'inline-block' }} />
-                  {t.label}
-                </span>
-              ))}
+          <div className="panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span className="panel-title">Live Physical Process — Water Storage Rig</span>
+              <span className="badge blue">LIVE</span>
             </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <button
+                className={`btn-sm ${rigViewMode === '3d' ? 'btn-primary' : 'btn-secondary'}`}
+                onClick={() => setRigViewMode('3d')}
+                style={{ height: 24, fontSize: 11, padding: '0 8px', display: 'inline-flex', alignItems: 'center', gap: 4 }}
+              >
+                <Box size={12} />
+                <span>3D Digital Twin</span>
+              </button>
+              <button
+                className={`btn-sm ${rigViewMode === '2d' ? 'btn-primary' : 'btn-secondary'}`}
+                onClick={() => setRigViewMode('2d')}
+                style={{ height: 24, fontSize: 11, padding: '0 8px', display: 'inline-flex', alignItems: 'center', gap: 4 }}
+              >
+                <Layers size={12} />
+                <span>2D Schematic</span>
+              </button>
+            </div>
+          </div>
+          <div className="panel-body no-pad" style={{ padding: rigViewMode === '3d' ? 0 : 16 }}>
+            {rigViewMode === '3d' ? (
+              <ThreeTankRig frame={latest} height={360} />
+            ) : (
+              <>
+                <TankVisualization frame={latest} />
+                {/* Threshold legend */}
+                <div style={{ display: 'flex', gap: 16, justifyContent: 'center', marginTop: 12 }}>
+                  {[
+                    { label: 'Low (30%)', color: 'var(--color-blue)' },
+                    { label: 'Setpoint (70%)', color: 'var(--color-green)' },
+                    { label: 'High (80%)', color: 'var(--color-amber)' },
+                  ].map(t => (
+                    <span key={t.label} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: 'var(--text-muted)' }}>
+                      <span style={{ width: 14, height: 1, background: t.color, display: 'inline-block' }} />
+                      {t.label}
+                    </span>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
